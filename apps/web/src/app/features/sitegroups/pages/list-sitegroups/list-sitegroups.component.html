@@ -1,0 +1,33 @@
+<div class="list-sitegroups-container">
+  <h2>List of Sitegroups</h2>
+
+  <table mat-table [dataSource]="sitegroups" class="mat-elevation-z8">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let sitegroup">
+        {{ sitegroup.name }}
+        <div class="name-container">
+          <a
+            class="name-link"
+            [routerLink]="['/', 'organizations', 'view', sitegroup.id]"
+            >{{ sitegroup.name }}
+          </a>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Edit Column -->
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let sitegroup">
+        <button mat-icon-button (click)="editSitegroup(sitegroup.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name', 'edit']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'edit']"></tr>
+  </table>
+</div>

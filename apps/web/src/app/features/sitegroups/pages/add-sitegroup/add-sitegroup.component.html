@@ -1,0 +1,35 @@
+<div class="add-sitegroup-container">
+  <div class="page-title">
+    <h2>Add Sitegroup</h2>
+  </div>
+  <form
+    *ngIf="addSitegroupForm"
+    [formGroup]="addSitegroupForm"
+    (ngSubmit)="submitForm(addSitegroupForm.value)"
+  >
+    <mat-form-field>
+      <mat-select
+        formControlName="organization"
+        placeholder="Organization"
+        #singleSelect
+      >
+        <mat-option
+          *ngFor="let organization of organizations"
+          [value]="organization.id"
+        >
+          {{ organization.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Sitegroup Name</mat-label>
+      <input type="text" 
+      formControlName="name" 
+      matInput placeholder="" />
+      <mat-error *ngIf="addSitegroupForm.get('name')?.errors?.['required']">
+        This field is required.
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
+</div>

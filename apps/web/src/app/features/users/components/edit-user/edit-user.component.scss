@@ -1,0 +1,50 @@
+
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-form-field {
+  width: 100%;
+
+  input {
+    width: 100%;
+  }
+
+}
+
+
+.buttons-container {
+  display: flex;
+  margin-top: 40px;
+  gap:5px;
+  grid-column: span 2;
+}
+
+.divider {
+  border: none;
+  border-top: 3px solid #0f0101;
+  margin: 20px auto;
+  width: 100%;
+  
+
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.grid-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // border: 1px solid #ccc;
+  padding: 10px;
+  // border-radius: 5px;
+  background-color: #f8f8f8;
+}
+.add-button-container {
+  margin-top: 6px;
+  
+}

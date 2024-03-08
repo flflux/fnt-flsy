@@ -1,0 +1,10 @@
+<div class="site-details-container">
+    <h4>Device Details</h4>
+    <div *ngIf="viewDevices">
+      <p><strong>Name:</strong> {{ viewDevices.site.name }}</p>
+      <p><strong>Device:</strong> {{ viewDevices.deviceId }}</p>
+    </div>
+    <div *ngIf="!viewDevices">Loading Device details...</div>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="goToListPage()">Back</button>

@@ -1,0 +1,218 @@
+
+.modal_first_container{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    // height:300px;
+  }
+  
+  .modal-container{
+  display: flex;
+  flex-direction: column;
+  width: 500px !important;
+  height:300px !important;
+  }
+  
+  .user-card {
+    width: 480px;
+    height: 280px;
+    margin-left: -10px;
+  }
+  
+  .btn_container{
+    margin-left: 10px;
+  
+  }
+  
+  
+  
+  @media only screen and (max-width: 912px) {
+    .user-card {
+        width: 400px;
+        height: 300px;
+       
+      
+      }
+      .modal_first_container{
+        display: flex;
+        flex-direction: column;
+        width: 350px;
+        // height:300px;
+    }
+  
+    .modal_second_container{
+              display: flex;
+              flex-direction: column;
+              width: 400px;
+              // height:300px;
+            }
+    
+    .modal-container{
+      display: flex;
+      flex-direction: column;
+      width: 500px !important;
+      height:300px !important;
+    }
+  }
+  @media only screen and (max-width: 599.5px) {
+    .user-card {
+        width: 340px;
+        height: 320px;
+        margin-left: -15px;
+      }
+      .modal_first_container{
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        // height:300px;
+    }
+    .modal_second_container{
+              display: flex;
+              flex-direction: column;
+              width: 400px;
+              // height:300px;
+            }
+    .modal-container{
+      display: flex;
+      flex-direction: column;
+      width: 500px !important;
+      height:300px !important;
+    }
+    .buttons_container{
+        width: 100px !important;
+        height: 40px !important;
+       
+      }
+      .btn_container{
+        margin-left: 9px !important;
+      }
+  }
+  @media only screen and (max-width: 459.5px) {
+    .user-card {
+        width: 310px;
+        height: 350px;
+        margin-left: -20px;
+      }
+      .modal_first_container{
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        // height:300px;
+    }
+    
+    .modal_second_container{
+              display: flex;
+              flex-direction: column;
+              width: 400px;
+              // height:300px;
+              margin-left: 20px;
+            }
+    .modal-container{
+      display: flex;
+      flex-direction: column;
+      width: 500px !important;
+      height:300px !important;
+      margin-left: -25px;
+    }
+  }
+  @media only screen and (max-width: 390.5px) {
+    .user-card {
+        width:290px;
+        height: 350px;
+        margin-left: -33px !important;
+      }
+      .modal_first_container{
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        // height:300px;
+    }
+    
+    .modal_second_container{
+              display: flex;
+              flex-direction: column;
+              width: 400px;
+              // height:300px;
+              margin-left: 25px !important;
+            }
+    .modal-container{
+      display: flex;
+      flex-direction: column;
+      width: 500px !important;
+      height:300px !important;
+      margin-left: -30px;
+    }
+    .buttons_container{
+        width: 100px !important;
+        height: 40px !important;
+       
+      }
+      .btn_container{
+        margin-left: 10px !important;
+      }
+  }
+  @media only screen and (max-width: 360.5px) {
+    .user-card {
+        width: 190px;
+        height: 350px;
+        margin-left: -45px !important;
+      }
+      .modal_first_container{
+        display: flex;
+        flex-direction: column;
+        width: 270px;
+        // height:300px;
+    }
+    
+    .modal_second_container{
+              display: flex;
+              flex-direction: column;
+              width: 400px;
+              // height:300px;
+              margin-left: 40px !important;
+            }
+    .modal-container{
+      display: flex;
+      flex-direction: column;
+      width: 500px !important;
+      height:300px !important;
+      margin-left: -35px;
+    }
+    .buttons_container{
+        width: 100px !important;
+        height: 40px !important;
+       
+      }
+      .btn_container{
+        margin-left: 10px !important;
+      }
+  }
+  @media only screen and (max-width: 281px) {
+    .user-card {
+        width: 150px;
+        height: 350px;
+        margin-left: -38px;
+      }
+      .modal_first_container{
+        display: flex;
+        flex-direction: column;
+        width: 235px;
+        // height:300px;
+    }
+    
+    .modal-container{
+      display: flex;
+      flex-direction: column;
+      width: 500px !important;
+      height:300px !important;
+      margin-left: -45px;
+    }
+    .buttons_container{
+        width: 100px !important;
+        height: 40px !important;
+       
+      }
+      .btn_container{
+        margin-left: 10px !important;
+      }
+  }

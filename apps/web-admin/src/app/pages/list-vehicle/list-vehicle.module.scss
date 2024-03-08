@@ -1,0 +1,242 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+.container {
+  overflow-y: auto;
+}
+
+.Vehicle_container {
+  padding: 20px;
+  padding-bottom: 179px;
+}
+
+// .search-container {
+//   margin-top: 20px;
+// }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table th,
+table td {
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f2f2f2;
+}
+
+/* AddBuildingForm Styles */
+
+.modal_form_containers {
+  display: flex;
+  flex-direction: row;
+}
+
+.edit_modal_container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  // border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  padding-bottom: 20px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+
+  h2 {
+    margin-bottom: 20px;      
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    margin-top: 0;
+    padding: 25px;
+    background-color: black;
+    color: white;
+  }
+
+}
+
+.delete_modal_container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  // border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  padding-bottom: 20px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+
+  h2 {
+    margin-bottom: 20px;      
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    margin-top: 0;
+    padding: 25px;
+    background-color: black;
+    color: white;
+
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin: 0 10px;
+    }
+  }
+}
+.modal-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  // border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  padding-bottom: 20px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+  h2 {
+    margin-bottom: 20px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    margin-top: 0;
+    padding: 25px;
+    background-color: black;
+    color: white;
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin: 0 10px;
+    }
+  }
+}
+
+.update_modal-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.update_modal-buttons {
+  display: flex;
+  justify-content: center;
+
+  button {
+    margin: 0 10px;
+  }
+}
+
+.MuiTablePagination-root {
+  flex-shrink: 0;
+}
+
+.MuiInputBase-input {
+  padding: 10px;
+}
+
+.btn_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.dropdownId {
+  color: 'black';
+}
+
+.add-modal {
+  display: flex;
+  flex-direction: column;
+  color: black;
+}
+
+.table-row:hover{
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.inactive-vehicle:hover{
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+  cursor: default;
+}
+
+.row-action-button:hover{
+  cursor:pointer;
+  background-color: #cacaca;
+  border-radius: 20px;
+}
+.row-action-delete-button{
+  color:green
+}
+
+// .socname{
+//   text-decoration: none;
+//   color:black;
+//   margin:5px;
+//   padding:5px 20px;
+// }
+
+.active{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 50px;
+  padding: 7px;
+  border: 1px solid #08bc41;
+  background: rgb(186, 244, 210);
+  color: #00922e;
+}
+
+.inactive{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 50px;
+  padding: 7px;
+  // padding-right: -5px;
+  border: 1px solid #b32950;
+  background: rgb(255, 215, 215);
+  color: #ba0435;
+}
+
+// .active{
+//   margin-left: 90px;
+// }

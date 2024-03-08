@@ -1,0 +1,26 @@
+
+<div *ngIf="isDoneLoading" class="card-container">
+  <mat-card class="example-card">
+  <div class="box">
+    <span class="text font-semibold">User Profile</span>
+    <div *ngIf="user" class="">
+      <div class="">
+        <span class="text-2xl font-medium">Welcome Back {{ user.firstName }}</span>
+      </div>
+      <div *ngIf="hasSuperRoles" class="">
+        <span class="text-lg font-medium">Choose a Super Role</span>
+        <div class="choice-element" *ngIf="user.superRole" (click)="handleSuperChoiceClick(user.superRole)">
+          <span>{{ user.superRole }}</span>
+        </div>
+      </div>
+      <div *ngIf="hasOrganizationRoles && (!hasSuperRoles || !user.superRole)" class="">
+        <span class="text-lg font-medium">Choose an Organization Role</span>
+        <div class="choice-element" *ngFor="let role of user.organizationRoles" (click)="handleOrganizationChoiceClick(role)">
+          <span>{{ role.organizationId }}</span>
+          <span>{{ role.organizationRole }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </mat-card>
+</div>

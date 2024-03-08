@@ -1,0 +1,65 @@
+<div class="sitegroup-details-container">
+  <h4>Sitegroup Details</h4>
+  <div *ngIf="sitegroup">
+    <p><strong>Name:</strong> {{ sitegroup.name }}</p>
+    <p><strong>Organization:</strong> {{ sitegroup.organization.name }}</p>
+  </div>
+  <div *ngIf="!sitegroup">Loading sitegroup details...</div>
+</div>
+
+<!------------------SITES---------------->
+
+<div class="sites-container">
+  <h4>{{ selectedsitegroup?.name }} </h4>
+  <div class="page-header">
+    <div class="page-title">
+      <h5>Sites</h5>
+    </div>
+    <div class="page-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        class="add-button"
+        [routerLink]="['/', 'sites', 'add']"
+      >
+        <mat-icon>add</mat-icon>
+        Add
+      </button>
+    </div>
+  </div>
+  <table mat-table [dataSource]="sites" class="mat-elevation-z8">
+    <!-- Site Name and View/Edit Column -->
+    <ng-container matColumnDef="site">
+      <th mat-header-cell *matHeaderCellDef class="header-cell">Name</th>
+      <td mat-cell *matCellDef="let site">
+        <div class="name-with-view">
+          <a
+            class="name-link"
+            [routerLink]="['/', 'sites', site.id]"
+          >{{ site.name }}</a>
+          <a
+            class="icon-link"
+            [routerLink]="['/', 'sites', site.id, 'edit']"
+          >
+            <mat-icon class="edit" aria-label="edit">edit</mat-icon>
+          </a>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['site']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['site']"></tr>
+  </table>
+  <mat-paginator
+  class="demo-paginator"
+  (page)="onPageChange($event)"
+  [length]="totalItems"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  aria-label="Select page"
+  [showFirstLastButtons]="true"
+></mat-paginator>
+
+</div>
+
+<button mat-raised-button color="primary" (click)="goToListPage()">Back</button>

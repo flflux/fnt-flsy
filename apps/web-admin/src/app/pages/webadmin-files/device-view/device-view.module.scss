@@ -1,0 +1,40 @@
+.device-container{
+    border: 1px solid gray;
+    position: relative;
+    display: grid;
+    justify-content: inherit;
+    align-items: center !important;
+    text-align: center;
+    padding: 75px;
+    margin: 265px;
+    margin-top: 50px;
+    border-radius: 10px;
+    border-radius: 22.028px;
+    border: 1.377px solid #FFF;
+    background: var(--white-100, #FFF);
+    box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.15);
+}
+
+
+.fields{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 23px;
+}
+
+.fields-text{
+    display: flex;
+    align-self: start;
+    margin: 12px;
+    font-size: x-large;
+}
+
+.controllername:hover{
+    margin: 0px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    border: 1px solid #FFD9ED;
+    background-color: #FFE0F0 !important;
+    color: #B23376 !important;
+  }

@@ -1,0 +1,24 @@
+/*
+ * Replace this with your own classes
+ */
+ 
+ .container {
+    display:flex;
+    flex-direction: column;
+ }
+
+ 
+
+ .card-grid{
+   display:flex;
+   flex-wrap: wrap;
+ }
+
+ .card{
+   margin: 10px;
+   width: 300px;
+ }
+
+ h1{
+   margin:10px;
+ }

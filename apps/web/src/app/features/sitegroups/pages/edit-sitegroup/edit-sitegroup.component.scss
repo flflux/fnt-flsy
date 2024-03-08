@@ -1,0 +1,17 @@
+.edit-sitegroup {
+  max-width: 400px;
+  margin: 0 auto;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  button {
+    margin-top: 16px;
+  }
+
+  .buttons-container {
+    display: flex;
+    gap: 10px; 
+  }
+}

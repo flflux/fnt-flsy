@@ -1,0 +1,111 @@
+.login-page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.login-img{
+    // display: flex;
+    // background-image: url('../../../assets/login-img.png');
+    // // background-position: bottom;
+    // // object-fit: contain;
+    // // position:relative;
+    // height: 100vh;
+    // width: 100vh;
+    // z-index: -1;  
+
+    display: flex;
+    background-image: url(/src/assets/login-img.png);
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* background: no-repeat;*/
+}   
+
+
+.login-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../../../assets/login-img.png');
+    background-position: bottom;
+    object-fit: contain;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 26vh;
+    margin-bottom: 49vh;
+    margin-left: 1vh;
+    margin-right: 1vh;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 40px;
+    padding-bottom: 15px;
+    border-radius: 20px;
+   background: #FFF; 
+   box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.14);
+   position: absolute;
+   z-index: 1;
+}
+
+.login_form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-header{
+    color: var(--Primary-text, #0C1421);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Poppins;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%; /* 36px */
+    letter-spacing: 0.36px;
+}
+
+.login-form{
+    margin:10px;
+}
+
+.email{
+    margin-bottom: 10px;
+
+}
+
+.password{
+    margin-bottom: 10px;
+}
+
+.forgot-password{
+    color: var(--Link, #1E4AE9);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    text-align: right;
+}
+
+.submit_btn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form{
+    display:flex;
+}
+.logo{
+    justify-content: center;
+    display: flex;
+    margin-bottom: 20px;
+    margin-left: -14px;
+}
+

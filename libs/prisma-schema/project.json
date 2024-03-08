@@ -1,0 +1,52 @@
+{
+  "name": "prisma-schema",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/prisma-schema/src",
+  "projectType": "library",
+  "targets": {
+    "prisma": {
+      "command": "npx prisma",
+      "options": {
+        "cwd": "libs/prisma-schema/"
+      }
+    },
+    "migrate": {
+      "command": "prisma migrate dev",
+      "options": {
+        "cwd": "libs/prisma-schema/"
+      }
+    },
+    "migrate-create-only": {
+      "command": "prisma migrate dev --name '' --create-only",
+      "options": {
+        "cwd": "libs/prisma-schema/"
+      }
+    },
+    "migrate-reset": {
+      "command": "prisma migrate reset --force",
+      "options": {
+        "cwd": "libs/prisma-schema/"
+      }
+    },
+    "migrate-diff": {
+      "command": "npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma   --to-schema-datasource prisma/schema.prisma  --script > down_REPLACENAME_.sql",
+      "options": {
+        "cwd": "libs/prisma-schema/"
+      }
+    },
+    "generate-types": {
+      "command": "npx prisma generate",
+      "options": {
+        "cwd": "libs/prisma-schema/"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/prisma-schema/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

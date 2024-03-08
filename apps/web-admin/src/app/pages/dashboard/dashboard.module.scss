@@ -1,0 +1,302 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+.cardheader {
+    font-size: 17.206px;
+    font-family: Poppins;
+}
+
+.main_container {
+    display: flex;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 806px) {
+    .main_container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .column_second{
+        width: 300px !important;
+        height: 220px !important;
+        margin-top: -70px !important;
+        margin-left: 20px !important;
+    }
+    }
+
+.vertical-line {
+    border-bottom: 1px solid rgba(137, 137, 137, 0.20);
+    width: 1px;
+    height: auto;
+    flex-shrink: 0;
+    stroke-width: 2.5px;
+    stroke: rgba(137, 137, 137, 0.20);
+    margin: 10px 36px 1px 5px;
+    background-color: rgba(137, 137, 137, 0.20);
+    margin-top: 120px;
+}
+
+@media only screen and (max-width: 2937px) {
+    .cards {
+        min-width: 200px;
+        padding-bottom: 0px !important;
+        box-shadow: 0px 1.16354px 16.63539px 0px rgba(0, 0, 0, 0.15) !important;
+        min-height: 86px !important;
+        margin-top: 10px;
+    }
+}
+
+
+
+.cards {
+    min-width: 200px;
+    padding-bottom: 0px !important;
+    box-shadow: 0px 1.16354px 16.63539px 0px rgba(0, 0, 0, 0.15) !important;
+    min-height: 86px !important;
+}
+
+.dashboard-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 30px;
+    margin: 20px;
+}
+
+.fields {
+    // text-align: right;
+    color: #000 !important;
+    font-family: Poppins;
+    font-size: 17.206px !important;
+    font-style: normal;
+    font-weight: 600 !important;
+    line-height: 16.671px;
+    /* 96.892% */
+    letter-spacing: 0.208px;
+}
+
+.count {
+    // text-align: center;
+    font-weight: bold;
+    font-size: 28px !important;
+    color: #F7B523 !important;
+    font-family: Poppins;
+    font-size: 27.681px !important;
+    font-style: normal;
+    font-weight: 600 !important;
+    line-height: 16.671px;
+    /* 60.227% */
+    letter-spacing: 0.208px;
+}
+
+.cardcontent {
+    padding-bottom: 0px !important;
+}
+
+.horizontal-line {
+    border-bottom: 1px solid rgba(137, 137, 137, 0.20);
+    width: auto;
+    height: 0px;
+    flex-shrink: 0;
+    stroke-width: 2.5px;
+    stroke: rgba(137, 137, 137, 0.20);
+    margin: 70px 20px 1px 20px;
+}
+
+.manager-horizontal-line {
+    border-bottom: 1px solid rgba(137, 137, 137, 0.20);
+    width: auto;
+    height: 0px;
+    flex-shrink: 0;
+    stroke-width: 2.5px;
+    stroke: rgba(137, 137, 137, 0.20);
+    // margin: 70px 86px 1px 20px;
+    margin-bottom: 20px;
+    margin-top: -10px;
+}
+
+.cardmedia {
+    width: 38.363px !important;
+    height: 38.094px;
+    border-radius: 38.363px;
+    margin: 20px;
+}
+
+.logs-card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 10px !important;
+    margin: 2;
+    max-width: 1238px !important;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.logs-name {
+    color: #000;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.active-logs {
+    width: 4.672px !important;
+    height: 52px !important;
+    align-self: center;
+    border-radius: 10px;
+    background: #1F9B00;
+}
+
+.header {
+    margin: 20px;
+}
+
+.links_dec {
+    text-decoration: none;
+}
+
+.resident-actions {
+    display: flex;
+    flex-direction: row;
+    margin-left: 70px;
+}
+
+.add_btn {
+    // border-radius: 50px !important;
+    // border: 1px solid #FFAED9 !important;
+    // background: #FFE0F0 !important;
+
+    width: 80px !important;
+    height: 35px !important;
+    // margin-bottom: 13px !important;
+    margin-left: 125px !important;
+    text-transform: capitalize !important;
+}
+
+.grid-header {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+
+}
+
+.column_second {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 3px 1.16354px 16.63539px 3px rgba(0, 0, 0, 0.15) !important;
+    margin-top: 120px;
+    margin-right: 10px;
+    height: 400px;
+}
+
+.logs {
+    height: 300px;
+    width: 89%;
+    border: 0.5px solid #d9d9d9;
+    border-radius: 5px;
+    overflow-y: scroll;
+    padding: 20px;
+    padding-bottom: 10px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 0px;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    transition: overflow-y 0.3s ease;
+    /* Add smooth transition */
+
+    /* Customize the scrollbar */
+    &::-webkit-scrollbar {
+        width: 5px;
+        /* Set the width of the scrollbar */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #888;
+        /* Set the color of the scrollbar thumb */
+        border-radius: 5px;
+        /* Set the border radius of the scrollbar thumb */
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        /* Set the color of the scrollbar track */
+        border-radius: 5px;
+        /* Set the border radius of the scrollbar track */
+    }
+
+    /* Add hover effect */
+    &:hover {
+        overflow-y: scroll;
+        /* Change overflow-y to scroll on hover */
+    }
+
+    /* Hide scrollbar by default and show it on hover */
+    &::-webkit-scrollbar-thumb {
+        visibility: hidden;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        visibility: visible;
+    }
+
+    &:hover::-webkit-scrollbar-track {
+        visibility: visible;
+    }
+}
+
+
+@media only screen and (max-width: 599.5px) {
+    .column_second{
+        width: 300px !important;
+        height: 220px !important;
+        margin-top: -70px !important;
+        margin-left: 20px !important;
+    }
+    .main_container {
+        display: flex;
+        flex-direction: column;
+    }
+
+  }
+  @media only screen and (max-width: 459.5px) {
+    .column_second{
+        width: 280px !important;
+        height: 220px !important;
+        margin-top: -70px !important;
+        margin-left: 20px !important;
+    }
+    .main_container {
+        display: flex;
+        flex-direction: column;
+    }
+  }
+  @media only screen and (max-width: 390.5px) {
+    .column_second{
+        width: 270px !important;
+        height: 220px !important;
+        margin-top: -70px !important;
+        margin-left: 20px !important;
+    }
+    .main_container {
+        display: flex;
+        flex-direction: column;
+    }
+  }
+//   @media only screen and (max-width: 360.5px) {
+   
+//   }
+//   @media only screen and (max-width: 281px) {
+    
+//   }

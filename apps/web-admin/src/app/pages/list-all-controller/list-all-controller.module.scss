@@ -1,0 +1,78 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+.container{
+}
+.Device_container {
+  padding: 20px;
+  padding-bottom: 179px;
+}
+
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    display:flex;
+    flex-direction: column;
+
+    h2 {
+      margin-bottom: 20px;
+    }
+  
+    p {
+      margin-bottom: 30px;
+    }
+  
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+  
+      button {
+        margin: 0 10px;
+      }
+    }
+  }
+
+  .addbtn{
+    float: right;
+  }
+
+  .btn_container{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    margin-bottom: 20px;
+  }
+
+  .update_modal-buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin:2px;
+  }
+
+  
+  // .search-container{
+  //   text-align:initial;
+  // }
+
+  .table-row:hover{
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+  }
+  
+  .row-action-button:hover{
+    // background-color: #FFE0F0;
+    cursor:pointer;
+  }

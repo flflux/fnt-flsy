@@ -1,0 +1,27 @@
+.add-sitegroup-container {
+  padding: 20px;
+
+  h2 {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-size: 24px;
+    align-self: flex-center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 400px;
+    margin: 0 auto;
+
+    mat-form-field {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    button {
+      align-self: flex-end;
+    }
+  }
+}

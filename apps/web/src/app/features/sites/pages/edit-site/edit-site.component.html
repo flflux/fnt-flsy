@@ -1,0 +1,16 @@
+<div class="edit-site-container">
+    <h2>Edit Site</h2>
+    <form [formGroup]="editSiteForm" (ngSubmit)="submitForm()">
+      <div class="form-group">
+        <label for="name">Site Name:</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+      </div>
+      <!-- Add other form fields as needed -->
+  
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!editSiteForm.valid">Save</button>
+        <button mat-raised-button color="warn" type="button" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  

@@ -1,0 +1,218 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+.Details-card {
+  // height: 590px;
+  flex-shrink: 0;
+  border-radius: 10px !important;
+  background: #fff;
+  box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+  margin-left: 50px !important;
+  width: 550px;
+  margin-top: 0px;
+}
+.Password-card {
+  height: 340px;
+  flex-shrink: 0;
+  border-radius: 10px !important;
+  background: #fff;
+  width: 550px;
+  margin-top: 0px;
+}
+
+.edit-mode {
+  height: 570px;
+  flex-shrink: 0;
+  border-radius: 10px !important;
+  background: #fff;
+  box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+  margin-left: 50px !important;
+  width: 550px;
+  margin-top: 0px;
+}
+
+@media only screen and (max-width: 912px) {
+  .Details-card {
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 10px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 10px !important;
+    width: 550px;
+    margin-top: 10px;
+  }
+  .Password-card {
+    height: 340px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    width: 550px;
+    margin-top: 0px;
+  }
+  .edit-mode {
+    height: 590px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 50px !important;
+    width: 550px;
+    margin-top: 0px;
+  }
+}
+@media only screen and (max-width: 599.5px) {
+  .Details-card {
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 10px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 10px !important;
+    width: 400px;
+    margin-top: 10px;
+  }
+  .Password-card {
+    height: 340px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    width: 550px; 
+    margin-top: 0px;
+  }
+  .edit-mode {
+    height: 590px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 50px !important;
+    width: 550px;
+    margin-top: 0px;
+  }
+}
+@media only screen and (max-width: 459.5px) {
+  .Details-card {
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 10px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 10px !important;
+    width: 350px;
+    margin-top: 10px;
+  }
+  .Password-card {
+    height: 340px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    width: 550px; 
+    margin-top: 0px;
+  }
+  .edit-mode {
+    height: 590px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 50px !important;
+    width: 550px;
+    margin-top: 0px;
+  }
+}
+@media only screen and (max-width: 390.5px) {
+  .Details-card {
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 10px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 10px !important;
+    width: 320px;
+    margin-top: 10px;
+  }
+  .Password-card {
+    height: 340px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    width: 550px; 
+    margin-top: 0px;
+  }
+  .edit-mode {
+    height: 590px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 50px !important;
+    width: 550px;
+    margin-top: 0px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .Details-card {
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 10px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 10px !important;
+    width: 290px;
+    margin-top: 10px;
+  }
+  .Password-card {
+    height: 340px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    width: 550px; 
+    margin-top: 0px;
+  }
+  .edit-mode {
+    height: 590px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 50px !important;
+    width: 550px;
+    margin-top: 0px;
+  }
+}
+@media only screen and (max-width: 281px) {
+  .Details-card {
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 10px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 10px !important;
+    width: 220px;
+    margin-top: 10px;
+  }
+  .Password-card {
+    height: 340px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    width: 550px; 
+    margin-top: 0px;
+  }
+  .edit-mode {
+    height: 590px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #fff;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 50px !important;
+    width: 550px;
+    margin-top: 0px;
+  }
+}

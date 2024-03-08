@@ -1,0 +1,2 @@
+export const MQTT_DOMAIN_MYGATE=process.env.MQTT_DOMAIN_MYGATE
+export const MQTT_PORT_MYGATE=process.env.MQTT_PORT_MYGATE

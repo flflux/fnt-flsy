@@ -1,0 +1,59 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+
+.cardmedia{
+    width: 38.363px !important;
+    height: 38.094px;
+    border-radius: 38.363px;
+    margin: 20px;
+}
+
+.logs-card{
+    display: flex;
+    border: 1px solid #ddd; 
+    border-radius: 10px !important;
+    margin: 2;
+    max-width: 1238px !important;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.logs-name{
+    color: #000;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.active-logs{
+    width: 4.672px !important;
+    height: 52px !important;
+    align-self: center;
+    border-radius: 10px;
+    background: #1F9B00;
+}
+
+.inactive-logs{
+    width: 4.672px !important;
+    height: 52px !important;
+    align-self: center;
+    border-radius: 10px;
+    background: #c20000;
+}
+
+.logs-card-text{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#dateTime{
+  color: rgba(0, 0, 0, 0.6) !important;
+}

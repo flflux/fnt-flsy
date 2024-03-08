@@ -1,0 +1,41 @@
+<div class="edit-sitegroup">
+  <h1>Edit Sitegroup</h1>
+
+  <form [formGroup]="editSitegroupForm" (ngSubmit)="submitForm()">
+    <div class="form-group">
+      <label for="organizationName">Organization</label>
+      <input
+        type="text"
+        class="form-control"
+        id="organizationName"
+        [value]="organizationName"
+        disabled
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Sitegroup Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        formControlName="name"
+      />
+      <div
+        *ngIf="
+          editSitegroupForm.get('name')?.invalid &&
+          editSitegroupForm.get('name')?.touched
+        "
+      >
+        <small class="text-danger">Sitegroup name is required.</small>
+      </div>
+    </div>
+
+    <div class="buttons-container">
+      <button mat-raised-button type="submit" color="primary">Update</button>
+      <button mat-raised-button color="primary" (click)="goToListPage()">
+        Back
+      </button>
+    </div>
+  </form>
+</div>

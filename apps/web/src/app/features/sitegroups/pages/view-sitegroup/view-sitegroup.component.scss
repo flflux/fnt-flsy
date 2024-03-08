@@ -1,0 +1,64 @@
+.view-sitegroup {
+  max-width: 400px;
+  margin: 0 auto;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  button {
+    margin-left: 8px;
+  }
+}
+/*---------Sitegroups styling-------*/
+.sites-container {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.page-header {
+ display: flex;
+ justify-content: space-between;
+ margin-bottom: 20px; 
+}
+
+.mat-table {
+ width: 100%;
+}
+
+.mat-header-cell,
+.mat-cell {
+ text-align: left;
+ padding: 10px;
+ flex: 0 0 calc(50% - 20px);
+ margin-bottom: 20px;
+}
+
+.header-cell {
+ font-size: 18px;
+}
+
+.mat-header-row {
+ background-color: #f5f5f5;
+}
+
+.mat-row:nth-child(even) {
+ background-color: #f9f9f9;
+}
+
+.mat-row:hover {
+ background-color: #e0e0e0;
+}
+
+button {
+ margin-top: 10px;
+}

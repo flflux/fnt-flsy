@@ -1,0 +1,115 @@
+<xng-breadcrumb [separator]="iconTemplate"></xng-breadcrumb>
+<ng-template #iconTemplate>
+  <mat-icon>chevron_right</mat-icon>
+</ng-template>
+<div class="organizations-container">
+  <h4>{{ selectedOrganization?.name }}</h4>
+
+  <div class="edit-delete-buttons-container">
+    <button 
+     mat-raised-button 
+    color="primary" 
+    (click)="goToEditPage()">
+      Edit
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      *ngIf="selectedOrganization"
+      (click)="deleteOrganization(selectedOrganization.id)"
+    >
+      Delete
+    </button>
+  </div>
+
+  <div class="organization-grid">
+    <div class="left-column">
+      <div
+        class="organization-card"
+        *ngFor="let organization of organizations.data"
+      >
+        <div class="card-body">
+          <p><strong>Type:</strong> {{ organization['type'] }}</p>
+          <p><strong>Email:</strong> {{ organization['email'] }}</p>
+          <p><strong>Mobile No:</strong> {{ organization['phoneNumber'] }}</p>
+          <p><strong>Address:</strong> {{ organization['addressLine1'] }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-column">
+      <div
+        class="organization-card"
+        *ngFor="let organization of organizations.data"
+      >
+        <div class="card-body">
+          <p><strong>City:</strong> {{ organization['city'] }}</p>
+          <p><strong>Postal Code:</strong> {{ organization['postalCode'] }}</p>
+          <p><strong>Country:</strong> {{ organization['countryCode'] }}</p>
+          <p><strong>State:</strong> {{ organization['stateCode'] }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="organizations.data.length === 0">
+    Loading organization details...
+  </div>
+</div>
+
+<!------------------SITE-GROUPS---------------->
+
+<div class="sitegroups-container">
+  <h4>{{ selectedOrganization?.name }}</h4>
+  <div class="page-header">
+    <div class="page-title">
+      <h5>Site Groups</h5>
+    </div>
+    <div class="page-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        class="add-button"
+        [routerLink]="['/', 'sitegroups', 'add']"
+      >
+        <mat-icon>add</mat-icon>
+        Add
+      </button>
+    </div>
+  </div>
+  <table mat-table [dataSource]="sitegroups" class="mat-elevation-z8">
+    <!-- Sitegroup Name and View/Edit Column -->
+    <ng-container matColumnDef="sitegroup">
+      <th mat-header-cell *matHeaderCellDef class="header-cell">Name</th>
+      <td mat-cell *matCellDef="let sitegroup">
+        <div class="name-with-view">
+          <a
+            class="name-link"
+            [routerLink]="['/', 'sitegroups', sitegroup.id]"
+            >{{ sitegroup.name }}</a
+          >
+          <a
+            class="icon-link"
+            [routerLink]="['/', 'sitegroups', sitegroup.id, 'edit']"
+          >
+            <mat-icon class="edit" aria-label="edit">edit</mat-icon>
+          </a>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['sitegroup']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['sitegroup']"></tr>
+  </table>
+  <mat-paginator
+    class="demo-paginator"
+    (page)="onPageChange($event)"
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    aria-label="Select page"
+    [showFirstLastButtons]="true"
+  ></mat-paginator>
+</div>
+
+<button mat-raised-button color="primary" (click)="goToListPage()">Back</button>

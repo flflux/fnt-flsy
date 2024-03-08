@@ -1,0 +1,38 @@
+.user-details-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-bottom: 20px;
+  
+    h4 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+  
+    p {
+      margin: 5px 0;
+    }
+  
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 5px;
+  
+      li {
+        margin-bottom: 5px;
+      }
+    }
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  
+    button {
+      margin-left: 10px;
+    }
+  }
+  

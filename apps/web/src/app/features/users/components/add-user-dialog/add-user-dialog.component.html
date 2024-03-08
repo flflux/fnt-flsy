@@ -1,0 +1,158 @@
+<div class="add-user-container">
+  <div mat-dialog-content>
+    <form [formGroup]="userForm" (ngSubmit)="(onSaveClick)">
+      <div class="row">
+        <h4>Add User/Member</h4>
+
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input
+              type="text"
+              formControlName="firstName"
+              matInput
+              placeholder=""
+            />
+            <mat-error *ngIf="userForm.get('firstName')?.errors?.['required']">
+              This field is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" matInput placeholder="" />
+            <mat-error *ngIf="userForm.get('lastName')?.errors?.['required']">
+              This field is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput placeholder="email" />
+            <mat-error *ngIf="userForm.get('email')?.errors?.['required']">
+              This field is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input
+              formControlName="phoneNumber"
+              matInput
+              placeholder="phone number"
+            />
+            <mat-error *ngIf="userForm.get('phoneNumber')?.errors?.['required']">
+              This field is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="col-md-6">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Password"
+              type="password"
+              formControlName="password"
+            />
+          </mat-form-field>
+        </div> -->
+
+        <hr class="divider" />
+        
+        <div class="col-md-12">
+          <h4>Organization Roles</h4>
+          <div class="grid-container">
+            <div formArrayName="organizationRoles">
+              <div
+                *ngFor="
+                  let orFormGroup of organizationRoles.controls;
+                  index as i
+                "
+              >
+                <div [formGroupName]="i">
+                  <mat-form-field>
+                    <mat-label>Organization</mat-label>
+                    <mat-select formControlName="organizationId">
+                      <mat-option
+                        *ngFor="let organization of organizations"
+                        [value]="organization.id"
+                      >
+                        {{ organization.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Member Role</mat-label>
+                    <mat-select formControlName="organizationRole">
+                      <mat-option value="ADMIN">Admin</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeOrganizationRoles(i)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-button-container">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="addOrganizationRoles()"
+          >
+            <mat-icon>add</mat-icon> Add
+          </button>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="col-md-6">
+        <h4>Super Role</h4>
+        <div *ngIf="hasSuperRole">
+          <mat-form-field>
+            <mat-label>User Role</mat-label>
+            <mat-select formControlName="superRole">
+              <mat-option value="ADMIN">Admin</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="removeSuperRole()">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="!hasSuperRole" class="add-button-container">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="addSuperRole()"
+          >
+            <mat-icon>add</mat-icon> Add
+          </button>
+        </div>
+      </div>
+
+      <div class="buttons-container">
+        <button mat-raised-button color="warn" (click)="onCancelClick()">
+          Cancel
+        </button>
+        <button (click)="onSaveClick()" mat-raised-button color="primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions></div>
+</div>

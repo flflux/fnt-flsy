@@ -1,0 +1,129 @@
+<div class="page-contents">
+  <div class="page-header">
+    <div class="page-title">
+      <h2>Users</h2>
+    </div>
+    <div class="page-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        class="add-button"
+        (click)="openAddUserDialog()"
+      >
+        <mat-icon>add</mat-icon>
+        Add
+      </button>
+    </div>
+  </div>
+  <div class="page-list">
+    <table mat-table [dataSource]="users">
+      <!-- Define columns and cells -->
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef>
+          <h6>Name</h6>
+          <div class="search-container">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Search Name"
+                [(ngModel)]="firstNameFilter"
+                (input)="onQueryChange()"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                *ngIf="firstNameFilter"
+                (click)="clearFirstNameFilter()"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="name-container">
+            <a class="name-link" [routerLink]="['/', 'users', user.id]">
+              {{ user.firstName }} {{ user.lastName }}
+            </a>
+            <a class="icon-link" (click)="openEditUser(user.id)">
+              <mat-icon class="edit" aria-label="edit">edit</mat-icon>
+            </a>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>  
+          <h6>Email</h6>
+          <div class="search-container">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Search Email"
+                [(ngModel)]="emailFilter"
+                (input)="onQueryChange()"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                *ngIf="emailFilter"
+                (click)="clearEmailFilter()"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          {{ user.email }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef>
+          <h6>Phone Number</h6>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          {{ user.phoneNumber }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef>
+          <h6>Roles</h6>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <ul>
+            <li *ngIf="user.superRole">Super {{ user.superRole }}</li>
+            <li *ngFor="let or of user.organizationRoles">
+              {{ or.name }} {{ or.organizationRole }}
+            </li>
+          </ul>
+        </td>
+      </ng-container>
+
+      <!-- Define header row -->
+      <tr
+        mat-header-row
+        *matHeaderRowDef="['firstName', 'email', 'phoneNumber', 'roles']"
+      ></tr>
+      <!-- Define data rows -->
+      <tr
+        mat-row
+        *matRowDef="
+          let user;
+          columns: ['firstName', 'email', 'phoneNumber', 'roles']
+        "
+      ></tr>
+    </table>
+  </div>
+
+  <!-- Add MatPaginator to handle pagination -->
+  <mat-paginator
+    class="demo-paginator"
+    (page)="onPageChange($event)"
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    aria-label="Select page"
+    [showFirstLastButtons]="true"
+  ></mat-paginator>
+</div>

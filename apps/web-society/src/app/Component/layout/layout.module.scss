@@ -1,0 +1,56 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+// .layout{
+//     display:flex;
+//     flex-direction: column;
+// }
+
+// .outlet{
+//     margin-left: 200px;
+//     top: 66px;
+//     position: relative;
+// }
+
+// .Box{
+//     overflow-y:scroll;
+//     height: 680px
+// }
+
+/* layout.module.scss */
+
+.container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .outlet {
+    margin-left: 0; 
+   
+  
+    @media (min-width: 100px) {
+        margin-left: 40px; 
+        top: 66px;
+        position: relative;
+    }
+    @media (min-width: 600.5px) {
+        margin-left: 190px; 
+        top: 66px;
+        position: relative;
+    }
+    @media (min-width: 960px) {
+      margin-left: 200px; 
+      top: 66px;
+      position: relative;
+    }
+  }
+  
+  .Box {
+    overflow-y: scroll;
+    height: calc(100vh - 70px);
+  }
+  

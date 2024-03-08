@@ -1,0 +1,153 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+.add_btn{
+    border-radius: 50px !important;
+    border: 1px solid #FFAED9 !important;
+    background: #FFE0F0 !important;
+    width: 127px;
+    height: 44px;
+    flex-shrink: 0;
+    float: right;
+    margin:10px !important;
+}
+
+
+.modal-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    // border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding-bottom: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    border-radius: 20px;
+  
+  }
+    .h2_tag {
+      margin-bottom: 20px;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      margin-top: 0;
+      padding: 25px;
+      background-color: #2B3445;
+      color: white;
+    }
+  
+    p {
+      margin-bottom: 30px;
+    }
+  
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+  
+      button {
+        margin: 0 10px;
+      }
+    }
+  
+  
+    
+.delete_modal_container{
+    position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  // border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  padding-bottom: 20px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  border-radius: 20px;
+
+  .h2_tag {
+    margin-bottom: 20px;      
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    margin-top: 0;
+    padding: 25px;
+    background-color: #2B3445;
+    color: white;
+
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin: 0 10px;
+    }
+  }
+}
+
+
+.delete_modal_container{
+  position: fixed;
+display: flex;
+flex-direction: column;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #ffffff;
+// border: 1px solid #ccc;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+padding-bottom: 20px;
+max-width: 400px;
+width: 100%;
+text-align: center;
+border-radius: 20px;
+
+.h2_tag {
+  margin-bottom: 20px;      
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  margin-top: 0;
+  padding: 25px;
+  background-color: #2B3445;
+  color: white;
+
+}
+
+p {
+  margin-bottom: 30px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+
+  button {
+    margin: 0 10px;
+  }
+}
+}
+
+.delete_btn{
+  background-color: #D32F2F !important;
+}
+
+.row-action-button:hover{
+    cursor:pointer;
+    background-color: #cacaca;
+    border-radius: 20px;
+}

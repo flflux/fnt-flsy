@@ -1,0 +1,180 @@
+.appbar{
+    height:64px;
+    background-color:#FFFFFF !important;
+    width:100% !important;
+ }
+
+
+ .person_icon{
+   display: flex;
+   flex-direction: row-reverse;
+   float: right;
+   margin: 12px !important;
+   margin-right: 50px !important;
+   size: "large";
+   background-color: red;
+   color: white !important;
+  //  border: 1px solid #e1117f !important;
+  //  border-radius: 8px !important;
+ }
+
+ .person_icon:hover{
+   background-color:#e1117f !important ;
+ }
+
+ .logo{
+  margin-top: 18px;
+  margin-left: 14px;
+ }
+
+ .userbox{
+  display: flex;
+  flex-direction: row;
+  float: right;
+  border-radius: 30px;
+  width: 248px;
+  height: 43px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #4D4D4D;
+  background: rgba(255, 253, 253, 0.02);
+  /* margin: 3px; */
+  margin-right: 20px;
+  margin-top: -42px;
+  padding-bottom: 12px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.userimg{
+  margin:6px 5px 5px 6px;
+  color: black;
+}
+
+.usertext{
+  display:column;
+  margin: 4px 5px 5px 7px;
+  flex: 1;
+}
+
+.usertext > h6{
+  margin-top: -19px;
+  color: black;
+}
+
+.usertext > h3{
+  border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding: 0px;
+    background-color: white;
+    color: black;
+}
+
+.dropdown_icon{
+  margin-top: 9px;
+  margin-left: -1px;
+  width:0.9rem;
+  height:0.9rem;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.dropdown-menu{
+  width:248px !important;
+  animation-name: dropdown;
+  animation-duration:0.5s;
+}
+
+.menu-options{
+  text-align: center;
+  justify-content: flex-start !important;
+}
+
+.accountcircle{
+  height: 44px !important;
+  width: 29px !important;
+}
+
+
+@keyframes dropdown {
+  // 0%{height:0%;opacity:0.2;transform: translateY(20%) ;}
+  50%{height:40%;opacity:0.5; transform: translateY(50%)}
+  100%{height:auto;opacity: 1; transform: translateY(100%)}
+}
+
+
+@media only screen and (max-width: 768px) {
+  .appbar {
+      height: 64px;
+  }
+
+  .person_icon {
+      margin-right: 20px !important;
+  }
+
+  .logo {
+      margin-top: 10px;
+      margin-left: 10px;
+  }
+
+  .userbox {
+    width: 59px;
+    height: 43px;
+    margin-right: 10px;
+    margin-top: -43px;
+    padding-bottom: 15px;
+    border: none;
+  }
+
+  .usertext {
+      margin: 4px 5px 5px 7px;
+      display:none;
+  }
+
+  .usertext > h6 {
+      margin-top: -15px;
+  }
+
+  .dropdown-menu {
+      width: 200px !important;
+  }
+
+  .Icon_box{
+    display:none !important;
+  }
+
+  .logo {
+    margin-top: 18px;
+    width: 135px;
+  }
+
+  .menu-items {
+    margin-top: 1px;
+    width: 134px;
+    margin-left: 10px;
+    box-shadow: none;
+    border-radius: 0px 0px 0px 0px;
+    position: absolute;
+    z-index: -1;
+    animation: 0.5s ease;
+  }
+
+  .usertext > h3{
+    border-top-right-radius: 8px;
+      border-top-left-radius: 8px;
+      font-size: small;
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding: 0px;
+      background-color: white;
+      color: black;
+  }
+}
+
+
+
+
+
+

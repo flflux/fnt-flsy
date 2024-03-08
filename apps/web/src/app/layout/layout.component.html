@@ -1,0 +1,17 @@
+<div class="layout-container">
+  <div class="topbar-container mat-elevation-z8">
+    <fnt-flsy-topbar></fnt-flsy-topbar>
+  </div>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav mode="side" opened>
+      <div class="sidebar-container">
+        <fnt-flsy-sidebar></fnt-flsy-sidebar>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

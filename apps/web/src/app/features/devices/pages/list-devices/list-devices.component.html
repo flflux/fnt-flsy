@@ -1,0 +1,48 @@
+<div class="list-devices-container">
+  <h2>List of Devices</h2>
+
+  <div class="button-container">
+    <button
+      mat-raised-button
+      color="primary"
+      class="add-button"
+      (click)="goToAddDevice()"
+    >
+      Add
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let device">{{ device.name }}</td>
+    </ng-container>
+
+    <!-- Edit Column -->
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let device">
+        <button mat-icon-button (click)="editDevice(device.id)">
+          <mat-icon class="edit" aria-label="edit">edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Delete Column -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let device">
+        <button mat-icon-button (click)="deleteDevice(device.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name', 'edit', 'delete']"></tr>
+    <tr
+      mat-row
+      *matRowDef="let device; columns: ['name', 'edit', 'delete']"
+    ></tr>
+  </table>
+</div>

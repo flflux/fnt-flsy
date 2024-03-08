@@ -1,0 +1,145 @@
+
+.container {
+    margin: 45px;
+    // margin-top: -17px;
+    padding-bottom:45px;
+}
+
+.card-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.cards-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 125px !important;
+  margin-left: 235px !important;
+
+}
+
+.loading_indicator{
+display: flex !important;
+flex-direction: row !important;
+justify-content: center !important;
+align-items: center !important;
+height: 14vh !important; 
+margin-left: 140px;
+}
+
+.upload_image{
+  width: 320px !important;
+  height: 150px !important;
+}
+
+  .card_add_button_containers {
+    margin-top: -25px;
+  }
+  
+
+.device-card{
+    width: 435px;
+    height: 210px;
+    border-radius: 10px;
+    border: 1px solid #FF84C5;
+    background: #FFF;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11);
+}
+
+.Details-card{
+    height: 543px;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    background: #FFF;
+    box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11) !important;
+    margin-left: 1px !important;
+}
+
+.device-card{
+  width: 350px;
+  height: 180px;
+  border-radius: 10px;
+  border: 1px solid #FF84C5;
+  background: #FFF;
+  box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11);
+}
+
+.card-card {
+  width: 350px;
+  height: 180px;
+  border-radius: 10px;
+  border: 1px solid #ff84c5;
+  background: #fff;
+  box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.11);
+  margin-left: 50px;
+}
+
+
+
+.Tab{
+    text-transform: capitalize !important;
+    color: #615E5E !important;
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: Poppins !important;
+    font-size: 22px !important;
+    font-style: normal;
+    font-weight: 500 !important;
+    line-height: 100% !important;
+    letter-spacing: 0.34px !important;
+}
+
+.card-typo {
+  // font-size: 20px;
+  font-family: Poppins !important;
+  font-size: 1rem !important;
+  font-style: normal;
+  letter-spacing: 0.2px !important;
+  line-height: 100% !important;
+}
+
+.cards-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 14px;
+  margin-top: 55px;
+  margin-left: 210px;
+
+  &::-webkit-scrollbar {
+      width: 8px; 
+  }
+
+  &::-webkit-scrollbar-thumb {
+      background-color: #888; 
+      border-radius: 5px; 
+  }
+
+  &::-webkit-scrollbar-track {
+      background-color: #f1f1f1; 
+      border-radius: 5px; 
+  }
+
+  /* Add hover effect */
+  // &:hover {
+  //     overflow-y: scroll; 
+
+
+  &::-webkit-scrollbar-thumb {
+      visibility: hidden;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+      visibility: visible;
+  }
+}
+
+
+.card_button_container {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-end !important;
+}
+.card_add_button_containers {
+  margin-top: -25px;
+}

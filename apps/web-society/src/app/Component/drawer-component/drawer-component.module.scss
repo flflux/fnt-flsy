@@ -1,0 +1,60 @@
+/*
+ * Replace this with your own classes
+ */
+
+//  .container {
+//  }
+
+
+ .Nav{
+    display:flex;
+    flex-direction:column;
+   color: white;
+ }
+
+ .button-tabs{
+  color:#B6C2FF !important;
+  font-size: 1rem;
+  font-family: "Poppins"
+}
+
+.button-tabs:hover{
+  border-radius: 50px;
+  border: 1px solid;
+  background-color: #6B7587 !important;
+
+  .drawertab{
+    color:white;
+  }
+
+  .drawer-icons{
+    color:white;
+  }
+}
+
+.active-tab{
+  border-radius: 50px !important;
+  border: 1px solid !important;
+  background-color: #6B7587 !important;
+
+  .drawertab{
+    color:white;
+  }
+
+  .drawer-icons{
+    color:white;
+  }
+}
+
+ .side-drawer{
+   margin-top:60px;
+   position:absolute;
+ }
+
+ .drawertab{
+   color:white !important;
+ }
+
+ .drawer-icons{
+   color: white;
+ }

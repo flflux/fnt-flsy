@@ -1,0 +1,486 @@
+/////////////////////////////////////////////////////////
+
+// CLIENTCONFIG
+
+/////////////////////////////////////////////////////////
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/////////////////////////////////////////////////////////
+
+// ENUMS
+
+/////////////////////////////////////////////////////////
+
+enum SuperRoleName {
+  ADMIN
+}
+
+enum OrganizationRoleName {
+  ADMIN
+}
+
+enum SocietyRoleName {
+  ADMIN
+}
+
+enum ResidentType {
+  OWNER
+  FAMILY_MEMBER
+  TENANT
+}
+
+enum VehicleType {
+  TWO_WHEELER
+  FOUR_WHEELER
+  OTHER
+}
+
+enum AccessDirection {
+  IN
+  OUT
+}
+
+enum AccessStatus {
+  ALLOW
+  DISALLOW
+}
+
+enum SyncMessageCardAction {
+  ADD
+  REMOVE
+}
+
+enum DeviceType {
+  ACCESS
+  MONCON
+}
+
+enum CardType {
+  RFID
+  FASTAG
+}
+
+/////////////////////////////////////////////////////////
+
+// ORGANIZATION MANAGEMENT DEFAULT
+
+/////////////////////////////////////////////////////////
+model User {
+  id                Int                    @id @default(autoincrement())
+  email             String                 @unique
+  phoneNumber       String?                @map("phone_number")
+  firstName         String                 @map("first_name")
+  lastName          String                 @map("last_name") 
+  isActive          Boolean                @map("is_active") @default(true)
+  password          String?
+  token             String?
+  superRoles        UserSuperRole[]
+  organizationRoles UserOrganizationRole[]
+  societyRoles      UserSocietyRole[]
+
+  @@map("users")
+}
+
+model Organization {
+  id           Int                    @id @default(autoincrement())
+  name         String
+  type         String
+  email        String                 @unique
+  phoneNumber  String                 @map("phone_number")
+  addressLine1 String                 @map("address_line_1")
+  addressLine2 String?                @map("address_line_2")
+  city         String
+  postalCode   String                 @map("postal_code")
+  countryCode  String                 @map("country_code")
+  stateCode    String?                @map("state_code")
+  siteGroups   SiteGroup[]
+  users        UserOrganizationRole[]
+
+  @@map("organizations")
+}
+
+model SiteGroup {
+  id             Int          @id @default(autoincrement())
+  name           String
+  organizationId Int          @map("organization_id")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  sites          Site[]
+
+  @@map("site_groups")
+}
+
+model Site {
+  id          Int       @id @default(autoincrement())
+  name        String
+  siteGroupId Int       @map("site_group_id")
+  siteGroup   SiteGroup @relation(fields: [siteGroupId], references: [id])
+  devices     Device[]
+
+  @@map("sites")
+}
+
+model SuperRole {
+  id    Int             @id @default(autoincrement())
+  name  SuperRoleName   @unique
+  users UserSuperRole[]
+
+  @@map("super_roles")
+}
+
+model OrganizationRole {
+  id    Int                    @id @default(autoincrement())
+  name  OrganizationRoleName   @unique
+  users UserOrganizationRole[]
+
+  @@map("organization_roles")
+}
+
+model SocietyRole {
+  id    Int               @id @default(autoincrement())
+  name  SocietyRoleName   @unique
+  users UserSocietyRole[]
+
+  @@map("society_roles")
+}
+
+model UserSuperRole {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  superRoleId Int       @map("super_role_id")
+  user        User      @relation(fields: [userId], references: [id])
+  superRole   SuperRole @relation(fields: [superRoleId], references: [id])
+
+  @@map("users_super_roles")
+}
+
+model UserOrganizationRole {
+  id                 Int              @id @default(autoincrement())
+  userId             Int              @map("user_id")
+  organizationRoleId Int              @map("organization_role_id")
+  organizationId     Int              @map("organization_id")
+  user               User             @relation(fields: [userId], references: [id])
+  organizationRole   OrganizationRole @relation(fields: [organizationRoleId], references: [id])
+  organization       Organization     @relation(fields: [organizationId], references: [id])
+
+  @@map("users_organization_roles")
+}
+
+model UserSocietyRole {
+  id            Int         @id @default(autoincrement())
+  userId        Int         @map("user_id")
+  societyRoleId Int         @map("society_role_id")
+  societyId     Int         @map("society_id")
+  isPrimary     Boolean     @default(false) @map("is_primary")
+  user          User        @relation(fields: [userId], references: [id])
+  societyRole   SocietyRole @relation(fields: [societyRoleId], references: [id])
+  society       Society     @relation(fields: [societyId], references: [id])
+
+  @@map("users_society_roles")
+}
+
+/////////////////////////////////////////////////////////
+
+// SOCIETY MANAGEMENT
+
+/////////////////////////////////////////////////////////
+
+model Society {
+  id           Int               @id @default(autoincrement()) @map("id")
+  name         String            @map("name")
+  addressLine1 String            @map("address_line_1")
+  addressLine2 String?           @map("address_line_2")
+  city         String
+  postalCode   String            @map("postal_code")
+  countryCode  String            @map("country_code")
+  stateCode    String?           @map("state_code")
+  email        String?           @map("email")
+  phoneNumber  String?           @map("phone_number")
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime?         @updatedAt @map("updated_at") @db.Timestamptz()
+  isActive     Boolean           @map("is_active")
+  code         String            @map("code")
+  buildings    Building[]
+  devices      Device[]
+  users        UserSocietyRole[]
+  logs         VehicleLog[]
+  
+  @@unique([code])
+  @@map("societies")
+}
+
+model Building {
+  id        Int       @id @default(autoincrement()) @map("id")
+  name      String    @map("name")
+  societyId Int       @map("society_id")
+  isActive  Boolean   @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  society   Society   @relation(fields: [societyId], references: [id])
+  floors    Floor[]
+
+  @@unique([name,societyId])
+  @@map("buildings")
+}
+
+model Floor {
+  id         Int       @id @default(autoincrement()) @map("id")
+  number     String    @map("number")
+  buildingId Int       @map("building_id")
+  isActive   Boolean   @map("is_active")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+  building   Building  @relation(fields: [buildingId], references: [id])
+  flats      Flat[]
+
+  @@unique([number,buildingId])
+  @@map("floors")
+}
+
+model Flat {
+  id        Int       @id @default(autoincrement()) @map("id")
+  number    String    @map("number")
+  floorId   Int       @map("floor_id")
+  isActive  Boolean   @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+
+  floor     Floor          @relation(fields: [floorId], references: [id])
+  residents ResidentFlat[]
+
+  vehicles VehicleFlat[]
+
+  @@unique([number,floorId])
+  @@map("flats")
+}
+
+model Resident {
+  id          Int            @id @default(autoincrement()) @map("id")
+  name        String         @map("name")
+  email       String        
+  phoneNumber String         @map("phone_number")
+  isChild     Boolean        @map("is_child")
+  isActive    Boolean        @map("is_active")
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz()
+  flats       ResidentFlat[]
+
+  @@map("residents")
+}
+
+model ResidentFlat {
+  id         Int          @id @default(autoincrement()) @map("id")
+  flatId     Int          @map("flat_id")
+  residentId Int          @map("resident_id")
+  isPrimary  Boolean      @default(false) @map("is_primary")
+  type       ResidentType @map("type")
+  flat       Flat         @relation(fields: [flatId], references: [id])
+  resident   Resident     @relation(fields: [residentId], references: [id])
+
+  @@unique([flatId, residentId])
+  @@map("residents_flats")
+}
+
+/////////////////////////////////////////////////////////
+
+// VEHICLE MANAGEMENT
+
+/////////////////////////////////////////////////////////
+
+model Vehicle {
+  id       Int             @id @default(autoincrement()) @map("id")
+  name     String          @map("name")
+  number   String          @unique @map("number")
+  isActive Boolean         @map("is_active")
+  type     VehicleType     @map("type")
+  cards    Card[]
+  flats    VehicleFlat[]
+  devices  VehicleDevice[]
+  logs     VehicleLog[]
+
+  @@map("vehicles")
+}
+
+model Card {
+  id        Int          @id @default(autoincrement()) @map("id")
+  number    String       @map("number")
+  vehicleId Int?         @map("vehicle_id")
+  isActive  Boolean      @map("is_active")
+  type      CardType     @map("type")
+  devices   Device[]
+  logs      VehicleLog[]
+
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
+
+  @@map("cards")
+}
+
+model VehicleFlat {
+  id        Int @id @default(autoincrement()) @map("id")
+  vehicleId Int @map("vehicle_id")
+  flatId    Int @map("flat_id")
+
+  vehicles Vehicle @relation(fields: [vehicleId], references: [id])
+  flats    Flat    @relation(fields: [flatId], references: [id])
+
+  @@unique([vehicleId, flatId])
+  @@map("vehicles_flats")
+}
+
+model VehicleDevice {
+  id        Int @id @default(autoincrement()) @map("id")
+  vehicleId Int @map("vehicle_id")
+  deviceId  Int @map("device_id")
+
+  vehicles Vehicle @relation(fields: [vehicleId], references: [id])
+  devices  Device  @relation(fields: [deviceId], references: [id])
+
+  @@unique([vehicleId, deviceId])
+  @@map("vehicles_devices")
+}
+
+model VehicleLog {
+  id            Int             @id @default(autoincrement()) @map("id")
+  status        AccessStatus    @map("status")
+  direction     AccessDirection @map("direction")
+  vehicleCardId Int             @map("vehicle_card_id")
+  societyId     Int             @map("society_id")
+  deviceId      Int             @map("device_id")
+  vehicleId     Int             @map("vehicle_id")
+  dateTime     DateTime        @map("date_time") @db.Timestamptz()
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  card    Card     @relation(fields: [vehicleCardId], references: [id], onDelete: Cascade)
+  device  Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  society Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
+
+  @@map("vehicle_logs")
+}
+
+model Device {
+  id                Int        @id @default(autoincrement())
+  deviceId          String     @unique @map("device_id")
+  deviceKey         String     @map("device_key")
+  name              String
+  thingId           String     @map("thing_id")
+  thingKey          String     @map("thing_key")
+  channelId         String     @map("channel_id")
+  lastSyncTimestamp Int        @map("last_sync_timestamp")
+  isDeviceKeyExempt Boolean    @default(false) @map("is_device_key_exempt")
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt         DateTime?  @updatedAt @map("updated_at") @db.Timestamptz()
+  isActive          Boolean    @map("is_active")
+  type              DeviceType @map("type")
+  siteId            Int?       @map("site_id")
+  societyId         Int?       @map("society_id")
+  deviceBankId      Int?       @map("device_bank_id")
+
+  society Society? @relation(fields: [societyId], references: [id])
+  site    Site?    @relation(fields: [siteId], references: [id])
+
+  vehicles        VehicleDevice[]
+  deviceParameter DeviceParameter[]
+  vehicleCards    Card[]
+  logs            VehicleLog[]
+  deviceCards     DeviceCard[]
+  syncMessages    SyncMessage[]
+  iAmHereLogs     IAmHereLog[]
+  syncAckLogs     SyncAckLog[]
+  deviceImages    DeviceImage[]
+
+  @@map("devices")
+}
+
+model DeviceImage {
+  id           Int      @id @default(autoincrement())
+  image        Bytes
+  deviceId     Int      @map("device_id")
+  device       Device   @relation(fields: [deviceId], references: [id])
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("device_images")
+}
+
+model DeviceCard {
+  id        Int       @id @default(autoincrement()) @map("id")
+  deviceId  Int       @map("device_id")
+  cardId    String    @map("card_id")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz()
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@unique([deviceId, cardId])
+  @@map("device_cards")
+}
+
+model IAmHereLog {
+  id        Int      @id @default(autoincrement()) @map("id")
+  deviceId  Int      @map("device_id")
+  timestamp DateTime @default(now()) @map("timestamp") @db.Timestamptz()
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@map("i_am_here_logs")
+}
+
+model SyncMessage {
+  id        Int      @id @default(autoincrement()) @map("id")
+  syncToken String   @map("sync_token")
+  deviceId  Int      @map("device_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  device Device            @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  cards  SyncMessageCard[]
+
+  @@unique([deviceId, syncToken])
+  @@map("sync_messages")
+}
+
+model SyncMessageCard {
+  id            Int                   @id @default(autoincrement()) @map("id")
+  syncMessageId Int                   @map("sync_message_id")
+  cardId        String                @map("access_display")
+  status        SyncMessageCardAction @map("status")
+
+  card SyncMessage @relation(fields: [syncMessageId], references: [id], onDelete: Cascade)
+
+  @@map("sync_message_cards")
+}
+
+model SyncAckLog {
+  id        Int      @id @default(autoincrement()) @map("id")
+  deviceId  Int      @map("device_id")
+  timestamp Int      @map("timestamp")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@map("sync_ack_logs")
+}
+
+model DeviceParameter {
+  id         Int        @id @default(autoincrement()) @map("id")
+  deviceId   Int        @unique @map("device_id")
+  name       String     @map("name")
+  key        String     @map("key")
+  unit       String     @map("unit")
+  lowerLimit Int?       @map("lower_limit")
+  upperLimit Int?       @map("upper_limit")
+  type       DeviceType @map("type")
+  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@map("device_paramaters")
+}

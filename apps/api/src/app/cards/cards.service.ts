@@ -33,14 +33,32 @@ export class CardsService {
     if (card)
       throw new HttpException('card already exist!', HttpStatus.BAD_REQUEST);
 
-    return this.prisma.card.create({
-      data: {
-        number: addCardDto.number,
-        vehicleId: addCardDto.vehicleId,
-        isActive: addCardDto.isActive,
-        type: addCardDto.type,
+    const device = await this.prisma.device.findFirst({
+      where: {
+        deviceId: addCardDto.deviceId,
       },
     });
+
+    if (!device)
+      throw new HttpException('device not found', HttpStatus.NOT_FOUND);
+
+    const newCard = await this.prisma.card.create({
+      data: {
+        number: addCardDto.number,
+        isActive: addCardDto.isActive,
+        type: addCardDto.type,
+        deviceId: device.id,
+      },
+    });
+
+    return {
+      id: newCard.id,
+      number: newCard.number,
+      vehicleId: newCard.vehicleId,
+      isActive: newCard.isActive,
+      type: newCard.type,
+      deviceId: device.deviceId,
+    };
   }
 
   async findById(
@@ -123,9 +141,28 @@ export class CardsService {
       } else {
         const updatedCard = await this.prisma.card.update({
           where: { id: Number(id) },
-          data: cardDto,
+          data: {
+            id: cardDto.id,
+            number: cardDto.number,
+            vehicleId: cardDto.vehicleId,
+            isActive: cardDto.isActive,
+            type: cardDto.type,
+          },
         });
-        return updatedCard;
+
+        const device = await this.prisma.device.findFirst({
+          where:{
+            id: updatedCard.deviceId
+          }
+        })
+        return {
+          id: updatedCard.id,
+          number: updatedCard.number,
+          vehicleId: updatedCard.vehicleId,
+          isActive: updatedCard.isActive,
+          type: updatedCard.type,
+          deviceId: device.deviceId
+        };
       }
     }
   }
@@ -231,7 +268,7 @@ export class CardsService {
     //   whereArray.push({ siteGroupId: { in: allGroupsFilter } });
 
     if (number !== undefined) {
-      whereArray.push({ number: { contains: number ,mode:'insensitive'} });
+      whereArray.push({ number: { contains: number, mode: 'insensitive' } });
     }
 
     if (isActive !== undefined) {
@@ -353,7 +390,6 @@ export class CardsService {
     const deletedCard = await this.prisma.card.delete({
       where: { id: Number(id) },
     });
-
 
     if (!deletedCard) {
       throw new HttpException('Error in hard delete', HttpStatus.NOT_FOUND);

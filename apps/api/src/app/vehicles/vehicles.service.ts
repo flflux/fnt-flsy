@@ -197,21 +197,23 @@ export class VehiclesService {
               flatId = flat.id;
             }
 
-            //Section for creating resident if not exist.
+
+            if(flatData['Vehicle Make'] && flatData['Vehicle Number'] && flatData['Vehicle Type']){
+              //Section for creating resident if not exist.
             const vehicle = await tx.vehicle.findFirst({
               where:{
-                name: flatData['Name'],
-                number: flatData['Number'],
-                type: flatData['Type']
+                name: flatData['Vehicle Make'],
+                number: flatData['Vehicle Number'],
+                type: flatData['Vehicle Type']
               }
             })
 
             if(!vehicle){
               const newVehicle = await tx.vehicle.create({
                 data:{
-                  name: flatData['Name'],
-                  number: flatData['Number'],
-                  type: flatData['Type'],
+                  name: flatData['Vehicle Make'],
+                  number: flatData['Vehicle Number'],
+                  type: flatData['Vehicle Type'],
                   isActive: true
                 }
               });
@@ -236,11 +238,21 @@ export class VehiclesService {
               })
             }
 
+            }
+            
+
+            const device = await tx.device.findFirst({
+              where:{
+                deviceId: flatData['Device Name']
+              }
+            })
+
             const card = await tx.card.findFirst({
               where:{
                 number: String(flatData['Card Number']),
                 type: flatData['Card Type'],
-                isActive: true
+                isActive: true,
+                deviceId: device.id,
               }
             })
 
@@ -250,7 +262,9 @@ export class VehiclesService {
                   number: String(flatData['Card Number']),
                   type: flatData['Card Type'],
                   isActive: true,
-                  vehicleId: vehicleId
+                  vehicleId: vehicleId,
+                  deviceId: device.id,
+                  flatId: flatId
                 }
               })
             }

@@ -14,7 +14,9 @@ export class CardDto implements Card {
 
   @IsNumber()
   @ApiProperty()
-  vehicleId: number;
+  vehicleId?: number;
+
+  @ApiProperty() deviceId: string;
   
   @ApiProperty() isActive: boolean;
   @ApiProperty() type: CardType;

@@ -78,8 +78,8 @@ model User {
   email             String                 @unique
   phoneNumber       String?                @map("phone_number")
   firstName         String                 @map("first_name")
-  lastName          String                 @map("last_name") 
-  isActive          Boolean                @map("is_active") @default(true)
+  lastName          String                 @map("last_name")
+  isActive          Boolean                @default(true) @map("is_active")
   password          String?
   token             String?
   superRoles        UserSuperRole[]
@@ -211,7 +211,7 @@ model Society {
   devices      Device[]
   users        UserSocietyRole[]
   logs         VehicleLog[]
-  
+
   @@unique([code])
   @@map("societies")
 }
@@ -226,7 +226,7 @@ model Building {
   society   Society   @relation(fields: [societyId], references: [id])
   floors    Floor[]
 
-  @@unique([name,societyId])
+  @@unique([name, societyId])
   @@map("buildings")
 }
 
@@ -240,7 +240,7 @@ model Floor {
   building   Building  @relation(fields: [buildingId], references: [id])
   flats      Flat[]
 
-  @@unique([number,buildingId])
+  @@unique([number, buildingId])
   @@map("floors")
 }
 
@@ -255,16 +255,17 @@ model Flat {
   floor     Floor          @relation(fields: [floorId], references: [id])
   residents ResidentFlat[]
 
+  cards    Card[]
   vehicles VehicleFlat[]
 
-  @@unique([number,floorId])
+  @@unique([number, floorId])
   @@map("flats")
 }
 
 model Resident {
   id          Int            @id @default(autoincrement()) @map("id")
   name        String         @map("name")
-  email       String        
+  email       String
   phoneNumber String         @map("phone_number")
   isChild     Boolean        @map("is_child")
   isActive    Boolean        @map("is_active")
@@ -314,11 +315,15 @@ model Card {
   vehicleId Int?         @map("vehicle_id")
   isActive  Boolean      @map("is_active")
   type      CardType     @map("type")
-  devices   Device[]
+  flatId    Int?         @map("flat_id")
+  deviceId  Int          @map("device_id")
   logs      VehicleLog[]
 
+  flat    Flat?    @relation(fields: [flatId], references: [id])
   vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
+  device  Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
+  @@unique([deviceId, number])
   @@map("cards")
 }
 
@@ -354,7 +359,7 @@ model VehicleLog {
   societyId     Int             @map("society_id")
   deviceId      Int             @map("device_id")
   vehicleId     Int             @map("vehicle_id")
-  dateTime     DateTime        @map("date_time") @db.Timestamptz()
+  dateTime      DateTime        @map("date_time") @db.Timestamptz()
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
@@ -401,11 +406,11 @@ model Device {
 }
 
 model DeviceImage {
-  id           Int      @id @default(autoincrement())
-  image        Bytes
-  deviceId     Int      @map("device_id")
-  device       Device   @relation(fields: [deviceId], references: [id])
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  id        Int      @id @default(autoincrement())
+  image     Bytes
+  deviceId  Int      @map("device_id")
+  device    Device   @relation(fields: [deviceId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
   @@map("device_images")
 }

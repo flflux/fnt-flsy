@@ -13,7 +13,7 @@ import {
   SuperRoleName,
 } from '@prisma/client';
 import { ListDevicesPageDto } from './dto/list-devices-page.dto';
-import { AddDevicesDto, EditDevicesDto, EditDevicesKeyDto, EditDevicesSettingDto, EditDevicesStatusDto } from './dto/add-devices.dto';
+import { AddDevicesDto, EditDevicesDto, EditDevicesKeyDto, EditDevicesSettingDto, EditDevicesStatusDto, SbForceOpen } from './dto/add-devices.dto';
 import { ViewDeviceDto } from './dto/view-devices.dto';
 import { encodePassword } from '../auth/bcrypt';
 import { MainFluxService } from '../mainflux/mainflux.service';
@@ -1128,5 +1128,50 @@ export class DevicesService {
     );
 
     return transformedDeviceArray;
+  }
+
+
+  async forceOpenDeviceForSociety(societyCode: string,deviceDto: SbForceOpen){
+    const society = await this.prisma.society.findFirst({
+      where:{
+        code: societyCode
+      }
+    });
+    if(!society) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
+
+    const device = await this.prisma.device.findFirst({
+      where:{
+        deviceId: deviceDto.deviceId,
+        societyId: society.id
+      }
+    })
+
+    if(!device) throw new HttpException("device not found",HttpStatus.NOT_FOUND);
+
+    const log = await this.prisma.deviceLog.create({
+      data:{
+       isForcedOpen : true,
+       societyId: society.id,
+       deviceId: device.id,
+       dateTime: new Date()
+      }
+    })
+
+    await this.mainFluxService.connectAndPublishWithRetry(
+      {
+        ts: log.createdAt,
+        open: true
+      },
+      device.thingId,
+      device.thingKey,
+      device.channelId,
+      'device-force-open'
+    )
+
+    return {
+      "status": true,
+      "time": log.createdAt
+    }
+
   }
 }

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AddCardDto } from './dto/add-card.dto';
-import { CardDto } from './dto/card.dto';
+import { CardDto, SbCardDto } from './dto/card.dto';
 import { ViewCard } from '@fnt-flsy/data-transfer-types';
 import { ViewCardDto } from './dto/view-card.dto';
 import { Card, CardType, PrismaClient } from '@prisma/client';
@@ -151,17 +151,17 @@ export class CardsService {
         });
 
         const device = await this.prisma.device.findFirst({
-          where:{
-            id: updatedCard.deviceId
-          }
-        })
+          where: {
+            id: updatedCard.deviceId,
+          },
+        });
         return {
           id: updatedCard.id,
           number: updatedCard.number,
           vehicleId: updatedCard.vehicleId,
           isActive: updatedCard.isActive,
           type: updatedCard.type,
-          deviceId: device.deviceId
+          deviceId: device.deviceId,
         };
       }
     }
@@ -395,5 +395,62 @@ export class CardsService {
       throw new HttpException('Error in hard delete', HttpStatus.NOT_FOUND);
     }
     return;
+  }
+
+  async changeCardStatusAssoiatedWithFlatForSociety(
+    societyCode: string,
+    flatNumber: string,
+    sbCardDto: SbCardDto
+  ) {
+
+    const society = await this.prisma.society.findFirst({
+      where:{
+        code: societyCode
+      }
+    });
+    if(!society) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
+
+    const flat = await this.prisma.flat.findFirst({
+      where: {
+        number: flatNumber,
+        floor:{
+          building:{
+            society:{
+              id: society.id
+            }
+          }
+        }
+      }
+    })
+
+    if(!flat) throw new HttpException("flat not found",HttpStatus.NOT_FOUND);
+
+    const card = await this.prisma.card.findFirst({
+      where:{
+        flatId: flat.id,
+        number: sbCardDto.number
+      }
+    });
+    if(!card) throw new HttpException("card not found",HttpStatus.NOT_FOUND);
+
+    const updatedCard = await this.prisma.card.update({
+      where:{
+       id: card.id
+      },
+      data:{
+        isActive: Boolean(sbCardDto.isActive)
+      },
+      select:{
+        number: true,
+        isActive: true,
+        type: true
+      }
+    })
+
+    return updatedCard
+
+
+
+
   }
 }

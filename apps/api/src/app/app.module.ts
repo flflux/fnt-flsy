@@ -37,7 +37,7 @@ import { VehicleDeviceService } from './vehicle-device/vehicle-device.service';
 import { LogModule } from './log/log.module';
 import { CommunicationModule } from './communication/communication.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { VehicleLogsModule } from './vehicle-logs/vehicle-logs.module';
+import { VehicleLogsModule } from './vehicle-logs/device-logs.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({

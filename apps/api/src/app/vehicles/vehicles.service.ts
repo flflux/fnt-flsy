@@ -238,6 +238,8 @@ export class VehiclesService {
               })
             }
 
+            }else{
+              vehicleId = null
             }
             
 

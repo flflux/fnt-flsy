@@ -210,7 +210,7 @@ model Society {
   buildings    Building[]
   devices      Device[]
   users        UserSocietyRole[]
-  logs         VehicleLog[]
+  logs         DeviceLog[]
 
   @@unique([code])
   @@map("societies")
@@ -304,7 +304,7 @@ model Vehicle {
   cards    Card[]
   flats    VehicleFlat[]
   devices  VehicleDevice[]
-  logs     VehicleLog[]
+  logs     DeviceLog[]
 
   @@map("vehicles")
 }
@@ -317,7 +317,7 @@ model Card {
   type      CardType     @map("type")
   flatId    Int?         @map("flat_id")
   deviceId  Int          @map("device_id")
-  logs      VehicleLog[]
+  logs      DeviceLog[]
 
   flat    Flat?    @relation(fields: [flatId], references: [id])
   vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
@@ -351,24 +351,25 @@ model VehicleDevice {
   @@map("vehicles_devices")
 }
 
-model VehicleLog {
-  id            Int             @id @default(autoincrement()) @map("id")
-  status        AccessStatus    @map("status")
-  direction     AccessDirection @map("direction")
-  vehicleCardId Int             @map("vehicle_card_id")
-  societyId     Int             @map("society_id")
-  deviceId      Int             @map("device_id")
-  vehicleId     Int             @map("vehicle_id")
-  dateTime      DateTime        @map("date_time") @db.Timestamptz()
+model DeviceLog {
+  id            Int              @id @default(autoincrement()) @map("id")
+  status        AccessStatus?    @map("status")
+  direction     AccessDirection? @map("direction")
+  vehicleCardId Int?             @map("vehicle_card_id")
+  societyId     Int              @map("society_id")
+  deviceId      Int              @map("device_id")
+  vehicleId     Int?             @map("vehicle_id")
+  dateTime      DateTime         @map("date_time") @db.Timestamptz()
+  isForcedOpen  Boolean?         @default(false) @map("is_forced_open")
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
-  card    Card     @relation(fields: [vehicleCardId], references: [id], onDelete: Cascade)
+  card    Card?    @relation(fields: [vehicleCardId], references: [id], onDelete: Cascade)
   device  Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
   society Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
   vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
 
-  @@map("vehicle_logs")
+  @@map("device_logs")
 }
 
 model Device {
@@ -395,7 +396,7 @@ model Device {
   vehicles        VehicleDevice[]
   deviceParameter DeviceParameter[]
   vehicleCards    Card[]
-  logs            VehicleLog[]
+  logs            DeviceLog[]
   deviceCards     DeviceCard[]
   syncMessages    SyncMessage[]
   iAmHereLogs     IAmHereLog[]

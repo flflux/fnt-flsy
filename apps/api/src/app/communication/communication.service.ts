@@ -79,15 +79,15 @@ export class CommunicationService {
     // TODO: maintain MQTT and MyGate notification status
     // todo: check the timestamp from accessNotifDto if not availabel then use current timestamp
 
-    const log = await this.prismaService.vehicleLog.create({
+    const log = await this.prismaService.deviceLog.create({
       data: {
         status: accessNotifyDto.st=='ALLOW' ? "ALLOW" : "DISALLOW",
         direction: accessNotifyDto.dr=='IN'? "IN":"OUT",
         vehicleCardId: card.id,
         societyId: societyId,
         deviceId: device.id,
-        vehicleId: card.vehicle.id,
-        dateTime:accessNotifyDto.ts
+        vehicleId: card.vehicle?.id,
+        dateTime: new Date(Number(accessNotifyDto.ts) * 1000)
       },
     });
     console.log(

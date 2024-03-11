@@ -23,3 +23,9 @@ export class CardDto implements Card {
 
 
 }
+
+
+export class SbCardDto{
+  number: string
+  isActive: boolean
+}

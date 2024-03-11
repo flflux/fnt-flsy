@@ -1,61 +1,81 @@
-import { Body, Controller, Delete, Get, HttpCode, Request,HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Request,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { AddCardDto } from './dto/add-card.dto';
-import { CardDto } from './dto/card.dto';
+import { CardDto, SbCardDto } from './dto/card.dto';
 import { ViewCardDto } from './dto/view-card.dto';
 import { ListCardDto } from './dto/list-card.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ListCardPageDto } from './dto/list-card-page.dto';
 import { CardType } from '@prisma/client';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
 
-
-@ApiTags('cards')
 @Controller()
 export class CardsController {
-    constructor(private cardsService: CardsService) {}
+  constructor(private cardsService: CardsService) {}
 
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN,Role.SOCIETY_ADMIN)  
+  @ApiTags('cards')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN, Role.SOCIETY_ADMIN)
   @Post('/societies/:societyId/cards')
   @HttpCode(HttpStatus.CREATED)
   @ApiOkResponse({ type: CardDto })
   add(
     @Param('societyId') societyId: number,
-    @Body() addCardDto: AddCardDto): Promise<CardDto> {
-    return this.cardsService.add(+societyId,addCardDto);
+    @Body() addCardDto: AddCardDto
+  ): Promise<CardDto> {
+    return this.cardsService.add(+societyId, addCardDto);
   }
 
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN,Role.SOCIETY_ADMIN)  
+  @ApiTags('cards')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN, Role.SOCIETY_ADMIN)
   @Get('/societies/:societyId/cards/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: ViewCardDto })
   //   @Roles(Role.ORGANIZATION_ADMIN, Role.FOUNTLAB_ADMIN)
   findById(
     @Param('societyId') societyId: number,
-    @Param('id') id: number, @Request() req): Promise<ViewCardDto> {
+    @Param('id') id: number,
+    @Request() req
+  ): Promise<ViewCardDto> {
     const { user } = req;
-    return this.cardsService.findById(+societyId,+id, user.id);
+    return this.cardsService.findById(+societyId, +id, user.id);
   }
 
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN,Role.SOCIETY_ADMIN)  
+  @ApiTags('cards')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN, Role.SOCIETY_ADMIN)
   @Put('/societies/:societyId/cards/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: CardDto })
   //   @Roles(Role.FOUNTLAB_ADMIN)
   edit(
     @Param('societyId') societyId: number,
-    @Body() cardDto: CardDto, @Param('id') id: number): Promise<CardDto> {
-    return this.cardsService.edit(+societyId,cardDto, +id);
+    @Body() cardDto: CardDto,
+    @Param('id') id: number
+  ): Promise<CardDto> {
+    return this.cardsService.edit(+societyId, cardDto, +id);
   }
 
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN,Role.SOCIETY_ADMIN)  
+  @ApiTags('cards')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN, Role.SOCIETY_ADMIN)
   @Get('/societies/:societyId/cards')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: ListCardDto })
@@ -99,16 +119,37 @@ export class CardsController {
   //   return this.cardsService.softDeleteCard(+societyId,+id);
   // }
 
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN,Role.SOCIETY_ADMIN)  
+  @ApiTags('cards')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN, Role.SOCIETY_ADMIN)
   @Delete('/societies/:societyId/cards/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOkResponse()
   //   @Roles(Role.FOUNTLAB_ADMIN)
   hardDeleteFlat(
     @Param('societyId') societyId: number,
-    @Param('id') id: number) {
-    return this.cardsService.deleteCard(+societyId,+id);
+    @Param('id') id: number
+  ) {
+    return this.cardsService.deleteCard(+societyId, +id);
   }
 
+
+  @ApiTags('schnell-backend')
+  @ApiOperation({ summary: 'get cards associated with flat for the society' })
+  @Put('/societies/:societyCode/flats/:flatNumber/cards')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async changeCardStatusAssoiatedWithFlatForSociety(
+    @Request() req,
+    @Param('societyCode') societyCode: string,
+    @Param('flatNumber') flatNumber: string,
+    @Body() sbCardDto: SbCardDto,
+  ) {
+    const { user } = req;
+    const listsite = await this.cardsService.changeCardStatusAssoiatedWithFlatForSociety(
+      societyCode,
+      flatNumber,
+      sbCardDto
+    );
+    return listsite;
+  }
 }

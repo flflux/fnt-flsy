@@ -6,9 +6,10 @@ import { Page } from './page';
 export interface Card {
   id: number;
   number: string;
-  vehicleId: number;
+  vehicleId?: number;
   isActive: boolean;
   type: CardType;
+  deviceId: string;
 }
 
 export interface ViewCard {
@@ -21,6 +22,6 @@ export interface ViewCard {
 
 export type ListCard = Pick<ViewCard, 'id' | 'number' | 'vehicleId'| 'isActive'>;
 
-export type AddCard = Pick<Card, 'number' | 'vehicleId'| 'isActive'| 'type'>;
+export type AddCard = Pick<Card, 'number' | 'vehicleId'| 'isActive'| 'type' | 'deviceId'>;
 
 export type ListCardPage = Page<ListCard>;

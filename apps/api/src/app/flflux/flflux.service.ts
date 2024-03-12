@@ -65,6 +65,7 @@ maintain the sync message state with the tables.
         const device = await tx.device.findFirst({
           where: { id: id ,isActive: true},
           include: {
+            // TODO : we need to remove vehicles from here..
             vehicles:{
               select:{
                 vehicles:{
@@ -80,9 +81,16 @@ maintain the sync message state with the tables.
         
         const { deviceCards } = device;
 
-        const vehicleCards = device.vehicles.map((vehicle): Card=>{
-          return vehicle.vehicles.cards[0]
-        });
+        const vehicleCards = await tx.card.findMany({
+          where:{
+            deviceId: device.id,
+            isActive: true
+          }
+        })
+
+        // const vehicleCards = device.vehicles.map((vehicle): Card=>{
+        //   return vehicle.vehicles.cards[0]
+        // });
         
         const deviceCardsCardIds = deviceCards.map((c) => c.cardId);
         const vehicleCardsAccessDisplays = vehicleCards.map(

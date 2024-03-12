@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client';
 import { ViewVehicleLogsDto } from './dto/view-vehicle-logs.dto';
 
 @Injectable()
-export class VehicleLogsService {
+export class DeviceLogsService {
   private prisma = new PrismaClient();
 
-  async getVehicleLogs(
+  async getDeviceLogs(
     pageSize: number,
     pageOffset: number,
     sortBy: string,
@@ -76,13 +76,22 @@ export class VehicleLogsService {
     const isPaginate = isPaginated ? isPaginated : 'true';
 
     if (isPaginate == 'true') {
-      const count = await this.prisma.vehicleLog.count({
+      const count = await this.prisma.deviceLog.count({
         where: whereQuery,
       });
-      const listVehicleLog = await this.prisma.vehicleLog.findMany({
+      const listVehicleLog = await this.prisma.deviceLog.findMany({
         select: {
           id: true,
           device: { select: { id: true, name: true, deviceId: true } },
+          card: {
+            select: {
+              number: true,
+              type: true,
+              flat: {
+                select: { number: true },
+              },
+            },
+          },
           vehicle: {
             select: {
               id: true,
@@ -116,7 +125,7 @@ export class VehicleLogsService {
         content: listVehicleLog,
       };
     } else {
-      const listVehicleLog = await this.prisma.vehicleLog.findMany({
+      const listVehicleLog = await this.prisma.deviceLog.findMany({
         select: {
           id: true,
           device: { select: { id: true, name: true, deviceId: true } },

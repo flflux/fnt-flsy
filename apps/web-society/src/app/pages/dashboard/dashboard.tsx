@@ -24,6 +24,7 @@ import DeleteAdmin from './delete-admin/delete-admin';
 import { enqueueSnackbar } from 'notistack';
 import Loading from '../../Component/loading/loading';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import CodeIcon from '@mui/icons-material/Code';
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
 import { ForkLeft } from '@mui/icons-material';
@@ -721,6 +722,8 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
             <Card sx={{ minWidth: '40% '}} className={styles['society-details']}>
                 <CardContent>
                   <Typography variant="body2">
+                  <div className={styles['soc-detail-add']}><CodeIcon sx={{marginRight:"4px"}}/>{society?.code}</div>
+                    <br /> 
                    <div className={styles['soc-detail-add']}><LocalPhoneIcon sx={{marginRight:"4px"}}/>{society?.phoneNumber}</div>
                     <br />
                     <div className={styles['soc-detail-add']}><EmailIcon sx={{marginRight:"4px"}}/>{society?.email}</div>

@@ -32,6 +32,7 @@
     "@nestjs/platform-express": "^10.2.10",
     "@nestjs/schedule": "^3.0.1",
     "@nestjs/swagger": "^7.1.16",
+    "@nx/nx-linux-x64-musl": "^18.0.8",
     "@prisma/client": "^5.1.1",
     "@swc/helpers": "~0.5.0",
     "axios": "^1.4.0",

@@ -19,7 +19,7 @@ async function bootstrap() {
     .addTag('fnt-flsy')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('swagger', app, document);
+  //SwaggerModule.setup('swagger', app, document);
   app.use(
     session({
       secret: 'my-secret',

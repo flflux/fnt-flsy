@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AddCardDto } from './dto/add-card.dto';
-import { CardDto } from './dto/card.dto';
+import { CardDto, SbCardDto } from './dto/card.dto';
 import { ViewCard } from '@fnt-flsy/data-transfer-types';
 import { ViewCardDto } from './dto/view-card.dto';
 import { Card, CardType, PrismaClient } from '@prisma/client';
@@ -33,14 +33,32 @@ export class CardsService {
     if (card)
       throw new HttpException('card already exist!', HttpStatus.BAD_REQUEST);
 
-    return this.prisma.card.create({
-      data: {
-        number: addCardDto.number,
-        vehicleId: addCardDto.vehicleId,
-        isActive: addCardDto.isActive,
-        type: addCardDto.type,
+    const device = await this.prisma.device.findFirst({
+      where: {
+        deviceId: addCardDto.deviceId,
       },
     });
+
+    if (!device)
+      throw new HttpException('device not found', HttpStatus.NOT_FOUND);
+
+    const newCard = await this.prisma.card.create({
+      data: {
+        number: addCardDto.number,
+        isActive: addCardDto.isActive,
+        type: addCardDto.type,
+        deviceId: device.id,
+      },
+    });
+
+    return {
+      id: newCard.id,
+      number: newCard.number,
+      vehicleId: newCard.vehicleId,
+      isActive: newCard.isActive,
+      type: newCard.type,
+      deviceId: device.deviceId,
+    };
   }
 
   async findById(
@@ -123,9 +141,28 @@ export class CardsService {
       } else {
         const updatedCard = await this.prisma.card.update({
           where: { id: Number(id) },
-          data: cardDto,
+          data: {
+            id: cardDto.id,
+            number: cardDto.number,
+            vehicleId: cardDto.vehicleId,
+            isActive: cardDto.isActive,
+            type: cardDto.type,
+          },
         });
-        return updatedCard;
+
+        const device = await this.prisma.device.findFirst({
+          where: {
+            id: updatedCard.deviceId,
+          },
+        });
+        return {
+          id: updatedCard.id,
+          number: updatedCard.number,
+          vehicleId: updatedCard.vehicleId,
+          isActive: updatedCard.isActive,
+          type: updatedCard.type,
+          deviceId: device.deviceId,
+        };
       }
     }
   }
@@ -231,7 +268,7 @@ export class CardsService {
     //   whereArray.push({ siteGroupId: { in: allGroupsFilter } });
 
     if (number !== undefined) {
-      whereArray.push({ number: { contains: number ,mode:'insensitive'} });
+      whereArray.push({ number: { contains: number, mode: 'insensitive' } });
     }
 
     if (isActive !== undefined) {
@@ -354,10 +391,66 @@ export class CardsService {
       where: { id: Number(id) },
     });
 
-
     if (!deletedCard) {
       throw new HttpException('Error in hard delete', HttpStatus.NOT_FOUND);
     }
     return;
+  }
+
+  async changeCardStatusAssoiatedWithFlatForSociety(
+    societyCode: string,
+    flatNumber: string,
+    sbCardDto: SbCardDto
+  ) {
+
+    const society = await this.prisma.society.findFirst({
+      where:{
+        code: societyCode
+      }
+    });
+    if(!society) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
+
+    const flat = await this.prisma.flat.findFirst({
+      where: {
+        number: flatNumber,
+        floor:{
+          building:{
+            society:{
+              id: society.id
+            }
+          }
+        }
+      }
+    })
+
+    if(!flat) throw new HttpException("flat not found",HttpStatus.NOT_FOUND);
+
+    const card = await this.prisma.card.findFirst({
+      where:{
+        flatId: flat.id,
+        number: sbCardDto.number
+      }
+    });
+    if(!card) throw new HttpException("card not found",HttpStatus.NOT_FOUND);
+
+    const updatedCard = await this.prisma.card.update({
+      where:{
+       id: card.id
+      },
+      data:{
+        isActive: Boolean(sbCardDto.isActive)
+      },
+      select:{
+        number: true,
+        isActive: true,
+        type: true
+      }
+    })
+
+    return updatedCard
+
+
+
+
   }
 }

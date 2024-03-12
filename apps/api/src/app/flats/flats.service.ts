@@ -657,4 +657,46 @@ export class FlatsService {
     }
     
   }
+
+
+  async getCardsAssociatedWithFlatForSociety(societyCode: string,flatNumber: string){
+    const society = await this.prisma.society.findFirst({
+      where:{
+        code: societyCode
+      }
+    });
+    if(!society) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
+
+    const flat = await this.prisma.flat.findFirst({
+      select:{
+        number: true,
+        cards:{
+          select:{
+            number: true,
+            isActive: true,
+            type: true
+          }
+        }
+      },
+      where: {
+        number: flatNumber,
+        floor:{
+          building:{
+            society:{
+              id: society.id
+            }
+          }
+        }
+      }
+    })
+
+    if(!flat) throw new HttpException("flat not found",HttpStatus.NOT_FOUND);
+
+    console.log(flat);
+
+    return flat;
+    
+
+
+  }
 }

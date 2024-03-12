@@ -7,7 +7,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { VehicleLogsService } from './vehicle-logs.service';
+import { DeviceLogsService } from './device-logs.service';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -16,8 +16,8 @@ import { Role } from '../auth/role.enum';
 
 @ApiTags('vehicle-logs')
 @Controller('vehicle-logs')
-export class VehicleLogsController {
-  constructor(private vehicleLogService: VehicleLogsService) {}
+export class DeviceLogsController {
+  constructor(private vehicleLogService: DeviceLogsService) {}
 
   @UseGuards(AuthGuard,RolesGuard)
   @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN,Role.SOCIETY_ADMIN)
@@ -41,7 +41,7 @@ export class VehicleLogsController {
     @Query('sortOrder') sortOrder?: 'asc' | 'desc',
     @Query('isPaginated') isPaginated?: string
   ) {
-    return this.vehicleLogService.getVehicleLogs(
+    return this.vehicleLogService.getDeviceLogs(
       +pageSize,
       +pageOffset,
       sortBy,

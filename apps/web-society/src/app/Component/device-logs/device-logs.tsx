@@ -34,6 +34,13 @@ interface Response{
       }
     ]
   },
+  card: {
+      number: string,
+      type: string,
+      flat: {
+         number: string
+      },
+  },
   status: string,
   direction: string,
   dateTime: Date
@@ -97,12 +104,12 @@ export function DeviceLogs({id, refreshLogs}: DeviceLogsProps) {
               /> */}
               <CardContent sx={{ flex: 1 }}>
                 <Typography variant="body2" component="div" className={styles['logs-card-text']}>
-                  <div className={styles['logs-name']}>{item.device.name}</div>
-                  <div id={styles['dateTime']}>{item.dateTime}</div>
+                  <div className={styles['logs-name']}>{item.card.flat.number}</div>
+                  <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
                 </Typography>
                 <Typography variant="body2" color="text.secondary" className={styles['logs-card-text']}>
-                  <div>{item.vehicle.number}</div>      
-                  <div>{item.vehicle.name}</div>
+                  <div>{item.card?.number}</div>      
+                  <div>{item.card?.type}</div>
                   <div>{item.direction}</div>
                 </Typography>
               </CardContent>

@@ -35,13 +35,13 @@ export class LogService {
         const size = pageSize ? pageSize : 10;
         const offset = pageOffset ? pageOffset : 0;
         const orderBy = { [sort]: order };
-        const count = await this.prisma.vehicleLog.count({
+        const count = await this.prisma.deviceLog.count({
             where: {
                 societyId: societyId
             },
           });
           
-        const logs = await this.prisma.vehicleLog.findMany({
+        const logs = await this.prisma.deviceLog.findMany({
             take: Number(size),
             skip: Number(size * offset),
             orderBy,

@@ -20,7 +20,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Role } from '../auth/role.enum';
 import { Roles } from '../auth/roles.decorator';
-import { AddDevicesDto, EditDevicesDto, EditDevicesKeyDto, EditDevicesSettingDto, EditDevicesStatusDto } from './dto/add-devices.dto';
+import { AddDevicesDto, EditDevicesDto, EditDevicesKeyDto, EditDevicesSettingDto, EditDevicesStatusDto, SbForceOpen } from './dto/add-devices.dto';
 
 import { ListDevicesPageDto } from './dto/list-devices-page.dto';
 import { ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -30,11 +30,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import 'multer';
 
-@ApiTags('devices')
+
 @Controller()
 export class DevicesController {
   constructor(private deviceService: DevicesService) {}
 
+  @ApiTags('devices')
   @ApiOperation({summary:'add device'})
   @UseGuards(AuthGuard, RolesGuard)
   @Post('/societies/:societyId/devices')
@@ -45,8 +46,21 @@ export class DevicesController {
     return this.deviceService.addDevice(+societyId,deviceDto);
   }
 
+  @ApiTags('schnell-backend')
+  @ApiOperation({summary:'force open gate'})
+  // @UseGuards(AuthGuard, RolesGuard)
+  @Post('/societies/:societyCode/devices/force-open')
+  @HttpCode(HttpStatus.CREATED)
+  // @ApiOkResponse({ type: ViewDeviceDto })
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  forceOpenDeviceForSociety( @Param('societyCode') societyCode: string, @Body() deviceDto:SbForceOpen) {
+    return this.deviceService.forceOpenDeviceForSociety(societyCode,deviceDto);
+  }
 
 
+
+
+  @ApiTags('devices')
   @ApiOperation({summary:'add device Image'})
   @ApiBody({ type: CreateImageDto })
   @ApiConsumes('multipart/form-data') // Specify the media type for file upload
@@ -78,6 +92,7 @@ export class DevicesController {
   }
 
 
+  @ApiTags('devices')
   @ApiOperation({summary:"Find a device image belonging to a society"})
   @UseGuards(AuthGuard, RolesGuard)
   @Get('/societies/:societyId/devices/:id/images')
@@ -88,6 +103,7 @@ export class DevicesController {
   }
 
 
+  @ApiTags('devices')
   @ApiOperation({summary:'Find devices belonging to a society'})
   @UseGuards(AuthGuard, RolesGuard)
   @Get('/societies/:societyId/devices')
@@ -127,6 +143,7 @@ export class DevicesController {
   }
 
 
+  @ApiTags('devices')
   @ApiOperation({summary:"Find a device belonging to a society"})
   @UseGuards(AuthGuard, RolesGuard)
   @Get('/societies/:societyId/devices/:id')
@@ -138,6 +155,7 @@ export class DevicesController {
     return this.deviceService.findById(+id,+societyId, user.id);
   }
 
+  @ApiTags('devices')
   @ApiOperation({summary: 'Edit device'})
   @UseGuards(AuthGuard, RolesGuard)
   @Put('/societies/:societyId/devices/:id')
@@ -151,6 +169,7 @@ export class DevicesController {
   }
 
 
+  @ApiTags('devices')
   @ApiOperation({summary: 'Edit device setting'})
   @UseGuards(AuthGuard, RolesGuard)
   @Put('/societies/:societyId/devices/:id/settings')
@@ -162,6 +181,7 @@ export class DevicesController {
     return this.deviceService.editDeviceSetting(deviceDto, +id,+societyId,user.id);
   }
 
+  @ApiTags('devices')
   @ApiOperation({summary: 'Edit device key'})
   @UseGuards(AuthGuard, RolesGuard)
   @Put('/societies/:societyId/devices/:id/key')
@@ -172,6 +192,7 @@ export class DevicesController {
     return this.deviceService.editDeviceKey(deviceDto, +id,+societyId,user.id);
   }
 
+  @ApiTags('devices')
   @ApiOperation({summary: 'Edit device active Status'})
   @UseGuards(AuthGuard, RolesGuard)
   @Put('/societies/:societyId/devices/:id/status')
@@ -184,6 +205,7 @@ export class DevicesController {
   }
 
 
+  @ApiTags('devices')
   @ApiOperation({summary: 'delete device'})
   @UseGuards(AuthGuard, RolesGuard)
   @Delete('/societies/:societyId/devices/:id')
@@ -195,6 +217,7 @@ export class DevicesController {
 
 
 
+  @ApiTags('devices')
   @ApiOperation({summary: 'delete device Image'})
   @UseGuards(AuthGuard, RolesGuard)
   @Delete('/societies/:societyId/devices/:deviceId/image')
@@ -206,6 +229,7 @@ export class DevicesController {
 
   
 
+  @ApiTags('devices')
   @ApiOperation({summary:'find devices'})
   @UseGuards(AuthGuard, RolesGuard)
   @Get('/devices')

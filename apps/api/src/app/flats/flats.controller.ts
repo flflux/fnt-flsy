@@ -35,6 +35,7 @@ import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '../core/dto/page-base.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller()
 export class FlatsController {
@@ -78,9 +79,8 @@ export class FlatsController {
   }
 
   @ApiTags('schnell-backend')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'get cards associated with flat for the society' })
-  // @UseGuards(AuthGuard, RolesGuard)
-  // @Roles(Role.FOUNTLAB_ADMIN, Role.ORGANIZATION_ADMIN, Role.SOCIETY_ADMIN)
   @Get('/societies/:societyCode/flats/:flatNumber/cards')
   @HttpCode(HttpStatus.OK)
   // @ApiOkResponse({ type: ListFlatPageDto })

@@ -1153,6 +1153,7 @@ export class DevicesService {
        isForcedOpen : true,
        societyId: society.id,
        deviceId: device.id,
+       direction: deviceDto.direction,
        dateTime: new Date()
       }
     })
@@ -1160,7 +1161,8 @@ export class DevicesService {
     await this.mainFluxService.connectAndPublishWithRetry(
       {
         ts: log.createdAt,
-        open: true
+        open: true,
+        direction: deviceDto.direction
       },
       device.thingId,
       device.thingKey,

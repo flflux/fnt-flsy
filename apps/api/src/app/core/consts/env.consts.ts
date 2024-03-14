@@ -17,3 +17,4 @@ export const ADMIN_URL = process.env.ADMIN_URL;
 
 export const MYGATE_API_URL = process.env.MYGATE_API_URL;
 export const MYGATE_API_KEY = process.env.MYGATE_API_KEY;
+export const JWT_SECRET = process.env.JWT_SECRET

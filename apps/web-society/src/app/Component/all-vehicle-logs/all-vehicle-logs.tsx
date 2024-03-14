@@ -96,7 +96,7 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
   };
 
   return (
-    <div className={styles['container']}>
+    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto' }}>
       {loadingLogs ? (
         <div
           style={{

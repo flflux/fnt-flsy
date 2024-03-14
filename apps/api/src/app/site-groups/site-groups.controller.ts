@@ -27,67 +27,67 @@ import { ViewSiteGroupDto } from './dto/view-site-group.dto';
 export class SiteGroupsController {
   constructor(private siteGroupsService: SiteGroupsService) {}
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOkResponse({type: SiteGroupDto})
-  @Roles(Role.FOUNTLAB_ADMIN)
-  add(@Body() addSiteGroupDto:AddSiteGroupDto):Promise<SiteGroupDto> {
-    return this.siteGroupsService.add(addSiteGroupDto);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Post()
+  // @HttpCode(HttpStatus.CREATED)
+  // @ApiOkResponse({type: SiteGroupDto})
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  // add(@Body() addSiteGroupDto:AddSiteGroupDto):Promise<SiteGroupDto> {
+  //   return this.siteGroupsService.add(addSiteGroupDto);
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get('/:id')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({type: ViewSiteGroupDto})
-  @Roles(Role.ORGANIZATION_ADMIN, Role.FOUNTLAB_ADMIN)
-  findById(@Param('id') id: number, @Request() req):Promise<ViewSiteGroupDto> {
-    const { user } = req;
-    return this.siteGroupsService.findById(id, user.id);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Get('/:id')
+  // @HttpCode(HttpStatus.OK)
+  // @ApiOkResponse({type: ViewSiteGroupDto})
+  // @Roles(Role.ORGANIZATION_ADMIN, Role.FOUNTLAB_ADMIN)
+  // findById(@Param('id') id: number, @Request() req):Promise<ViewSiteGroupDto> {
+  //   const { user } = req;
+  //   return this.siteGroupsService.findById(id, user.id);
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Put('/:id')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({type: SiteGroupDto})
-  @Roles(Role.FOUNTLAB_ADMIN)
-  edit(@Body() siteGroupDto:SiteGroupDto, @Param('id') id: number):Promise<SiteGroupDto> {
-    return this.siteGroupsService.edit(siteGroupDto, id);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Put('/:id')
+  // @HttpCode(HttpStatus.OK)
+  // @ApiOkResponse({type: SiteGroupDto})
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  // edit(@Body() siteGroupDto:SiteGroupDto, @Param('id') id: number):Promise<SiteGroupDto> {
+  //   return this.siteGroupsService.edit(siteGroupDto, id);
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({type: ListSiteGroupPageDto})
-  @Roles(Role.ORGANIZATION_ADMIN,Role.FOUNTLAB_ADMIN)
-  async getFilteredPosts(
-    @Request() req,
-    @Query('pageSize') pageSize?: number,
-    @Query('pageOffset') pageOffset?: number,
-    @Query('name') name?: string,
-    @Query('organizationId') organizationId?: number,
-    @Query('sortBy') sortBy?: string,
-    @Query('sortOrder') sortOrder?: 'asc' | 'desc'
-  ):Promise<ListSiteGroupPageDto> {
-    const {user} = req;
-    const listgroup = await this.siteGroupsService.getFilteredPosts(
-      +pageSize,
-      +pageOffset,
-      name,
-      +organizationId,
-      sortBy,
-      sortOrder,
-      user.id
-    );
-    return listgroup;
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Get()
+  // @HttpCode(HttpStatus.OK)
+  // @ApiOkResponse({type: ListSiteGroupPageDto})
+  // @Roles(Role.ORGANIZATION_ADMIN,Role.FOUNTLAB_ADMIN)
+  // async getFilteredPosts(
+  //   @Request() req,
+  //   @Query('pageSize') pageSize?: number,
+  //   @Query('pageOffset') pageOffset?: number,
+  //   @Query('name') name?: string,
+  //   @Query('organizationId') organizationId?: number,
+  //   @Query('sortBy') sortBy?: string,
+  //   @Query('sortOrder') sortOrder?: 'asc' | 'desc'
+  // ):Promise<ListSiteGroupPageDto> {
+  //   const {user} = req;
+  //   const listgroup = await this.siteGroupsService.getFilteredPosts(
+  //     +pageSize,
+  //     +pageOffset,
+  //     name,
+  //     +organizationId,
+  //     sortBy,
+  //     sortOrder,
+  //     user.id
+  //   );
+  //   return listgroup;
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOkResponse()
-  @Roles(Role.FOUNTLAB_ADMIN)
-  deleteGrp(@Param('id') id: number) {
-    return this.siteGroupsService.deleteGrp(id);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Delete('/:id')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // @ApiOkResponse()
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  // deleteGrp(@Param('id') id: number) {
+  //   return this.siteGroupsService.deleteGrp(id);
+  // }
 }

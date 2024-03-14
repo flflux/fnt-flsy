@@ -6,6 +6,9 @@ import { MainFluxService } from '../mainflux/mainflux.service';
 // import { MyGateService } from '../mygate/mygate.service';
 // import { AuthService } from '../core/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
+import { AuthService } from '../auth/auth.service';
+import { UsersService } from '../users/users.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Module({
   // imports: [PrismaClientMygateModule],
@@ -13,8 +16,9 @@ import { ConfigService } from '@nestjs/config';
   providers: [
     CommunicationService,
     MainFluxService,
-    // MyGateService,
-    // AuthService,
+    NotificationsService,
+    AuthService,
+    UsersService,
     ConfigService,
   ],
 })

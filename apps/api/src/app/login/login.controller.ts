@@ -1,7 +1,7 @@
 import { Controller, Post, UseGuards, Request, Body, Get, HttpStatus, Param, HttpCode } from '@nestjs/common';
 import { LocalAuthGuard } from './../auth/local-auth.guard';
 import { LoginDto } from '../core/dto/user-login.dto';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../users/users.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserDto } from '../users/dto/user.dto';
@@ -14,6 +14,13 @@ export class LoginController {
   @Post('/login')
   login(@Body() loginDto:LoginDto, @Request() req) {
     return this.usersService.findByIdForSwitch(req.user.id);
+  }
+
+
+  @ApiTags('schnell-backend')
+  @Post('/client-token')
+  token(@Body() loginDto:LoginDto, @Request() req) {
+    return this.usersService.generateJWTtokenForUser(loginDto);
   }
 
   @UseGuards(AuthGuard)

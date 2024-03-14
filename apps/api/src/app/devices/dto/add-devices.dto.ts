@@ -7,6 +7,7 @@ import {
   EditDevicesSetting,
   EditDevicesStatus,
 } from '@fnt-flsy/data-transfer-types';
+import { AccessDirection } from '@prisma/client';
 
 export class AddDevicesDto
   extends PickType(DeviceDto, ['name', 'deviceId', 'type'])
@@ -40,4 +41,9 @@ export class EditDevicesStatusDto
 export class SbForceOpen {
   @ApiProperty()
   deviceId: string;
+
+  @ApiProperty()
+  direction: AccessDirection;
+
+
 }

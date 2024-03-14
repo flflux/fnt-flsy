@@ -11,29 +11,36 @@ import axios from 'axios';
 /* eslint-disable-next-line */
 export interface AllVehicleLogsProps {}
 
-interface Response{
-  id: number,
+interface Response {
+  id: number;
   device: {
-    id: number,
-    name: string,
-    deviceId: string
-  },
-  vehicle: {
-  id: number,
-    name: string,
-    number: string,
+    id: number;
+    name: string;
+    deviceId: string;
+  };
+  vehicle?: {
+    id: number;
+    name: string;
+    number: string;
     flats: [
       {
         flats: {
-          id: number,
-          number: string
-        }
+          id: number;
+          number: string;
+        };
       }
-    ]
-  },
-  status: string,
-  direction: string,
-  dateTime: Date
+    ];
+  };
+  card: {
+    number: string;
+    type: string;
+    flat: {
+      number: string;
+    };
+  };
+  status?: string;
+  direction?: string;
+  dateTime: Date;
 }
 
 export function AllVehicleLogs(props: AllVehicleLogsProps) {
@@ -72,7 +79,7 @@ export function AllVehicleLogs(props: AllVehicleLogsProps) {
 
 
   return (
-    <div className={styles['container']}>
+    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto' }}>
       {allvehiclelog.map((item) => (
             <Card
               key={item.id}
@@ -94,16 +101,26 @@ export function AllVehicleLogs(props: AllVehicleLogsProps) {
                 className={styles['cardmedia']}
               /> */}
               <CardContent sx={{ flex: 1 }}>
-                <Typography variant="body2" component="div" className={styles['logs-card-text']}>
-                  <div className={styles['logs-name']}>{item.vehicle.name}</div>
-                  <div id={styles['dateTime']}>{item.dateTime}</div>
-                </Typography>
-                <Typography variant="body2" color="text.secondary" className={styles['logs-card-text']}>
-                  <div>{item.vehicle.number}</div>      
-                  <div>{item.device.name}</div>
-                  <div>{item.direction}</div>
-                </Typography>
-              </CardContent>
+              <Typography
+                variant="body2"
+                component="div"
+                className={styles['logs-card-text']}
+              >
+                <div className={styles['logs-name']}>
+                  {item.card ? item.card?.number : 'Forced Open'}
+                </div>
+                <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                className={styles['logs-card-text']}
+              >
+                <div>{item.device.name}</div>
+                <div>{item.card?.type}</div>
+                <div>{item.direction}</div>
+              </Typography>
+            </CardContent>
             </Card>
             ))}
     </div>

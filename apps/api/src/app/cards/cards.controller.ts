@@ -24,6 +24,7 @@ import { CardType } from '@prisma/client';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller()
 export class CardsController {
@@ -135,7 +136,8 @@ export class CardsController {
 
 
   @ApiTags('schnell-backend')
-  @ApiOperation({ summary: 'get cards associated with flat for the society' })
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Activate or Deactivate cards associated with flat for the society' })
   @Put('/societies/:societyCode/flats/:flatNumber/cards')
   @HttpCode(HttpStatus.ACCEPTED)
   async changeCardStatusAssoiatedWithFlatForSociety(

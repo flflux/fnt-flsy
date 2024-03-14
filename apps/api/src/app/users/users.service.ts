@@ -13,15 +13,24 @@ import * as generatePassword from 'generate-password';
 import { ListUserDto } from './dto/list-user.dto';
 import { EditUserStatus, ViewUserDto } from './dto/view-user.dto';
 import { NotificationsService } from '../notifications/notifications.service';
-import { ForgotPasswordDto, LoginDto, UpdatePasswordDto, UpdatePasswordThroughProfileDto } from '../core/dto/user-login.dto';
+import {
+  ForgotPasswordDto,
+  LoginDto,
+  UpdatePasswordDto,
+  UpdatePasswordThroughProfileDto,
+} from '../core/dto/user-login.dto';
 import { comparePasswords, encodePassword } from '../auth/bcrypt';
 import * as ejs from 'ejs';
 import * as fs from 'fs/promises';
 import { ADMIN_URL, API_URL, SOCIETY_URL } from '../core/consts/env.consts';
+import { JWT_SECRET } from '../core/consts/env.consts';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class UsersService {
-  constructor(private notificationService: NotificationsService) { }
+  constructor(private notificationService: NotificationsService) {}
+
+  private readonly jwtSecret = JWT_SECRET;
 
   private prisma = new PrismaClient();
 
@@ -41,10 +50,9 @@ export class UsersService {
       Residents: residentCount,
       Vehicles: vehicleCount,
       Users: userCount,
-      Devices: deviceCount
-    }
+      Devices: deviceCount,
+    };
   }
-
 
   generateRandomHexToken(length: number): string {
     const characters = '0123456789abcdef';
@@ -56,9 +64,7 @@ export class UsersService {
     return token;
   }
 
-
   async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<UserDto> {
-
     const user = await this.prisma.user.findUnique({
       where: {
         email: updatePasswordDto.email,
@@ -85,19 +91,30 @@ export class UsersService {
       },
       data: {
         password: encodePassword(updatePasswordDto.password),
-        token: null
-      }
-    })
+        token: null,
+      },
+    });
 
-    const templateContent = await fs.readFile('apps/api/src/assets/templates/update-password-template.ejs', 'utf-8');
+    const templateContent = await fs.readFile(
+      'apps/api/src/assets/templates/update-password-template.ejs',
+      'utf-8'
+    );
     const message = ejs.render(templateContent, {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
     });
 
-    const sentMail = await this.notificationService.sendEmail(updatedUser.email, "Update Password", message);
+    const sentMail = await this.notificationService.sendEmail(
+      updatedUser.email,
+      'Update Password',
+      message
+    );
 
-    if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+    if (!sentMail)
+      throw new HttpException(
+        'there is some problem while sending mail',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
 
     return {
       id: updatedUser.id,
@@ -106,22 +123,26 @@ export class UsersService {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
     };
-
   }
 
-  async editUserPassword(id: number, updatePassword: UpdatePasswordThroughProfileDto): Promise<UserDto> {
-
-
+  async editUserPassword(
+    id: number,
+    updatePassword: UpdatePasswordThroughProfileDto
+  ): Promise<UserDto> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
       },
     });
 
-
-    if (!user) throw new HttpException("user not found", HttpStatus.NOT_FOUND);
-    if (updatePassword.new_password == updatePassword.old_password) throw new HttpException("Old password and new password should not be same", HttpStatus.BAD_REQUEST);
-    if (!await comparePasswords(updatePassword.old_password, user.password)) throw new HttpException("password not matched", HttpStatus.BAD_REQUEST);
+    if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+    if (updatePassword.new_password == updatePassword.old_password)
+      throw new HttpException(
+        'Old password and new password should not be same',
+        HttpStatus.BAD_REQUEST
+      );
+    if (!(await comparePasswords(updatePassword.old_password, user.password)))
+      throw new HttpException('password not matched', HttpStatus.BAD_REQUEST);
 
     const updatedUser = await this.prisma.user.update({
       select: {
@@ -135,17 +156,14 @@ export class UsersService {
         id: id,
       },
       data: {
-        password: encodePassword(updatePassword.new_password)
-      }
-    })
+        password: encodePassword(updatePassword.new_password),
+      },
+    });
 
-    return updatedUser
-
+    return updatedUser;
   }
 
-
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
-
     const user = await this.prisma.user.findUnique({
       where: {
         email: forgotPasswordDto.email,
@@ -162,40 +180,43 @@ export class UsersService {
         id: user.id,
       },
       data: {
-        token: token
-      }
+        token: token,
+      },
     });
 
     const resetPasswordLink = `${SOCIETY_URL}/update-password/email/${updateUserToken.email}/token/${updateUserToken.token}`;
 
-    const templateContent = await fs.readFile('apps/api/src/assets/templates/forgot-password-template.ejs', 'utf-8');
+    const templateContent = await fs.readFile(
+      'apps/api/src/assets/templates/forgot-password-template.ejs',
+      'utf-8'
+    );
     const message = ejs.render(templateContent, {
       firstName: updateUserToken.firstName,
       lastName: updateUserToken.lastName,
       resetPasswordLink: resetPasswordLink,
-      loginLink: SOCIETY_URL
+      loginLink: SOCIETY_URL,
     });
 
-    const sentMail = await this.notificationService.sendEmail(forgotPasswordDto.email, "Forgot Password", message);
+    const sentMail = await this.notificationService.sendEmail(
+      forgotPasswordDto.email,
+      'Forgot Password',
+      message
+    );
 
-    if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+    if (!sentMail)
+      throw new HttpException(
+        'there is some problem while sending mail',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
 
     return;
-
   }
 
-
-
-
-
-  async createAdminUser(
-    createUserDto: AddUserDto
-  ): Promise<UserDto> {
+  async createAdminUser(createUserDto: AddUserDto): Promise<UserDto> {
     // TODO: add generated password functionlity with smtp configurations and email validation...
 
-    
     const token = this.generateRandomHexToken(16);
-   
+
     const data = { ...createUserDto, token };
 
     const user = await this.prisma.user.findUnique({
@@ -208,14 +229,17 @@ export class UsersService {
       console.log('user already exist now adding the user admin role...');
 
       const is_user_super_relation = await this.prisma.userSuperRole.findFirst({
-        where:{
+        where: {
           userId: user.id,
-          superRoleId: 1
-        }
-      })
+          superRoleId: 1,
+        },
+      });
 
-      if(is_user_super_relation){
-        throw new HttpException("user already exist with the super role", HttpStatus.BAD_REQUEST);
+      if (is_user_super_relation) {
+        throw new HttpException(
+          'user already exist with the super role',
+          HttpStatus.BAD_REQUEST
+        );
       }
 
       const user_super_relation = await this.prisma.userSuperRole.create({
@@ -224,7 +248,7 @@ export class UsersService {
           superRoleId: 1,
         },
       });
-  
+
       if (!user_super_relation) {
         throw new HttpException(
           'some error while establishing relation between user and super',
@@ -232,7 +256,10 @@ export class UsersService {
         );
       }
 
-      const templateContent = await fs.readFile('apps/api/src/assets/templates/existing-admin-user-template.ejs', 'utf-8');
+      const templateContent = await fs.readFile(
+        'apps/api/src/assets/templates/existing-admin-user-template.ejs',
+        'utf-8'
+      );
 
       const message = ejs.render(templateContent, {
         firstName: user.firstName,
@@ -240,9 +267,17 @@ export class UsersService {
         adminLoginLink: ADMIN_URL,
       });
 
-      const sentMail = await this.notificationService.sendEmail(user.email, "You have been added in Fountlab", message);
+      const sentMail = await this.notificationService.sendEmail(
+        user.email,
+        'You have been added in Fountlab',
+        message
+      );
 
-      if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!sentMail)
+        throw new HttpException(
+          'there is some problem while sending mail',
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
 
       return {
         id: user.id,
@@ -279,9 +314,12 @@ export class UsersService {
       );
     }
 
-    const resetPasswordLink = `${ADMIN_URL}/update-password/email/${newUser.email}/token/${token}`
+    const resetPasswordLink = `${ADMIN_URL}/update-password/email/${newUser.email}/token/${token}`;
 
-    const templateContent = await fs.readFile('apps/api/src/assets/templates/new-admin-user-template.ejs', 'utf-8');
+    const templateContent = await fs.readFile(
+      'apps/api/src/assets/templates/new-admin-user-template.ejs',
+      'utf-8'
+    );
 
     const message = ejs.render(templateContent, {
       firstName: newUser.firstName,
@@ -290,9 +328,17 @@ export class UsersService {
       loginLink: ADMIN_URL,
     });
 
-    const sentMail = await this.notificationService.sendEmail(newUser.email, "You have been added in Fountlab", message);
+    const sentMail = await this.notificationService.sendEmail(
+      newUser.email,
+      'You have been added in Fountlab',
+      message
+    );
 
-    if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+    if (!sentMail)
+      throw new HttpException(
+        'there is some problem while sending mail',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
 
     return {
       id: newUser.id,
@@ -349,8 +395,13 @@ export class UsersService {
     // }
 
     if (!user) {
-      const { superRole, organizationRoles, SocietyRole, isPrimary, ...newData } =
-        data;
+      const {
+        superRole,
+        organizationRoles,
+        SocietyRole,
+        isPrimary,
+        ...newData
+      } = data;
 
       const newUser = await this.prisma.user.create({
         data: newData,
@@ -389,10 +440,13 @@ export class UsersService {
         });
       }
 
-      const resetPasswordLink = `${SOCIETY_URL}/update-password/email/${newUser.email}/token/${token}`
+      const resetPasswordLink = `${SOCIETY_URL}/update-password/email/${newUser.email}/token/${token}`;
 
-      const templateContent = await fs.readFile('apps/api/src/assets/templates/new-manager-template.ejs', 'utf-8');
-  
+      const templateContent = await fs.readFile(
+        'apps/api/src/assets/templates/new-manager-template.ejs',
+        'utf-8'
+      );
+
       const message = ejs.render(templateContent, {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
@@ -401,9 +455,17 @@ export class UsersService {
         loginLink: SOCIETY_URL,
       });
 
-      const sentMail = await this.notificationService.sendEmail(newUser.email, "You have been added in " + society.name, message);
+      const sentMail = await this.notificationService.sendEmail(
+        newUser.email,
+        'You have been added in ' + society.name,
+        message
+      );
 
-      if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!sentMail)
+        throw new HttpException(
+          'there is some problem while sending mail',
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
 
       return {
         id: newUser.id,
@@ -414,15 +476,22 @@ export class UsersService {
         SocietyRole: SocietyRole,
         isPrimary: isPrimary,
       };
-
     } else {
-      const { superRole, organizationRoles, SocietyRole, isPrimary, ...newData } = data;
-      const user_society_relation = await this.prisma.userSocietyRole.findFirst({
-        where: {
-          userId: user.id,
-          societyId: societyId
+      const {
+        superRole,
+        organizationRoles,
+        SocietyRole,
+        isPrimary,
+        ...newData
+      } = data;
+      const user_society_relation = await this.prisma.userSocietyRole.findFirst(
+        {
+          where: {
+            userId: user.id,
+            societyId: societyId,
+          },
         }
-      });
+      );
 
       if (user_society_relation) {
         throw new HttpException(
@@ -431,17 +500,21 @@ export class UsersService {
         );
       }
 
-      const new_user_society_relation = await this.prisma.userSocietyRole.create({
-        data: {
-          userId: user.id,
-          societyId: societyId,
-          societyRoleId: 1,
-          isPrimary: isPrimary,
-        },
-      });
+      const new_user_society_relation =
+        await this.prisma.userSocietyRole.create({
+          data: {
+            userId: user.id,
+            societyId: societyId,
+            societyRoleId: 1,
+            isPrimary: isPrimary,
+          },
+        });
 
-      const templateContent = await fs.readFile('apps/api/src/assets/templates/existing-manager-template.ejs', 'utf-8');
-  
+      const templateContent = await fs.readFile(
+        'apps/api/src/assets/templates/existing-manager-template.ejs',
+        'utf-8'
+      );
+
       const message = ejs.render(templateContent, {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -449,9 +522,17 @@ export class UsersService {
         loginLink: SOCIETY_URL,
       });
 
-      const sentMail = await this.notificationService.sendEmail(user.email, "You have been added in " + society.name, message);
+      const sentMail = await this.notificationService.sendEmail(
+        user.email,
+        'You have been added in ' + society.name,
+        message
+      );
 
-      if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!sentMail)
+        throw new HttpException(
+          'there is some problem while sending mail',
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
 
       if (isPrimary) {
         // set others with same role in the same society as not primary
@@ -474,10 +555,7 @@ export class UsersService {
         SocietyRole: SocietyRole,
         isPrimary: isPrimary,
       };
-
     }
-
-
   }
 
   async listAdmins(
@@ -490,18 +568,18 @@ export class UsersService {
   ): Promise<ListUserPageDto> {
     const societyAdminRoleId = await this.prisma.societyRole.findFirst({
       where: {
-        name: SuperRoleName.ADMIN
-      }
-    })
+        name: SuperRoleName.ADMIN,
+      },
+    });
     const whereArray = [];
     let whereQuery = {};
     whereArray.push({
       superRoles: {
         some: {
-          superRoleId: societyAdminRoleId.id
-        }
-      }
-    })
+          superRoleId: societyAdminRoleId.id,
+        },
+      },
+    });
 
     if (email !== undefined) {
       whereArray.push({ email: { contains: email, mode: 'insensitive' } });
@@ -531,8 +609,6 @@ export class UsersService {
     const count = await this.prisma.user.count({
       where: whereQuery,
     });
-
-
 
     const listusers = await this.prisma.user.findMany({
       where: whereQuery,
@@ -709,7 +785,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException();
     }
-    if (!user.isActive) throw new HttpException("user is inactive", HttpStatus.BAD_REQUEST);
+    if (!user.isActive)
+      throw new HttpException('user is inactive', HttpStatus.BAD_REQUEST);
 
     const viewUser = {
       id: user.id,
@@ -734,39 +811,48 @@ export class UsersService {
       })),
     };
     return viewUser;
-
   }
 
   async editUserStatus(id: number, editUserStatus: EditUserStatus) {
     const user = await this.prisma.user.findFirst({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
-    if (!user) throw new HttpException("user not found", HttpStatus.NOT_FOUND);
+    if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
     const editedUser = await this.prisma.user.update({
       where: {
-        id: id
+        id: id,
       },
       data: {
-        isActive: editUserStatus.isActive
-      }
-    })
+        isActive: editUserStatus.isActive,
+      },
+    });
 
+    const templateContent = await fs.readFile(
+      'apps/api/src/assets/templates/deactivate-admin-user.ejs',
+      'utf-8'
+    );
 
-    const templateContent = await fs.readFile('apps/api/src/assets/templates/deactivate-admin-user.ejs', 'utf-8');
-  
     const message = ejs.render(templateContent, {
       firstName: user.firstName,
       lastName: user.lastName,
     });
 
-    const sentMail = await this.notificationService.sendEmail(user.email, "You have been removed from Fountlab", message);
+    const sentMail = await this.notificationService.sendEmail(
+      user.email,
+      'You have been removed from Fountlab',
+      message
+    );
 
-    if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
+    if (!sentMail)
+      throw new HttpException(
+        'there is some problem while sending mail',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
 
-    return editUserStatus
+    return editUserStatus;
   }
 
   async edit(
@@ -970,7 +1056,7 @@ export class UsersService {
     const checkUser = await this.findById(id);
     if (!checkUser) {
       throw new NotFoundException();
-    } 
+    }
     const societyUserRelation = await this.prisma.userSocietyRole.findFirst({
       where: {
         societyId: societyId,
@@ -978,33 +1064,38 @@ export class UsersService {
       },
     });
 
-    if(societyUserRelation)  await this.prisma.userSocietyRole.delete({ where: { id: societyUserRelation.id, },});
+    if (societyUserRelation)
+      await this.prisma.userSocietyRole.delete({
+        where: { id: societyUserRelation.id },
+      });
 
-    const templateContent = await fs.readFile('apps/api/src/assets/templates/deactivate-manager.ejs', 'utf-8');
-  
+    const templateContent = await fs.readFile(
+      'apps/api/src/assets/templates/deactivate-manager.ejs',
+      'utf-8'
+    );
+
     const message = ejs.render(templateContent, {
       firstName: checkUser.firstName,
       lastName: checkUser.lastName,
     });
 
-    
-    const sentMail = await this.notificationService.sendEmail(checkUser.email, "You have been removed from society ", message);
+    const sentMail = await this.notificationService.sendEmail(
+      checkUser.email,
+      'You have been removed from society ',
+      message
+    );
 
-    if (!sentMail) throw new HttpException("there is some problem while sending mail", HttpStatus.INTERNAL_SERVER_ERROR);
-  
-    console.log('removed user...')
+    if (!sentMail)
+      throw new HttpException(
+        'there is some problem while sending mail',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+
+    console.log('removed user...');
     return;
-    
   }
 
-
-
-  async editAdmin(
-    userDto: AddUserDto,
-    id: number
-  ): Promise<
-    UserDto
-  > {
+  async editAdmin(userDto: AddUserDto, id: number): Promise<UserDto> {
     let transaction;
     try {
       transaction = await this.prisma.$transaction(async (prisma) => {
@@ -1036,13 +1127,10 @@ export class UsersService {
           ...newData
         } = data;
 
-
-
         const updateuser = await prisma.user.update({
           where: { id: id },
           data: newData,
         });
-
 
         const updatedUser: UserDto = {
           id: updateuser.id,
@@ -1052,7 +1140,6 @@ export class UsersService {
           lastName: updateuser.lastName,
           organizationRoles: organizationRoles,
           superRole: superRole,
-
         };
 
         return updatedUser;
@@ -1195,5 +1282,76 @@ export class UsersService {
       excludeSimilarCharacters: true,
     });
     return password;
+  }
+
+  async generateToken(user: any): Promise<string> {
+    const expiresIn = 24 * 60 * 60; // 24 hours in seconds
+    return jwt.sign(user, this.jwtSecret, { expiresIn });
+  }
+
+  async generateJWTtokenForUser(loginDto: LoginDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: loginDto.email },
+      select: {
+        id: true,
+        email: true,
+        phoneNumber: true,
+        firstName: true,
+        lastName: true,
+        isActive: true,
+        organizationRoles: {
+          select: {
+            organization: { select: { id: true } },
+            organizationRole: { select: { name: true } },
+          },
+        },
+        superRoles: { select: { superRole: { select: { name: true } } } },
+
+        societyRoles: {
+          select: {
+            society: { select: { id: true, name: true } },
+            societyRole: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!user) {
+      throw new NotFoundException();
+    }
+    if (!user.isActive)
+      throw new HttpException('user is inactive', HttpStatus.BAD_REQUEST);
+
+    const viewUser = {
+      id: user.id,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      isActive: user.isActive,
+      organizationRoles: user.organizationRoles.map((role) => ({
+        organizationId: role.organization.id,
+        organizationRole: role.organizationRole.name,
+      })),
+      superRole:
+        user.superRoles.length > 0
+          ? (user.superRoles[0].superRole.name as SuperRoleName)
+          : undefined,
+
+      societyRoles: user.societyRoles.map((role) => ({
+        societyId: role.society.id,
+        societyName: role.society.name,
+        societyRole: role.societyRole.name,
+      })),
+    };
+
+    const token = await this.generateToken(viewUser);
+
+    return {
+      token: token,
+    };
   }
 }

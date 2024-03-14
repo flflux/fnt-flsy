@@ -9,6 +9,7 @@ import {
 } from './dto/communication.dto';
 import {AccessSyncDto} from "../core/dto/access-sync.dto";
 import {AccessSyncAckDto} from "../core/dto/access-sync-ack.dto";
+import { DeviceAuthGuard } from '../auth/device-auth.guard';
 
 
 @ApiTags("device-communication")
@@ -16,7 +17,7 @@ import {AccessSyncAckDto} from "../core/dto/access-sync-ack.dto";
 export class CommunicationController {
   constructor(private communicationService: CommunicationService) {}
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(DeviceAuthGuard)
   @ApiOperation({ summary: 'Notify the server with device log' })
   @ApiParam({
     name: 'deviceId',
@@ -34,7 +35,7 @@ export class CommunicationController {
     return this.communicationService.accessNotify(+societyId,deviceId, accessNotifyDto);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(DeviceAuthGuard)
   @ApiOperation({ summary: 'Get credentials for the device' })
   @ApiParam({
     name: 'deviceId',
@@ -53,6 +54,7 @@ export class CommunicationController {
     return this.communicationService.getCredentials(deviceId);
   }
 
+  @UseGuards(DeviceAuthGuard)
   @ApiOperation({ summary: 'Get current time on the server' })
   @ApiResponse({
     status: 200,
@@ -64,7 +66,7 @@ export class CommunicationController {
     return this.communicationService.getTime();
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(DeviceAuthGuard)
   @ApiOperation({ summary: 'Api for device liveness' })
   @ApiResponse({ status: 200, description: 'Success', type: Number })
   @Get('i-am-here/:deviceId') // seconds in epoc
@@ -72,6 +74,8 @@ export class CommunicationController {
     return this.communicationService.iAmHere(deviceId);
   }
 
+
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Publish the message on channel with mqtt' })
   @ApiParam({
     name: 'deviceId',
@@ -88,7 +92,7 @@ export class CommunicationController {
     return this.communicationService.accessSync(deviceId, accessSyncDto);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(DeviceAuthGuard)
   @Post('sync-ack/society/:societyId/device/:deviceId')
   accessSyncAck(
     @Param('societyId') societyId: number,

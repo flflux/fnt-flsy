@@ -80,7 +80,7 @@ export function DeviceLogs({id, refreshLogs}: DeviceLogsProps) {
   }
 
   return (
-    <div className={styles['container']}>
+    <div  className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto' }}>
     <div>
           {deviceLog.map((item) => (
             <Card
@@ -103,16 +103,26 @@ export function DeviceLogs({id, refreshLogs}: DeviceLogsProps) {
                 className={styles['cardmedia']}
               /> */}
               <CardContent sx={{ flex: 1 }}>
-                <Typography variant="body2" component="div" className={styles['logs-card-text']}>
-                  <div className={styles['logs-name']}>{item.card.flat.number}</div>
-                  <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
-                </Typography>
-                <Typography variant="body2" color="text.secondary" className={styles['logs-card-text']}>
-                  <div>{item.card?.number}</div>      
-                  <div>{item.card?.type}</div>
-                  <div>{item.direction}</div>
-                </Typography>
-              </CardContent>
+              <Typography
+                variant="body2"
+                component="div"
+                className={styles['logs-card-text']}
+              >
+                <div className={styles['logs-name']}>
+                  {item.card ? item.card?.number : 'Forced Open'}
+                </div>
+                <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                className={styles['logs-card-text']}
+              >
+                <div>{item.device.name}</div>
+                <div>{item.card?.type}</div>
+                <div>{item.direction}</div>
+              </Typography>
+            </CardContent>
             </Card>
             ))}
         </div>

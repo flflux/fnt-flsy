@@ -29,6 +29,7 @@ import { CreateImageDto } from './dto/add-devices-images.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import 'multer';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
 @Controller()
@@ -47,12 +48,10 @@ export class DevicesController {
   }
 
   @ApiTags('schnell-backend')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({summary:'force open gate'})
-  // @UseGuards(AuthGuard, RolesGuard)
   @Post('/societies/:societyCode/devices/force-open')
   @HttpCode(HttpStatus.CREATED)
-  // @ApiOkResponse({ type: ViewDeviceDto })
-  // @Roles(Role.FOUNTLAB_ADMIN)
   forceOpenDeviceForSociety( @Param('societyCode') societyCode: string, @Body() deviceDto:SbForceOpen) {
     return this.deviceService.forceOpenDeviceForSociety(societyCode,deviceDto);
   }

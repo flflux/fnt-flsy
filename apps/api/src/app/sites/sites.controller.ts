@@ -28,67 +28,67 @@ import { ViewSiteDto } from './dto/view-site.dto';
 export class SitesController {
   constructor(private sitesService: SitesService) {}
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOkResponse({type: SiteDto})
-  @Roles(Role.FOUNTLAB_ADMIN)
-  add(@Body() addSiteDto:AddSiteDto):Promise<SiteDto> {
-    return this.sitesService.add(addSiteDto);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Post()
+  // @HttpCode(HttpStatus.CREATED)
+  // @ApiOkResponse({type: SiteDto})
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  // add(@Body() addSiteDto:AddSiteDto):Promise<SiteDto> {
+  //   return this.sitesService.add(addSiteDto);
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get('/:id')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({type: ViewSiteDto})
-  @Roles(Role.ORGANIZATION_ADMIN, Role.FOUNTLAB_ADMIN)
-  findById(@Param('id') id: number, @Request() req):Promise<ViewSiteDto> {
-    const { user } = req;
-    return this.sitesService.findById(id, user.id);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Get('/:id')
+  // @HttpCode(HttpStatus.OK)
+  // @ApiOkResponse({type: ViewSiteDto})
+  // @Roles(Role.ORGANIZATION_ADMIN, Role.FOUNTLAB_ADMIN)
+  // findById(@Param('id') id: number, @Request() req):Promise<ViewSiteDto> {
+  //   const { user } = req;
+  //   return this.sitesService.findById(id, user.id);
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Put('/:id')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({type: SiteDto})
-  @Roles(Role.FOUNTLAB_ADMIN)
-  edit(@Body() siteDto:SiteDto, @Param('id') id: number): Promise<SiteDto>{
-    return this.sitesService.edit(siteDto, id);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Put('/:id')
+  // @HttpCode(HttpStatus.OK)
+  // @ApiOkResponse({type: SiteDto})
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  // edit(@Body() siteDto:SiteDto, @Param('id') id: number): Promise<SiteDto>{
+  //   return this.sitesService.edit(siteDto, id);
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({type: ListSitePageDto})
-  @Roles(Role.FOUNTLAB_ADMIN,Role.ORGANIZATION_ADMIN)
-  async getFilteredPosts(
-    @Request() req,
-    @Query('pageSize') pageSize?: number,
-    @Query('pageOffset') pageOffset?: number,
-    @Query('name') name?: string,
-    @Query('siteGroupId') siteGroupId?: number,
-    @Query('sortBy') sortBy?: string,
-    @Query('sortOrder') sortOrder?: 'asc' | 'desc'
-  ):Promise<ListSitePageDto> {
-    const {user}=req;
-    const listsite = await this.sitesService.getFilteredPosts(
-      +pageSize,
-      +pageOffset,
-      name,
-      +siteGroupId,
-      sortBy,
-      sortOrder,
-      user.id
-    );
-    return listsite;
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Get()
+  // @HttpCode(HttpStatus.OK)
+  // @ApiOkResponse({type: ListSitePageDto})
+  // @Roles(Role.FOUNTLAB_ADMIN,Role.ORGANIZATION_ADMIN)
+  // async getFilteredPosts(
+  //   @Request() req,
+  //   @Query('pageSize') pageSize?: number,
+  //   @Query('pageOffset') pageOffset?: number,
+  //   @Query('name') name?: string,
+  //   @Query('siteGroupId') siteGroupId?: number,
+  //   @Query('sortBy') sortBy?: string,
+  //   @Query('sortOrder') sortOrder?: 'asc' | 'desc'
+  // ):Promise<ListSitePageDto> {
+  //   const {user}=req;
+  //   const listsite = await this.sitesService.getFilteredPosts(
+  //     +pageSize,
+  //     +pageOffset,
+  //     name,
+  //     +siteGroupId,
+  //     sortBy,
+  //     sortOrder,
+  //     user.id
+  //   );
+  //   return listsite;
+  // }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOkResponse()
-  @Roles(Role.FOUNTLAB_ADMIN)
-  deleteOrg(@Param('id') id: number) {
-    return this.sitesService.deleteSite(id);
-  }
+  // @UseGuards(AuthGuard, RolesGuard)
+  // @Delete('/:id')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // @ApiOkResponse()
+  // @Roles(Role.FOUNTLAB_ADMIN)
+  // deleteOrg(@Param('id') id: number) {
+  //   return this.sitesService.deleteSite(id);
+  // }
 }

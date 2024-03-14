@@ -310,13 +310,13 @@ model Vehicle {
 }
 
 model Card {
-  id        Int          @id @default(autoincrement()) @map("id")
-  number    String       @map("number")
-  vehicleId Int?         @map("vehicle_id")
-  isActive  Boolean      @map("is_active")
-  type      CardType     @map("type")
-  flatId    Int?         @map("flat_id")
-  deviceId  Int          @map("device_id")
+  id        Int         @id @default(autoincrement()) @map("id")
+  number    String      @map("number")
+  vehicleId Int?        @map("vehicle_id")
+  isActive  Boolean     @map("is_active")
+  type      CardType    @map("type")
+  flatId    Int?        @map("flat_id")
+  deviceId  Int         @map("device_id")
   logs      DeviceLog[]
 
   flat    Flat?    @relation(fields: [flatId], references: [id])

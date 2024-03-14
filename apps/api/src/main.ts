@@ -13,10 +13,10 @@ async function bootstrap() {
     credentials:true,
   })
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Fnt-Flsy API')
-    .setDescription('Fnt-Flsy API description')
+    .setTitle('Hive API')
+    .setDescription('Hive API description')
     .setVersion('0.1')
-    .addTag('fnt-flsy')
+    .addTag('Hive')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('swagger', app, document);

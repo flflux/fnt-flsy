@@ -118,7 +118,7 @@ export function VehicleLogs({id, refreshLogs}: VehicleLogsProps) {
                 <CardContent sx={{ flex: 1 }}>
                   <Typography variant="body2" component="div" className={styles['logs-card-text']}>
                     <div className={styles['logs-name']}>{item.vehicle.name}</div>
-                    <div id={styles['dateTime']}>{item.dateTime}</div>
+                    <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
                   </Typography>
                   <Typography variant="body2" color="text.secondary" className={styles['logs-card-text']}>
                     <div>{item.vehicle.number}</div>      

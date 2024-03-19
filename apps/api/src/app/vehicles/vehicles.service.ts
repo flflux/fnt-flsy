@@ -153,10 +153,9 @@ export class VehiclesService {
 
 
             //section for creating floor if not exist.
-            
             const floor = await tx.floor.findFirst({
               where:{
-                number: flatData['Floor Number'],
+                number: String(flatData['Floor Number']),
                 buildingId: buildingId
               }
             });
@@ -164,7 +163,7 @@ export class VehiclesService {
             if(!floor){
               const newFloor = await tx.floor.create({
                 data:{
-                  'number': flatData['Floor Number'],
+                  'number': String(flatData['Floor Number']),
                   "buildingId": buildingId,
                   "isActive": true
                 }
@@ -259,19 +258,20 @@ export class VehiclesService {
             })
 
             if(!card){
-              const newCard = await tx.card.create({
-                data:{
-                  number: String(flatData['Card Number']),
-                  type: flatData['Card Type'],
-                  isActive: true,
-                  vehicleId: vehicleId,
-                  deviceId: device.id,
-                  flatId: flatId
-                }
-              })
+              if(flatData['Card Number'] && flatData['Card Type']){
+                const newCard = await tx.card.create({
+                  data:{
+                    number: String(flatData['Card Number']),
+                    type: flatData['Card Type'],
+                    isActive: true,
+                    vehicleId: vehicleId,
+                    deviceId: device.id,
+                    flatId: flatId
+                  }
+                })
+              }
             }
           }
-
       })
           
     } catch (error) {

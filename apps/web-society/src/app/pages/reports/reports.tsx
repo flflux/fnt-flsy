@@ -204,7 +204,7 @@ export function Reports(props: ReportsProps) {
     console.log(data.vehicleId);
     console.log(data);
     try{
-      const response = await axios.get(`${apiUrl}/vehicle-logs/society/${societycontext?.id}/reports/vehicle-logs`, {
+      const response = await axios.get(`${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`, {
         withCredentials: true,
         params: {
           deviceId: data.deviceId,

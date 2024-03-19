@@ -77,7 +77,7 @@ export function VehicleLogs({id, refreshLogs}: VehicleLogsProps) {
   const getVehicleLogs=async()=>{
     console.log("vehicleId:",id);
     try{
-      const response = await axios.get(`${apiUrl}/vehicle-logs/society/${societycontext?.id}/reports/vehicle-logs`, {
+      const response = await axios.get(`${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`, {
         withCredentials: true,
         params: {
           vehicleId: id,
@@ -126,7 +126,7 @@ export function VehicleLogs({id, refreshLogs}: VehicleLogsProps) {
                 <CardContent sx={{ flex: 1 }}>
                   <Typography variant="body2" component="div" className={styles['logs-card-text']}>
                     <div className={styles['logs-name']}>{item.vehicle.name}</div>
-                    <div id={styles['dateTime']}>{item.dateTime}</div>
+                    <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
                   </Typography>
                   <Typography variant="body2" color="text.secondary" className={styles['logs-card-text']}>
                     <div>{item.vehicle.number}</div>      

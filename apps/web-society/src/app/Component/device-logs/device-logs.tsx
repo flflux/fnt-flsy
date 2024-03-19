@@ -59,7 +59,7 @@ export function DeviceLogs({id, refreshLogs}: DeviceLogsProps) {
   const getDeviceLogs=async()=>{
     console.log("deviceId:",id);
     try{
-      const response = await axios.get(`${apiUrl}/vehicle-logs/society/${user?.societyRoles[0].societyId}/reports/vehicle-logs`, {
+      const response = await axios.get(`${apiUrl}/society/${user?.societyRoles[0].societyId}/reports/vehicle-logs`, {
         withCredentials: true,
         params: {
           deviceId: id,

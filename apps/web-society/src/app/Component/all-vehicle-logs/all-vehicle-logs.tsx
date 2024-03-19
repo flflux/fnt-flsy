@@ -72,7 +72,7 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
       setLoadingLogs(true);
       // await new Promise((resolve) => setTimeout(resolve, 4000));
       const response = await axios.get(
-        `${apiUrl}/vehicle-logs/society/${societycontext?.id}/reports/vehicle-logs`,
+        `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
         {
           withCredentials: true,
           params: {

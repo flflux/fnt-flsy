@@ -735,8 +735,8 @@ export function ViewFlats(props: ViewFlatsProps) {
               ) : (Array.isArray(VehicleList) && VehicleList.length > 0 ? (
                 VehicleList.map((Vehicle: ViewVehicle, index: number) => (
                   <Grid container key={index} columnGap={5} className={styles['grid-container']}>
-                    <Grid item xs={12} md={2.2}><div className={`${styles['vehicle-name']} ${Vehicle.isActive ? '' : styles['inactive-vehicle']}`} onClick={(e) => handleClick(Vehicle.id, Vehicle.isActive, Vehicle.flats[0].flats.id, Vehicle.flats[0].flats.floor.id, Vehicle.flats[0].flats.floor.building.id, e)}>{Vehicle.name}</div></Grid>
-                    <Grid item xs={12} md={2.2}><div className={styles['vehicle-number']}>{Vehicle.number}</div></Grid>
+                    <Grid item xs={12} md={2.2}><div className={`${styles['vehicle-name']} ${Vehicle.isActive ? '' : styles['inactive-vehicle']}`} onClick={(e) => handleClick(Vehicle.id, Vehicle.isActive, Vehicle.flats[0].flats.id, Vehicle.flats[0].flats.floor.id, Vehicle.flats[0].flats.floor.building.id, e)}>{Vehicle.number}</div></Grid>
+                    <Grid item xs={12} md={2.2}><div className={styles['vehicle-number']}>{Vehicle.name}</div></Grid>
                     <Grid item xs={12} md={2.2}><div className={styles['vehicle-type']}> {formatVehicleType(Vehicle.type)}</div></Grid>
                     <Grid item xs={12} md={1.65}><div className={`${Vehicle.isActive ? styles.active : styles.inactive}`}>{Vehicle.isActive ? (
                       'Active'

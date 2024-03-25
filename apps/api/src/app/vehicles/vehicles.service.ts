@@ -177,13 +177,13 @@ export class VehiclesService {
             const flat = await tx.flat.findFirst({
               where:{
                 floorId: floorId,
-                number: flatData['Flat Number'],
+                number: String(flatData['Flat Number']),
               }
             })
             if(!flat){
               const newFlat = await tx.flat.create({
                 data:{
-                  number: flatData['Flat Number'],
+                  number: String(flatData['Flat Number']),
                   floorId: floorId,
                   isActive: true
                 }
@@ -197,11 +197,11 @@ export class VehiclesService {
             }
 
 
-            if(flatData['Vehicle Make'] && flatData['Vehicle Number'] && flatData['Vehicle Type']){
+            if(flatData['Vehicle Number'] && flatData['Vehicle Type']){
               //Section for creating resident if not exist.
             const vehicle = await tx.vehicle.findFirst({
               where:{
-                name: flatData['Vehicle Make'],
+                name: flatData['Vehicle Make']? flatData['Vehicle Make'] : " ",
                 number: flatData['Vehicle Number'],
                 type: flatData['Vehicle Type']
               }
@@ -210,7 +210,7 @@ export class VehiclesService {
             if(!vehicle){
               const newVehicle = await tx.vehicle.create({
                 data:{
-                  name: flatData['Vehicle Make'],
+                  name: flatData['Vehicle Make']? flatData['Vehicle Make'] : " ",
                   number: flatData['Vehicle Number'],
                   type: flatData['Vehicle Type'],
                   isActive: true
@@ -252,7 +252,7 @@ export class VehiclesService {
               where:{
                 number: String(flatData['Card Number']),
                 type: flatData['Card Type'],
-                isActive: true,
+                isActive: flatData['Active']==true ? true: false,
                 deviceId: device.id,
               }
             })
@@ -263,7 +263,7 @@ export class VehiclesService {
                   data:{
                     number: String(flatData['Card Number']),
                     type: flatData['Card Type'],
-                    isActive: true,
+                    isActive: flatData['Active']==true ? true: false,
                     vehicleId: vehicleId,
                     deviceId: device.id,
                     flatId: flatId

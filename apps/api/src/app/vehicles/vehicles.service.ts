@@ -177,13 +177,13 @@ export class VehiclesService {
             const flat = await tx.flat.findFirst({
               where:{
                 floorId: floorId,
-                number: flatData['Flat Number'],
+                number: String(flatData['Flat Number']),
               }
             })
             if(!flat){
               const newFlat = await tx.flat.create({
                 data:{
-                  number: flatData['Flat Number'],
+                  number: String(flatData['Flat Number']),
                   floorId: floorId,
                   isActive: true
                 }

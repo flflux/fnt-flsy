@@ -45,7 +45,8 @@ export function DrawerComponent(props: DrawerComponentProps) {
             width: drawerWidth,
             boxSizing: 'border-box',
             marginTop:'64px',
-            backgroundColor:'#2B3445',
+            backgroundColor: 'white',
+            boxShadow:'0 4px 6px rgba(0, 0, 0, 0.5)',
           },
           '@media (max-width: 768px)': {
             '& .MuiDrawer-paper': {

@@ -7,7 +7,7 @@
 */
 .appbar{
   height:64px;
-  background-color:#FFFFFF !important;
+  background-color:rgb(245,158,11) !important;
   width:100% !important;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .logo{
-margin-top: 18px;
+margin-top: 12px;
 margin-left: 14px;
 }
 
@@ -38,44 +38,47 @@ margin-left: 14px;
 display: flex;
 flex-direction: row;
 float: right;
-border-radius: 30px;
-width: 248px;
-height: 43px;
+// border-radius: 30px;
+width: 230px;
+height: 50px;
 flex-shrink: 0;
-border-radius: 5px;
-border: 1px solid #4D4D4D;
-background: rgba(255, 253, 253, 0.02);
+// border-radius: 5px;
+// border: 1px solid #4D4D4D;
+// background: rgba(255, 253, 253, 0.02);
 /* margin: 3px; */
-margin-right: 20px;
-margin-top: -42px;
+margin-right: 10px;
+margin-top: -67px;
 padding-bottom: 12px;
 cursor: pointer;
-background-color: white;
+background-color: rgba(0, 0, 0, 0.01);
 }
 
 .userimg{
-margin:6px 5px 5px 6px;
-color: black;
+// margin:6px 5px 5px 6px;
+margin-right: 73px;
+color:white;
 }
 
 .usertext{
   display:column;
   margin: 7px 5px 5px 7px;
   width: 144px;
+  font-family:sans-serif;
 }
 
+
 .usertext > h6{
-margin-top: -19px;
+margin-top: -15px;
 color: black;
 }
 
-.usertext > h3{
+.usertext > h4{
 border-top-right-radius: 8px;
   border-top-left-radius: 8px;
-  margin-top: 0;
+  margin-top: 7px;
   margin-bottom: 20px;
   padding: 0px;
-  background-color: white;
+  // background-color: white;
   color: black;
 }
 
@@ -106,8 +109,8 @@ justify-content: flex-start !important;
 }
 
 .accountcircle{
-  height: 44px !important;
-  width: 29px !important;
+  height: 65px !important;
+  width: 40px !important;
 }
 
 @keyframes dropdown {

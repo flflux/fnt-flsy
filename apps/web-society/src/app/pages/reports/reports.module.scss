@@ -7,12 +7,16 @@
     // overflow-y: scroll;
  }
 
+//  .h1_tag{
+//     // color:#1e40af;
+//     font-family: Arial, Helvetica, sans-serif;
+//   }
+
 .report-dropdown{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    margin-left: -105px;
+    justify-content:space-around !important;
 }
 
 .horizontal-line{

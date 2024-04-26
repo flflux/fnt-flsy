@@ -321,7 +321,7 @@ export function VehiclesList(props: VehiclesListProps) {
         <Breadcrumbs paths={breadcrumbs} />
         <Box className={styles['Vehicle_container']}>
           <Box className={styles['btn_container']}>
-            <h1>Vehicles</h1>
+            <h1 className={styles['h1_tag']}>Vehicles</h1>
             <Box>
               <AddVehicleComponent
                 open={isAddModalOpen}

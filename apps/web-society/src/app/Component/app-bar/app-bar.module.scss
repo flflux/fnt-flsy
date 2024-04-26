@@ -1,6 +1,6 @@
 .appbar{
     height:64px;
-    background-color:#FFFFFF !important;
+    background-color:rgb(245,158,11) !important;
     width:100% !important;
  }
 
@@ -23,7 +23,7 @@
  }
 
  .logo{
-  margin-top: 18px;
+  margin-top: 10px;
   margin-left: 14px;
  }
 
@@ -32,49 +32,55 @@
   flex-direction: row;
   float: right;
   border-radius: 30px;
-  width: 248px;
-  height: 43px;
+  // width: 248px;
+  width:230px;
+  height: 70px;
   flex-shrink: 0;
   border-radius: 5px;
-  border: 1px solid #4D4D4D;
+  // border: 1px solid #4D4D4D;
+  // background: rgba(255, 253, 253, 0.02);
   background: rgba(255, 253, 253, 0.02);
   /* margin: 3px; */
-  margin-right: 20px;
-  margin-top: -42px;
-  padding-bottom: 12px;
+  margin-right: 5px;
+  margin-top: -55px;
+  // padding-bottom: 12px;
   cursor: pointer;
-  background-color: white;
+  // background-color: white;
 }
 
 .userimg{
-  margin:6px 5px 5px 6px;
-  color: black;
+  // margin:6px 5px 5px 6px;
+  color:white;
+ 
+
 }
 
 .usertext{
   display:column;
-  margin: 4px 5px 5px 7px;
+  // margin: 4px 5px 5px 7px;
   flex: 1;
+  font-family:sans-serif
 }
 
 .usertext > h6{
   margin-top: -19px;
   color: black;
+  font-family: sans-serif;
 }
 
-.usertext > h3{
+.usertext > h4{
   border-top-right-radius: 8px;
     border-top-left-radius: 8px;
-    margin-top: 0;
+    margin-top: 10px;
     margin-bottom: 20px;
     padding: 0px;
-    background-color: white;
+    // background-color: white;
     color: black;
 }
 
 .dropdown_icon{
-  margin-top: 9px;
-  margin-left: -1px;
+  margin-top: 5px;
+  margin-left: -40px;
   width:0.9rem;
   height:0.9rem;
   color: rgb(0, 0, 0);
@@ -82,7 +88,7 @@
 }
 
 .dropdown-menu{
-  width:248px !important;
+  width:200px !important;
   animation-name: dropdown;
   animation-duration:0.5s;
 }
@@ -93,9 +99,25 @@
 }
 
 .accountcircle{
-  height: 44px !important;
-  width: 29px !important;
+  height: 55px !important;
+  width: 35px !important;
+  padding-right: 60px !important;
+   margin-bottom: 20px !important;
+ 
 }
+
+.menu-items {
+  margin-top: 1px;
+  width: 230px;
+  margin-left: 1px;
+  box-shadow: none;
+  border-radius: 0px 0px 0px 0px;
+  position: absolute;
+  z-index: -1;
+  animation: 0.5s ease;
+}
+
+
 
 
 @keyframes dropdown {
@@ -120,10 +142,12 @@
   }
 
   .userbox {
-    width: 59px;
-    height: 43px;
+    // width: 59px;
+    // height: 43px;
+    width:100px;
+    height: 50px;
     margin-right: 10px;
-    margin-top: -43px;
+    margin-top: -63px;
     padding-bottom: 15px;
     border: none;
   }

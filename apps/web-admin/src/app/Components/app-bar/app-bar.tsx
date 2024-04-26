@@ -16,6 +16,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import axios from "axios";
+import hivelogo from "../../../assets/HIVE_Logo_Black.svg"
 
 
 
@@ -58,21 +59,23 @@ export function TopBar() {
     <AppBar className={styles['appbar']}>
           <div>
           {/* <Link to="/logout"><Button className={styles['person_icon']} color="primary">LogOut</Button></Link> */}
-          <img src={fountlab} alt="font lab logo" width="150px" height="23px" className={styles['logo']} />
+          {/* <img src={fountlab} alt="font lab logo" width="150px" height="23px" className={styles['logo']} /> */}
+          <img src={hivelogo} alt="font lab logo" width="100px" height="45px" className={styles['logo']} />
 
           <Box>
             <div className={styles["userbox"]} >
-              <div className={styles["userimg"]} onClick={handleResize}>
-                <AccountCircle   className={styles['accountcircle']}/>
-                {/* <img src={PersonIcon} alt="User img" height="44px" width="44px" onClick={handleResize}/> */}
-              </div>
               <div className={styles["usertext"]}>
-                <h3>{user?.firstName}  {user?.lastName}</h3>
+                <h4>{user?.firstName}  {user?.lastName}</h4>
                 <h6>{user?.superRole}</h6>
               </div>
-              <IconButton onClick={handleMenu} className={styles['dropdown_icon']}>
+              {/* <div className={styles["userimg"]} onClick={handleResize}> */}
+              <div className={styles["userimg"]} onClick={handleMenu}>
+                <AccountCircle     className={styles['accountcircle']}  />
+                {/* <img src={PersonIcon} alt="User img" height="44px" width="44px" onClick={handleResize}/> */}
+              </div>
+              {/* <IconButton onClick={handleMenu} className={styles['dropdown_icon']}>
                 {!openProfile ? <KeyboardArrowDownIcon  /> : <KeyboardArrowUpIcon  />}
-              </IconButton>
+              </IconButton> */}
             </div>
             
           </Box>

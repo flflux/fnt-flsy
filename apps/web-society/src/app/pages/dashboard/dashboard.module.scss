@@ -113,7 +113,10 @@
     .import-export{
         display: flex;
         flex-direction: row;
-        margin-left: -8px;
+        margin-top: 10px;
+        padding-left: 10px;
+        // padding-bottom: 10px;
+        // margin-left: -px;
     }
 
     .cards {
@@ -125,8 +128,24 @@
         min-height: 86px !important;
         margin-top:10px;
     }
+
+    .bulkcard {
+        min-width: 40%;
+        width:90%;
+       height: 130px;
+        padding-bottom: 0px !important;
+        box-shadow: 0px 1.16354px 16.63539px 0px rgba(0, 0, 0, 0.15) !important;
+        min-height: 86px !important;
+        margin-top:10px;
+        padding-left: 5px;
+        border-radius: 10px !important;
+  
+        
+    }
     
-    
+    .bulk_detail{
+        padding-left: 10px;
+    }
     
     .fields {
         // text-align: right;
@@ -238,6 +257,7 @@
         // margin-bottom: 13px !important;
         margin-left: 125px !important;
         text-transform: capitalize !important;
+       
     }
     
     .grid-header {

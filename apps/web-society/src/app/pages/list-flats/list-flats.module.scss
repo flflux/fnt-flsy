@@ -66,12 +66,13 @@ table {
 table th,
 table td {
   padding: 8px;
-  text-align: left;
+  text-align:start;
 }
 
 table th {
   background-color: #f2f2f2;
 }
+
 
 
 .modal-container {
@@ -167,6 +168,27 @@ table th {
   background-color: #cacaca;
   border-radius: 20px;
 }
+.css-17wnncx-MuiTableCell-root {
+  font-size: 1rem;
+  font-family: Poppins;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01071em;
+  display: table-cell;
+  vertical-align: inherit;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+  text-align:left;
+  padding: 5px;
+  font-size: 16px;
+}
+
+
+
+/* Add this if you want to adjust the height of individual cells */
+
+/* Add this if you want to adjust the height of the IconButton */
+
 
 // .importmodal-container {
 //   position: fixed !important;

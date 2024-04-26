@@ -21,6 +21,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { auto } from '@popperjs/core';
 
 
+
 /* eslint-disable-next-line */
 export interface ReportsProps {}
 
@@ -282,6 +283,10 @@ export function Reports(props: ReportsProps) {
     };
     
   };
+
+
+
+  
   
   // const data = Array.from({ length: 10 }, (_, index) => generateRandomData());
 
@@ -521,11 +526,13 @@ export function Reports(props: ReportsProps) {
 
     
     
+ <div className={styles['horizontal-line']} /> 
 
-
-    <div className={styles['horizontal-line']} />
- 
-     
+            {/* <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center',marginBottom:'10px' }}>
+    
+    
+    <Button variant="contained" color="primary" type="submit">Export</Button>
+  </div>   */}
     <Box sx={{
         height: 400,
         width: '100%',

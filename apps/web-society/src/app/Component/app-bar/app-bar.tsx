@@ -74,7 +74,7 @@ export function TopBar() {
           {/* <Link to="/logout"><Button className={styles['person_icon']} color="primary">LogOut</Button></Link> */}
           
           {/* <img src={fountlab} alt="font lab logo" width="150px" height="23px" className={styles['logo']} /> */}
-          <img src={hivelogo} alt="font lab logo" width="100px" height="45px" className={styles['logo']} />
+          <img src={hivelogo} alt="font lab logo" width="150px" height="50px"  className={styles['logo']} />
 
           <Box >
             <div className={styles["userbox"]} >

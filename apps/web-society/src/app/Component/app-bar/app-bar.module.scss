@@ -6,14 +6,14 @@
 
 
  .person_icon{
-   display: flex;
-   flex-direction: row-reverse;
-   float: right;
-   margin: 12px !important;
-   margin-right: 50px !important;
-   size: "large";
-   background-color: red;
-   color: white !important;
+  display: flex;
+ flex-direction: row-reverse;
+ float: right;
+ margin: 12px !important;
+ margin-right: 50px !important;
+ size: "large";
+ background-color: red;
+ color: white !important;
   //  border: 1px solid #e1117f !important;
   //  border-radius: 8px !important;
  }
@@ -23,26 +23,27 @@
  }
 
  .logo{
-  margin-top: 10px;
-  margin-left: 14px;
- }
+  margin-top: 5px;
+  margin-left: 20px;
+  }
 
  .userbox{
   display: flex;
   flex-direction: row;
   float: right;
-  border-radius: 30px;
+  // border-radius: 30px;
   // width: 248px;
-  width:230px;
-  height: 70px;
+  width:170px;
+  height: 50px;
   flex-shrink: 0;
-  border-radius: 5px;
+  // border-radius: 5px;
   // border: 1px solid #4D4D4D;
   // background: rgba(255, 253, 253, 0.02);
   background: rgba(255, 253, 253, 0.02);
   /* margin: 3px; */
-  margin-right: 5px;
-  margin-top: -55px;
+  margin-right: 1px;
+  margin-top: -67px;
+  padding-bottom: 12px;
   // padding-bottom: 12px;
   cursor: pointer;
   // background-color: white;
@@ -50,20 +51,20 @@
 
 .userimg{
   // margin:6px 5px 5px 6px;
-  color:white;
  
+color:white;
 
 }
 
 .usertext{
   display:column;
-  // margin: 4px 5px 5px 7px;
+   margin: 4px 5px 5px 10px;
   flex: 1;
   font-family:sans-serif
 }
 
 .usertext > h6{
-  margin-top: -19px;
+  margin-top: -15px;
   color: black;
   font-family: sans-serif;
 }
@@ -78,17 +79,17 @@
     color: black;
 }
 
-.dropdown_icon{
-  margin-top: 5px;
-  margin-left: -40px;
-  width:0.9rem;
-  height:0.9rem;
-  color: rgb(0, 0, 0);
-  cursor: pointer;
-}
+// .dropdown_icon{
+//   margin-top: 5px;
+//   margin-left: -40px;
+//   width:0.9rem;
+//   height:0.9rem;
+//   color: rgb(0, 0, 0);
+//   cursor: pointer;
+// }
 
 .dropdown-menu{
-  width:200px !important;
+  width:180px !important;
   animation-name: dropdown;
   animation-duration:0.5s;
 }
@@ -99,16 +100,16 @@
 }
 
 .accountcircle{
-  height: 55px !important;
-  width: 35px !important;
-  padding-right: 60px !important;
-   margin-bottom: 20px !important;
+  height: 65px !important;
+  width: 40px !important;
+   padding-right: 15px !important;
+  //  margin-bottom: 20px !important;
  
 }
 
 .menu-items {
   margin-top: 1px;
-  width: 230px;
+  width: 205px;
   margin-left: 1px;
   box-shadow: none;
   border-radius: 0px 0px 0px 0px;
@@ -133,20 +134,20 @@
   }
 
   .person_icon {
-      margin-right: 20px !important;
+      margin-right: 1px !important;
   }
 
   .logo {
-      margin-top: 10px;
-      margin-left: 10px;
+      // margin-top: 10px;
+      margin-left: 2px;
   }
 
   .userbox {
     // width: 59px;
     // height: 43px;
-    width:100px;
+    width:80px;
     height: 50px;
-    margin-right: 10px;
+    margin-right: 1px;
     margin-top: -63px;
     padding-bottom: 15px;
     border: none;
@@ -170,8 +171,8 @@
   }
 
   .logo {
-    margin-top: 18px;
-    width: 135px;
+    // margin-top: 10px;
+    width: 170px;
   }
 
   .menu-items {

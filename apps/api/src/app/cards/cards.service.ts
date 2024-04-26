@@ -48,6 +48,7 @@ export class CardsService {
         isActive: addCardDto.isActive,
         type: addCardDto.type,
         deviceId: device.id,
+        vehicleId: addCardDto.vehicleId
       },
     });
 

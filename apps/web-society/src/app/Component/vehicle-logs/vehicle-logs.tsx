@@ -98,47 +98,33 @@ export function VehicleLogs({id, refreshLogs}: VehicleLogsProps) {
   }
 
   return (
-    <div className={styles['container']}>
-      <div>
-            {vehicleLog.map((item) => (
-              <Card
-                key={item.id}
-                className={styles['logs-card']}
-                sx={{
-                  display: 'flex',
-                  maxWidth: 300,
-                  border: '1px solid #ddd',
-                  borderRadius: 5,
-                  margin: 2, 
-                }}
-              >
-
-                {item.status==='ALLOW' ? <div className={styles['active-logs']} /> : <div className={styles['inactive-logs']}/> }
-
-                {/* <div className={styles['active-logs']} /> */}
-                {/* <CardMedia
-                  component="img"
-                  height="140"
-                  image={item.imageUrl}
-                  alt="Image Description"
-                  className={styles['cardmedia']}
-                /> */}
-                <CardContent sx={{ flex: 1 }}>
-                  <Typography variant="body2" component="div" className={styles['logs-card-text']}>
-                    <div className={styles['logs-name']}>{item.vehicle.name}</div>
-                    <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" className={styles['logs-card-text']}>
-                    <div>{item.vehicle.number}</div>      
-                    <div>{item.device.name}</div>
-                    <div>{item.direction}</div>
-                  </Typography>
-                </CardContent>
-              </Card>
-              ))}
-          </div>
+    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        <table className={styles['logs-table']}>
+            <thead>
+                <tr>
+                    <th>Device Name</th>
+                    <th>Vehicle Number</th>
+                    <th>Vehicle Name</th>
+                    <th>Direction</th>
+                    <th>Date Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {deviceLog.map((item) => (
+                    <tr key={item.id}>
+                        <td>{item.device.name}</td>
+                        <td>{item.vehicle ? item.vehicle?.flats[0].flats.number : 'Forced Open'}</td>
+                        <td>{item.vehicle?.number}</td>
+                        <td>{item.vehicle?.name}</td>
+                        <td>{item.direction}</td>
+                        <td>{item.dateTime.toString()}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     </div>
-  );
+);
+
 }
 
 export default VehicleLogs;

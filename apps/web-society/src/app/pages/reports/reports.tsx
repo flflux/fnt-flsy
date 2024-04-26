@@ -23,7 +23,7 @@ import { auto } from '@popperjs/core';
 
 
 /* eslint-disable-next-line */
-export interface ReportsProps {}
+export interface ReportsProps { }
 
 interface ViewVehicle {
   id: number;
@@ -31,7 +31,7 @@ interface ViewVehicle {
   number: string;
   type: string;
   isActive: boolean;
-  vehicles:Vehicle;
+  vehicles: Vehicle;
   flats: [
     {
       flats: {
@@ -55,7 +55,7 @@ interface ViewVehicle {
     }];
 };
 
-interface VehicleLog{
+interface VehicleLog {
   id: number,
   device: {
     id: number,
@@ -63,7 +63,7 @@ interface VehicleLog{
     deviceId: string
   },
   vehicle: {
-  id: number,
+    id: number,
     name: string,
     number: string,
     flats: [
@@ -82,48 +82,48 @@ interface VehicleLog{
 
 interface Form {
   vehicleId: number;
-  deviceId:number;
-  startDate:Date;
-  endDate:Date;
+  deviceId: number;
+  startDate: Date;
+  endDate: Date;
 }
 
 interface DeviceForm {
   deviceId: number;
 }
 
-interface VehicleTypeForm{
-  type:VehicleType;
+interface VehicleTypeForm {
+  type: VehicleType;
 }
 
-interface DirectionForm{
-  direction:string;
+interface DirectionForm {
+  direction: string;
 }
 
 
 
 const columns: GridColDef[] = [
-  { field: 'vehicle', headerName: 'Vehicle', width: 100, flex:1 },
+  { field: 'vehicle', headerName: 'Vehicle Name', width: 100, flex: 1 },
   // {field:'id', headerName:"Id", width:90},
   {
     field: 'device',
-    headerName: 'Device',
+    headerName: 'Gate',
     width: 100,
     editable: false,
-    flex:1
+    flex: 1
   },
   {
     field: 'date',
     headerName: 'Date',
     width: 100,
     editable: false,
-    flex:1
+    flex: 1
   },
   {
     field: 'type',
-    headerName: 'Type',
+    headerName: 'Vehicle Number',
     width: 100,
     editable: false,
-    flex:1
+    flex: 1
   },
   {
     field: 'direction',
@@ -131,7 +131,7 @@ const columns: GridColDef[] = [
     type: 'number',
     width: 100,
     editable: false,
-    flex:1,
+    flex: 1,
   },
   {
     field: 'status',
@@ -139,7 +139,7 @@ const columns: GridColDef[] = [
     type: 'number',
     width: 100,
     editable: false,
-    flex:1,
+    flex: 1,
     // maxWidth:200
   },
 ];
@@ -163,18 +163,18 @@ export function Reports(props: ReportsProps) {
 
   const [VehicleList, setVehicleList] = useState<ViewVehicle[]>([]);
   const [deviceList, setDeviceList] = useState<Device[]>([]);
-  const [vehiclelogs, setVehiclelogs]=useState<VehicleLog[]>([]);
+  const [vehiclelogs, setVehiclelogs] = useState<VehicleLog[]>([]);
   const apiUrl = environment.apiUrl;
-  const user=useContext(UserContext);
-  const params=useParams();
+  const user = useContext(UserContext);
+  const params = useParams();
 
-  const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
-  console.log("society id:",societycontext?.id);
+  const societycontext = useContext(SocietyContext);
+  console.log("society context:", societycontext);
+  console.log("society id:", societycontext?.id);
 
 
 
-  
+
   const columnWidth = 1000 / columns.length;
 
   // Set the width dynamically for each column
@@ -182,7 +182,11 @@ export function Reports(props: ReportsProps) {
 
 
 
-   const rows=vehiclelogs.map((log)=>({
+  const rows = vehiclelogs.map((log) => {
+
+
+
+    return {
       id: log.id,
       vehicle: log.vehicle.name, // Assuming you have a 'name' property for the vehicle
       device: log.device.name, // Assuming you have a 'name' property for the device
@@ -190,9 +194,10 @@ export function Reports(props: ReportsProps) {
       type: log.vehicle.number,
       direction: log.direction,
       status: log.status,
-   }))
+    }
+  })
 
-   
+
   const validationSchema = yup.object().shape({
     vehicleId: yup.number(),
     deviceId: yup.number()
@@ -200,33 +205,33 @@ export function Reports(props: ReportsProps) {
   const { register, handleSubmit, control, reset, formState: { errors }, watch } = useForm<Form>({
     resolver: yupResolver(validationSchema),
   });
-  const onFormSubmit=async(data:any)=>{
+  const onFormSubmit = async (data: any) => {
     console.log(data.deviceId);
     console.log(data.vehicleId);
     console.log(data);
-    try{
+    try {
       const response = await axios.get(`${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`, {
         withCredentials: true,
         params: {
           deviceId: data.deviceId,
           vehicleId: data.vehicleId,
-          startDate:data.startDate,
-          enddate:data.endDate,
-          pageSize:10,
-          pageOffset:0,
-          sortBy:"dateTime",
-          sortOrder:"desc",
-          isPaginated:"true"
+          startDate: data.startDate,
+          enddate: data.endDate,
+          pageSize: 10,
+          pageOffset: 0,
+          sortBy: "dateTime",
+          sortOrder: "desc",
+          isPaginated: "true"
         },
       });
 
       // Update the vehiclelogs state with the API response
       setVehiclelogs(response.data.content);
-      console.log("Vehicle logs:",response.data)
-    }catch(error){
+      console.log("Vehicle logs:", response.data)
+    } catch (error) {
       console.log("error in vehicle log", error);
     }
-  } 
+  }
 
   const getAllVehicles = async () => {
     try {
@@ -267,12 +272,12 @@ export function Reports(props: ReportsProps) {
 
   const generateRandomData = () => {
     const randomHour = Math.floor(Math.random() * 24);
-  const randomMinute = Math.floor(Math.random() * 60);
+    const randomMinute = Math.floor(Math.random() * 60);
 
-  const date = new Date();
-  date.setHours(randomHour, randomMinute, 0, 0);
+    const date = new Date();
+    date.setHours(randomHour, randomMinute, 0, 0);
 
-    return{
+    return {
       id: Math.floor(Math.random() * 1000),
       vehicle: `Vehicle-${Math.floor(Math.random() * 1000)}`,
       device: `Device-${Math.floor(Math.random() * 1000)}`,
@@ -281,13 +286,19 @@ export function Reports(props: ReportsProps) {
       direction: Math.random() > 0.5 ? 'In' : 'Out',
       status: Math.random() > 0.5 ? 'Active' : 'Inactive',
     };
-    
+
+  };
+
+
+  const handleDataExport = () => {
+    console.log('Exporting data...');
+    // Add your export logic here
   };
 
 
 
-  
-  
+
+
   // const data = Array.from({ length: 10 }, (_, index) => generateRandomData());
 
   const breadcrumbs = [
@@ -312,14 +323,14 @@ export function Reports(props: ReportsProps) {
       <h1 className={styles['h1_tag']}>Vehicle Reports</h1>
 
 
-    
+
       {/* cards */}
       {/* onSubmit={handleVehicleSubmit} */}
       <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Box  className={styles['report-dropdown']}>
-      {/* <Box className={styles['dropdown']}> */}
-         {/* <Box> */}
-            {/* <FormControl sx={{ width: 300 , 
+        <Box className={styles['report-dropdown']}>
+          {/* <Box className={styles['dropdown']}> */}
+          {/* <Box> */}
+          {/* <FormControl sx={{ width: 300 , 
              '@media (max-width: 758px)': {
                 width:'100% !important',
               },}} fullWidth>
@@ -327,16 +338,16 @@ export function Reports(props: ReportsProps) {
               <Controller
                 name="vehicleId"
                 control={control} */}
-                {/* // defaultValue={undefined} */}
-                {/* rules={{ required: 'Vehicle Number is required' }}
+          {/* // defaultValue={undefined} */}
+          {/* rules={{ required: 'Vehicle Number is required' }}
                 render={({ field }) => (
                   <>
                   <Select
                     label="Select Vehicle"
                     variant="outlined"
                     {...field} */}
-                     {/* error={!!vehicleErrors.vehicleId} */}
-                    {/* MenuProps={{
+          {/* error={!!vehicleErrors.vehicleId} */}
+          {/* MenuProps={{
                       PaperProps: {
                         style: {
                           maxHeight: 105
@@ -344,60 +355,62 @@ export function Reports(props: ReportsProps) {
                       },
                     }}
                   > */}
-                    {/* {VehicleList.map((vehicle) => (
+          {/* {VehicleList.map((vehicle) => (
                       <MenuItem sx={{ justifyContent: 'center' }} key={vehicle.id} value={Number(vehicle.id)}>
                         {vehicle.number}
                       </MenuItem>
                     ))}
                   </Select> */}
-                  {/* <FormHelperText sx={{ color: "#d32f2f" }}>{vehicleErrors.vehicleId?.message}</FormHelperText> */}
-                  {/* </> */}
-                {/* )} />
+          {/* <FormHelperText sx={{ color: "#d32f2f" }}>{vehicleErrors.vehicleId?.message}</FormHelperText> */}
+          {/* </> */}
+          {/* )} />
             </FormControl> */}
           {/* </form> */}
-        {/* </Box> */}
+          {/* </Box> */}
 
-          
+
 
           {/* onSubmit={handleDeviceSubmit} */}
           {/* <form > */}
           <Box>
-          <FormControl sx={{ width: 300,
-           '@media (max-width: 758px)': {
-            width:'100% !important',
-          }, }} fullWidth>
+            <FormControl sx={{
+              width: 300,
+              '@media (max-width: 758px)': {
+                width: '100% !important',
+              },
+            }} fullWidth>
 
-            <InputLabel htmlFor="Device">Select Device</InputLabel>
-            <Controller
-              name="deviceId"
-              control={control}
-              // defaultValue=""
-              rules={{ required: 'Device is required' }}
-              render={({ field }) => (
-                <><Select
-                  label="Select Device"
-                  variant="outlined"
-                  {...field}
-                  // error={!!deviceErrors.deviceId}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 105
+              <InputLabel htmlFor="Device">Select Device</InputLabel>
+              <Controller
+                name="deviceId"
+                control={control}
+                // defaultValue=""
+                rules={{ required: 'Device is required' }}
+                render={({ field }) => (
+                  <><Select
+                    label="Select Device"
+                    variant="outlined"
+                    {...field}
+                    // error={!!deviceErrors.deviceId}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 105
+                        },
                       },
-                    },
-                  }}
-                >
-                  {deviceList.map((device) => (
-                    <MenuItem sx={{ justifyContent: 'center' }} key={device.id} value={device.id}>
-                      {device.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {/* <FormHelperText sx={{ color: "#d32f2f" }}>{errors.deviceId?.message}</FormHelperText> */}
-                </>
+                    }}
+                  >
+                    {deviceList.map((device) => (
+                      <MenuItem sx={{ justifyContent: 'center' }} key={device.id} value={device.id}>
+                        {device.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                    {/* <FormHelperText sx={{ color: "#d32f2f" }}>{errors.deviceId?.message}</FormHelperText> */}
+                  </>
 
-              )} />
-          </FormControl>
+                )} />
+            </FormControl>
           </Box>
           {/* </Box> */}
           {/* </form> */}
@@ -440,7 +453,7 @@ export function Reports(props: ReportsProps) {
               </Box> */}
 
 
-              {/* <Box className={styles['grid_top']}>
+          {/* <Box className={styles['grid_top']}>
                 <FormControl sx={{ width: 260 }}>
                   <InputLabel id="direction" htmlFor="direction">Direction</InputLabel>
                   <Controller
@@ -476,64 +489,71 @@ export function Reports(props: ReportsProps) {
                 </FormControl>
               </Box> */}
 
-              {/* <Box className={styles['date-box']}> */}
-                <Box sx={{marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
-                width:'100% !important',
-              }}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DatePicker']}>
-                    <Controller
-                      name="startDate"
-                      control={control}
-                      defaultValue={undefined}
-                      render={({ field }) => (
-                        <DateTimePicker {...field} label="Start Date" 
-                        />
-                      )}
+          {/* <Box className={styles['date-box']}> */}
+          <Box sx={{
+            marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
+              width: '100% !important',
+            }
+          }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']}>
+                <Controller
+                  name="startDate"
+                  control={control}
+                  defaultValue={undefined}
+                  render={({ field }) => (
+                    <DateTimePicker {...field} label="Start Date"
                     />
-                  </DemoContainer>
-                </LocalizationProvider>
-                </Box>
-                {/* <span className={styles['dash']}>-</span> */}
-                <Box sx={{marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
-                width:'100% !important',
-              }}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs} >
-                  <DemoContainer components={['DatePicker']} >
-                    <Controller
-                      name="endDate"
-                      control={control}
-                      defaultValue={undefined}
-                      render={({ field }) => (
-                        <DateTimePicker {...field} label="End Date"  />
-                      )}
-                      
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-                </Box>
-              {/* </Box> */}
+                  )}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Box>
+          {/* <span className={styles['dash']}>-</span> */}
+          <Box sx={{
+            marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
+              width: '100% !important',
+            }
+          }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} >
+              <DemoContainer components={['DatePicker']} >
+                <Controller
+                  name="endDate"
+                  control={control}
+                  defaultValue={undefined}
+                  render={({ field }) => (
+                    <DateTimePicker {...field} label="End Date" />
+                  )}
 
-              
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Box>
+          {/* </Box> */}
 
-              </Box>
-              <Box>
-                <Button variant="contained" color="primary" type="submit" sx={{ ml: "40px" }}>
-                  Generate
-                </Button>
-              </Box>
-            </form>
 
-    
-    
- <div className={styles['horizontal-line']} /> 
 
-            {/* <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center',marginBottom:'10px' }}>
-    
-    
-    <Button variant="contained" color="primary" type="submit">Export</Button>
-  </div>   */}
-    <Box sx={{
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: "10px" }}>
+          <Button variant="contained" color="primary" type="submit">
+            Generate
+          </Button>
+          <Button variant="contained" color="primary" onClick={()=>{handleDataExport()}}>
+            Export
+          </Button>
+        </Box>
+
+
+
+
+      </form>
+
+
+      {/*     
+ <div className={styles['horizontal-line']} />  */}
+
+
+      <Box sx={{
         height: 400,
         width: '100%',
         display: 'flex',
@@ -542,38 +562,38 @@ export function Reports(props: ReportsProps) {
           flexDirection: 'row', // Change to row on small screens and above
         },
       }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-        sx={{
-          [theme.breakpoints.down('sm')]: {
-            '.MuiCheckbox-root': {
-              width: 24, // Adjust the checkbox width as needed
-              height: 24, // Adjust the checkbox height as needed
-            },
-            '.MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
-              whiteSpace: 'nowrap',
-              fontSize: '0.6rem', // Adjust the font size as needed
-              [theme.breakpoints.up('sm')]: {
-                fontSize: '0.6rem', // Adjust the font size for larger screens
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
               },
             },
-          },
-        }}
-      />
-    </Box>
-       
-  </div>
+          }}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+          sx={{
+            [theme.breakpoints.down('sm')]: {
+              '.MuiCheckbox-root': {
+                width: 24, // Adjust the checkbox width as needed
+                height: 24, // Adjust the checkbox height as needed
+              },
+              '.MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
+                whiteSpace: 'nowrap',
+                fontSize: '0.6rem', // Adjust the font size as needed
+                [theme.breakpoints.up('sm')]: {
+                  fontSize: '0.6rem', // Adjust the font size for larger screens
+                },
+              },
+            },
+          }}
+        />
+      </Box>
+
+    </div>
   );
 }
 

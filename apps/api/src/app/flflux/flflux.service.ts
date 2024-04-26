@@ -1,9 +1,9 @@
-import { ForbiddenException, NotFoundException ,HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
+import { ForbiddenException, NotFoundException, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { Cron } from '@nestjs/schedule';
 import { flfluxDto } from './flflux.dto';
 import { MQTT_DOMAIN_MYGATE } from './env.consts';
-import { Device ,Card} from '@prisma/client';
+import { Device, Card } from '@prisma/client';
 import { SuperRole, OrganizationRole, PrismaClient, OrganizationRoleName, SuperRoleName } from '@prisma/client';
 import {
   API_URL,
@@ -13,10 +13,20 @@ import {
   MYGATE_API_URL,
   MYGATE_SYNC_CRON,
 } from '../core/consts/env.consts';
+import * as mqtt from 'mqtt';
+
+import {
+  MQTT_HTTP_PROTOCOL_MYGATE,
+  MQTT_PASSWORD,
+  MQTT_PORT_MYGATE,
+  MQTT_USERNAME,
+} from '../core/consts/env.consts';
 
 import { MainFluxService } from '../mainflux/mainflux.service';
 import { AccessSyncDto } from '../core/dto/access-sync.dto';
 import { CardDto } from '../cards/dto/card.dto';
+import { CommunicationService } from '../communication/communication.service';
+import { AccessNotifyDto } from '../core/dto/access-notify.dto';
 
 // import {
 //   MyGateNotifyDto,
@@ -28,21 +38,24 @@ import { CardDto } from '../cards/dto/card.dto';
 @Injectable()
 export class FlfluxService {
   constructor(
-    private mainFluxService: MainFluxService
-  ) {}
+    private mainFluxService: MainFluxService,
+    private communicationService: CommunicationService,
+  ) { }
   private prismaService = new PrismaClient();
-  
-  
-/*
-Scan the card table and create the sync message for the upserted card and deleted card 
-maintain the sync message state with the tables.
-*/
+
+  private connections: Map<string, any> = new Map();
+
+
+  /*
+  Scan the card table and create the sync message for the upserted card and deleted card 
+  maintain the sync message state with the tables.
+  */
 
   @Cron(DEVICE_SYNC_CRON, {
     name: 'deviceSyncMyGate',
   })
   async deviceSyncMyGate() {
-   try {
+    try {
       const devices = await this.prismaService.device.findMany({
         select: { id: true },
       });
@@ -63,13 +76,13 @@ maintain the sync message state with the tables.
     await this.prismaService
       .$transaction(async (tx) => {
         const device = await tx.device.findFirst({
-          where: { id: id ,isActive: true},
+          where: { id: id, isActive: true },
           include: {
             // TODO : we need to remove vehicles from here..
-            vehicles:{
-              select:{
-                vehicles:{
-                  select:{
+            vehicles: {
+              select: {
+                vehicles: {
+                  select: {
                     cards: true
                   }
                 }
@@ -78,11 +91,11 @@ maintain the sync message state with the tables.
             deviceCards: true,
           },
         });
-        
+
         const { deviceCards } = device;
 
         const vehicleCards = await tx.card.findMany({
-          where:{
+          where: {
             deviceId: device.id,
             isActive: true
           }
@@ -91,7 +104,7 @@ maintain the sync message state with the tables.
         // const vehicleCards = device.vehicles.map((vehicle): Card=>{
         //   return vehicle.vehicles.cards[0]
         // });
-        
+
         const deviceCardsCardIds = deviceCards.map((c) => c.cardId);
         const vehicleCardsAccessDisplays = vehicleCards.map(
           (c) => c.number
@@ -197,6 +210,115 @@ maintain the sync message state with the tables.
     );
     console.log('Sent sync message to device', device.deviceId, accessSyncDto);
     return String(syncToken);
+  }
+
+
+
+  @Cron(DEVICE_SYNC_CRON, {
+    name: 'deviceSyncMQTT',
+  })
+  async deviceSyncMQTT() {
+    try {
+      const devices = await this.prismaService.device.findMany({});
+      const toBeAdded = devices.filter((c) => !this.connections.has(c.thingId));
+      console.log("toBe added .. :  ", toBeAdded);
+
+      // TODO: implement workers
+
+      for (const device of toBeAdded) {
+        await this.addNewConnection(device.thingId, device.thingKey, device.channelId, `channels/${device.channelId}/messages/unique`)
+      }
+
+    } catch (e) {
+      Logger.log('deviceSync', e);
+    }
+  }
+
+
+  async addNewConnection(
+    thingId: string,
+    thingKey: string,
+    channelId: string,
+    topicName: string
+  ) {
+    const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
+    const mqttOptions = {
+      clientId,
+      clean: true,
+      connectTimeout: 4000,
+      username: thingId,
+      password: thingKey,
+      reconnectPeriod: 1000,
+
+      // additional options can be added here
+    };
+
+    // Connect to the MQTT broker
+    const client = mqtt.connect(`mqtt://${MQTT_DOMAIN_MYGATE}:${MQTT_PORT_MYGATE}`, mqttOptions);
+    const subscriptionTopic = `channels/${channelId}/messages/mygate-notify`;
+
+    // Handle incoming messages
+    client.on('message', async (topic, message) => {
+      const topic_res = topic.split("/")
+      console.log(topic_res);
+      console.log(`Received message on ${topic}: ${message.toString()}`); // Log the received message
+
+      const channel_id = topic_res[1];
+
+      const notifyTopic = topic_res[3];
+
+      console.log(notifyTopic);
+
+      const deviceToPublish = await this.prismaService.device.findFirst({
+        where: {
+          channelId: channel_id
+        }
+      })
+
+
+      if (notifyTopic === 'mygate-notify') {
+        const publishedMessage = message.toString();
+        try {
+          const deviceMessage: AccessNotifyDto = JSON.parse(publishedMessage);
+
+          console.log(deviceMessage);
+
+          if ('ci' in deviceMessage && 'ts' in deviceMessage && 'st' in deviceMessage && 'dr' in deviceMessage) {
+            await this.communicationService.accessNotify(deviceToPublish.societyId, deviceToPublish.deviceId, deviceMessage);
+          } else {
+            console.log("just displaying the message: ", deviceMessage);
+          }
+          
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+
+
+
+    // Subscribe to the specified topic
+    client.on('connect', () => {
+      client.subscribe(subscriptionTopic, (err) => {
+        if (err) {
+          Logger.error(`Error while subscribing to ${subscriptionTopic}: ${err}`);
+        } else {
+          Logger.log(`Subscribed to ${subscriptionTopic} for thingId: ${thingId}`);
+        }
+      });
+    });
+
+    // Store the connection in the map
+    this.connections.set(thingId, client);
+  }
+
+
+  // Function to disconnect from the MQTT broker
+  disconnect() {
+    this.connections.forEach((client) => {
+      client.end();
+    });
+    this.connections.clear();
   }
 
 }

@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 // import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import fountlab from "../../../assets/fount-lab-logo.png";
+// import fountlab from "../../../assets/fount-lab-logo.png";
 import UserImg from "../../../assets/User.png";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -17,6 +17,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 // import PersonIcon from '@mui/icons-material/Person';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import axios from "axios";
+import hivelogo from "../../../assets/HIVE_Logo_Black.svg"
 
 
 
@@ -72,21 +73,25 @@ export function TopBar() {
           <div>
           {/* <Link to="/logout"><Button className={styles['person_icon']} color="primary">LogOut</Button></Link> */}
           
-          <img src={fountlab} alt="font lab logo" width="150px" height="23px" className={styles['logo']} />
+          {/* <img src={fountlab} alt="font lab logo" width="150px" height="23px" className={styles['logo']} /> */}
+          <img src={hivelogo} alt="font lab logo" width="150px" height="50px"  className={styles['logo']} />
 
           <Box >
             <div className={styles["userbox"]} >
-              <div className={styles["userimg"]} onClick={handleResize}>
-                <AccountCircle   className={styles['accountcircle']}/>
-              </div>
               <div className={styles["usertext"]}>
-                <h3>{user?.firstName}  {user?.lastName}</h3>
+                <h4>{user?.firstName}  {user?.lastName}</h4>
+
                 {/* <h6>{user?.superRole}</h6> */}
                 <h6 className={styles["user-role"]}>{user?.societyRoles[0]?.societyRole}</h6>
+               
               </div>
-              <IconButton onClick={handleMenu} className={styles['Icon_box']}>
+              {/* <div className={styles["userimg"]} onClick={handleResize}> */}
+              <div className={styles["userimg"]}  onClick={handleMenu}>
+                <AccountCircle   className={styles['accountcircle']}/>
+              </div>
+              {/* <IconButton onClick={handleMenu} className={styles['Icon_box']}>
                 {!openProfile ? <KeyboardArrowDownIcon className={styles['dropdown_icon']} /> : <KeyboardArrowUpIcon className={styles['dropdown_icon']} />}
-              </IconButton>
+              </IconButton> */}
             </div>
             
           </Box>

@@ -21,6 +21,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { auto } from '@popperjs/core';
 
 
+
 /* eslint-disable-next-line */
 export interface ReportsProps {}
 
@@ -282,6 +283,10 @@ export function Reports(props: ReportsProps) {
     };
     
   };
+
+
+
+  
   
   // const data = Array.from({ length: 10 }, (_, index) => generateRandomData());
 
@@ -304,7 +309,7 @@ export function Reports(props: ReportsProps) {
   return (
     <div className={styles['container']}>
       <div className={styles['breadcrumb']}><Breadcrumbs paths={breadcrumbs} /></div>
-      <h1>Vehicle Reports</h1>
+      <h1 className={styles['h1_tag']}>Vehicle Reports</h1>
 
 
     
@@ -313,44 +318,44 @@ export function Reports(props: ReportsProps) {
       <form onSubmit={handleSubmit(onFormSubmit)}>
       <Box  className={styles['report-dropdown']}>
       {/* <Box className={styles['dropdown']}> */}
-         <Box>
-            <FormControl sx={{ width: 300 , 
+         {/* <Box> */}
+            {/* <FormControl sx={{ width: 300 , 
              '@media (max-width: 758px)': {
                 width:'100% !important',
               },}} fullWidth>
               <InputLabel htmlFor="floor">Select Vehicle</InputLabel>
               <Controller
                 name="vehicleId"
-                control={control}
-                // defaultValue={undefined}
-                rules={{ required: 'Vehicle Number is required' }}
+                control={control} */}
+                {/* // defaultValue={undefined} */}
+                {/* rules={{ required: 'Vehicle Number is required' }}
                 render={({ field }) => (
                   <>
                   <Select
                     label="Select Vehicle"
                     variant="outlined"
-                    {...field}
-                    // error={!!vehicleErrors.vehicleId}
-                    MenuProps={{
+                    {...field} */}
+                     {/* error={!!vehicleErrors.vehicleId} */}
+                    {/* MenuProps={{
                       PaperProps: {
                         style: {
                           maxHeight: 105
                         },
                       },
                     }}
-                  >
-                    {VehicleList.map((vehicle) => (
+                  > */}
+                    {/* {VehicleList.map((vehicle) => (
                       <MenuItem sx={{ justifyContent: 'center' }} key={vehicle.id} value={Number(vehicle.id)}>
                         {vehicle.number}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Select> */}
                   {/* <FormHelperText sx={{ color: "#d32f2f" }}>{vehicleErrors.vehicleId?.message}</FormHelperText> */}
-                  </>
-                )} />
-            </FormControl>
+                  {/* </> */}
+                {/* )} />
+            </FormControl> */}
           {/* </form> */}
-        </Box>
+        {/* </Box> */}
 
           
 
@@ -513,7 +518,7 @@ export function Reports(props: ReportsProps) {
 
               </Box>
               <Box>
-                <Button variant="contained" color="primary" type="submit" sx={{ mr: "10px" }}>
+                <Button variant="contained" color="primary" type="submit" sx={{ ml: "40px" }}>
                   Generate
                 </Button>
               </Box>
@@ -521,11 +526,13 @@ export function Reports(props: ReportsProps) {
 
     
     
+ <div className={styles['horizontal-line']} /> 
 
-
-    <div className={styles['horizontal-line']} />
- 
-     
+            {/* <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center',marginBottom:'10px' }}>
+    
+    
+    <Button variant="contained" color="primary" type="submit">Export</Button>
+  </div>   */}
     <Box sx={{
         height: 400,
         width: '100%',

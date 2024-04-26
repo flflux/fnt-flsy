@@ -509,7 +509,7 @@ const AddResidentComponent: React.FC<AddResidentProps> = ({ open, onClose, onSub
                         }}
                       >
                        
-                        <MenuItem sx={{  justifyContent: "start" }} value="FAMILY_MEMBER">Owner Family Member</MenuItem>
+                        {/* <MenuItem sx={{  justifyContent: "start" }} value="FAMILY_MEMBER">Owner Family Member</MenuItem> */}
                         <MenuItem sx={{  justifyContent: "start" }} value="OWNER">Owner</MenuItem>
                         <MenuItem  sx={{  justifyContent: "start" }} value="TENANT">Tenant</MenuItem>
                       </Select>

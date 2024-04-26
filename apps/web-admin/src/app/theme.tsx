@@ -171,7 +171,7 @@ const theme = createTheme({
       fontSize: '2rem',
       fontWeight: 400,
       fontFamily: "Poppins",
-      color: "black"
+       color: "black"
     },
     body1: {
       fontSize: '1.2rem',

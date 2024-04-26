@@ -835,7 +835,10 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
           <div className={styles['vertical-line']} />
 
           <div className={styles['rightColumn']}>
-          
+
+
+          <Card className={styles['bulkcard']}>
+          <h3 className={styles['bulk_detail']}>Bulk</h3>
           <Box className={styles['import-export']}>
             <Button startIcon={<InsertDriveFileIcon/>} color="info"
               variant="contained"  onClick={handleOpenModal} className={styles['import-export-button']}>Template</Button>
@@ -887,6 +890,7 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
             
 
             </Box>
+            </Card>
 
           <div className={styles['column_second']}>
            
@@ -899,8 +903,10 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
                     onClick={() => {
                       setIsAddModalOpen(true)
                     }}
+
                   >
-                    <AddIcon fontSize='small' />Add
+                     {/* sx={{ width: '225px', height:'40px', backgroundColor: 'rgb(245, 158, 11)', color: 'white' }} */}
+                    <AddIcon fontSize='small'  />Add
                   </Button>
                 </div>
                 <div className={styles['manager-horizontal-line']} />

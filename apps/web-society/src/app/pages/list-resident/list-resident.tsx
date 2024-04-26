@@ -393,7 +393,7 @@ export function ListResidents(props: ListResidentsProps) {
         <Box className={styles['building_container']}>
 
           <Box className={styles['btn_container']}>
-            <h1>Residents</h1>
+            <h1 className={styles['h1_tag']}>Residents</h1>
             <Box>
               <AddResidentComponent
                 open={isAddModalOpen}

@@ -85,8 +85,8 @@ export function ListFlats(props: ListFlatsProps) {
           pageSize: rowsPerPage,
           pageOffset: page,
           number: searchQueryName,
-          name: searchQueryName,
-          floorNumber: searchQueryName
+          name: searchQueryBuildingName,
+          floorNumber: searchQueryFloorNumber
         },
       });
 
@@ -347,7 +347,7 @@ export function ListFlats(props: ListFlatsProps) {
         <Breadcrumbs paths={breadcrumbs} />
         <Box className={styles['building_container']}>
           <Box className={styles['btn_container']}>
-            <h1>Flats</h1>
+            <h1 className={styles['h1_tag']}>Flats</h1>
             <Box>
               <AddFlatComponent
                 open={isAddModalOpen}

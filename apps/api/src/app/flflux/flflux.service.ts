@@ -1,9 +1,9 @@
-import { ForbiddenException, NotFoundException ,HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
+import { ForbiddenException, NotFoundException, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { Cron } from '@nestjs/schedule';
 import { flfluxDto } from './flflux.dto';
 import { MQTT_DOMAIN_MYGATE } from './env.consts';
-import { Device ,Card} from '@prisma/client';
+import { Device, Card } from '@prisma/client';
 import { SuperRole, OrganizationRole, PrismaClient, OrganizationRoleName, SuperRoleName } from '@prisma/client';
 import {
   API_URL,
@@ -29,20 +29,20 @@ import { CardDto } from '../cards/dto/card.dto';
 export class FlfluxService {
   constructor(
     private mainFluxService: MainFluxService
-  ) {}
+  ) { }
   private prismaService = new PrismaClient();
-  
-  
-/*
-Scan the card table and create the sync message for the upserted card and deleted card 
-maintain the sync message state with the tables.
-*/
+
+
+  /*
+  Scan the card table and create the sync message for the upserted card and deleted card 
+  maintain the sync message state with the tables.
+  */
 
   @Cron(DEVICE_SYNC_CRON, {
     name: 'deviceSyncMyGate',
   })
   async deviceSyncMyGate() {
-   try {
+    try {
       const devices = await this.prismaService.device.findMany({
         select: { id: true },
       });
@@ -63,13 +63,13 @@ maintain the sync message state with the tables.
     await this.prismaService
       .$transaction(async (tx) => {
         const device = await tx.device.findFirst({
-          where: { id: id ,isActive: true},
+          where: { id: id, isActive: true },
           include: {
             // TODO : we need to remove vehicles from here..
-            vehicles:{
-              select:{
-                vehicles:{
-                  select:{
+            vehicles: {
+              select: {
+                vehicles: {
+                  select: {
                     cards: true
                   }
                 }
@@ -78,7 +78,6 @@ maintain the sync message state with the tables.
             deviceCards: true,
           },
         });
-        
         const { deviceCards } = device;
 
         // const vehicleCards = await tx.card.findMany({
@@ -88,10 +87,10 @@ maintain the sync message state with the tables.
         //   }
         // })
 
-        const vehicleCards = device.vehicles.map((vehicle): Card=>{
-          return vehicle.vehicles.cards[0]
-        });
-        
+        const vehicleCards = device.vehicles
+          .map(vehicle => vehicle.vehicles.cards?.[0])
+          .filter(card => card !== undefined);
+
         const deviceCardsCardIds = deviceCards.map((c) => c.cardId);
         const vehicleCardsAccessDisplays = vehicleCards.map(
           (c) => c.number

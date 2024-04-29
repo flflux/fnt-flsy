@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { SocietyContext, UserContext } from '../../contexts/user-context';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -49,30 +49,18 @@ interface Response {
 export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
   const [allvehiclelog, setallvehiclelog] = useState<Response[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
-
   const apiUrl = environment.apiUrl;
-
-  const user = useContext(UserContext);
   const societycontext = useContext(SocietyContext);
-  console.log('society context:', societycontext);
-  console.log('society id:', societycontext?.id);
 
   useEffect(() => {
     getDeviceLogs();
   }, [refreshLogs, societycontext]);
 
-  const params = useParams();
-  console.log('params:', params);
-
-  const userContext = useContext(UserContext);
-  console.log('user Context:', userContext);
-
   const getDeviceLogs = async () => {
     try {
       setLoadingLogs(true);
-      // await new Promise((resolve) => setTimeout(resolve, 4000));
       const response = await axios.get(
-        `${apiUrl}/vehicle-logs/society/${societycontext?.id}/reports/vehicle-logs`,
+        `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
         {
           withCredentials: true,
           params: {
@@ -84,19 +72,17 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
           },
         }
       );
-
-      // Update the vehiclelogs state with the API response
       setallvehiclelog(response.data.content);
       console.log('All vehicle logs:', response.data.content);
       setLoadingLogs(false);
     } catch (error) {
-      console.log('Error in  All vehicle log', error);
+      console.log('Error in All vehicle log', error);
       setLoadingLogs(false);
     }
   };
 
   return (
-    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto',marginLeft:'20px' }}>
       {loadingLogs ? (
         <div
           style={{
@@ -110,52 +96,38 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
           <CircularProgress />
         </div>
       ) : (
-        allvehiclelog.map((item) => (
-          <Card
-            key={item.id}
-            className={styles['logs-card']}
-            sx={{
-              display: 'flex',
-              maxWidth: 300,
-              border: '1px solid #ddd',
-              borderRadius: 5,
-              margin: 2,
-            }}
-          >
-            <div className={styles['active-logs']} />
-            {/* <CardMedia
-                component="img"
-                height="140"
-                image={item.imageUrl}
-                alt="Image Description"
-                className={styles['cardmedia']}
-              /> */}
-            <CardContent sx={{ flex: 1 }}>
-              <Typography
-                variant="body2"
-                component="div"
-                className={styles['logs-card-text']}
-              >
-                <div className={styles['logs-name']}>
-                  {item.card ? item.card?.number : 'Forced Open'}
-                </div>
-                <div id={styles['dateTime']}>{item.dateTime.toString()}</div>
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                className={styles['logs-card-text']}
-              >
-                <div>{item.device.name}</div>
-                <div>{item.card?.type}</div>
-                <div>{item.direction}</div>
-              </Typography>
-            </CardContent>
-          </Card>
-        ))
+        <TableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Gate Name</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Flat Number</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Vehicle Number</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px'}}>Vehicle Type</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Direction</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Date</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Time</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allvehiclelog.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell style={{padding:'8px'}}>{item.device.name}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.vehicle ? item.vehicle?.flats[0].flats.number : 'Forced Open'}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.vehicle?.number}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.vehicle?.name}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.direction}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{new Date(item.dateTime).toLocaleDateString()}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{new Date(item.dateTime).toLocaleTimeString()}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </div>
   );
 }
+
 
 export default AllVehicleLogs;

@@ -824,9 +824,9 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
 </Box> */}
 
             <Box className={styles['logs']}>
-              <Box style={{ margin: '9px', float: 'right', display: 'flex', justifyContent: 'flex-end' }}>
+              {/* <Box style={{ margin: '9px', float: 'right', display: 'flex', justifyContent: 'flex-end' }}>
                 <RefreshIcon onClick={handleRefresh} style={{ cursor: 'pointer' }} />
-              </Box>
+              </Box> */}
               <AllVehicleLogs refreshLogs={refreshLogs} />
             </Box>
 

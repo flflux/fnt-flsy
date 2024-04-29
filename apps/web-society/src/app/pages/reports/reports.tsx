@@ -538,9 +538,9 @@ export function Reports(props: ReportsProps) {
           <Button variant="contained" color="primary" type="submit">
             Generate
           </Button>
-          <Button variant="contained" color="primary" onClick={()=>{handleDataExport()}}>
+          {/* <Button variant="contained" color="primary" onClick={()=>{handleDataExport()}}>
             Export
-          </Button>
+          </Button> */}
         </Box>
 
 

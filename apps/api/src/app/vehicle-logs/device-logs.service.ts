@@ -49,14 +49,15 @@ export class DeviceLogsService {
       });
     }
 
+    console.log(startDate, endDate);
     if (startDate !== undefined) {
       whereArray.push({
-        dateTime: { gte: new Date(startDate) },
+        dateTime: { gte: new Date(startDate).toISOString() },
       });
     }
     if (endDate !== undefined) {
       whereArray.push({
-        dateTime: { lte: new Date(endDate) },
+        dateTime: { lte: new Date(endDate).toISOString() },
       });
     }
 

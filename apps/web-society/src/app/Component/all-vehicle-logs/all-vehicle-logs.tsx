@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { SocietyContext, UserContext } from '../../contexts/user-context';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -60,7 +60,6 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
     try {
       setLoadingLogs(true);
       const response = await axios.get(
-        `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
         `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
         {
           withCredentials: true,

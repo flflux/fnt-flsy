@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/user-context';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import axios from 'axios';
 

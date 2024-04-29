@@ -492,7 +492,7 @@ export function ListBuildings(props: ListBuildingsProps) {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell><Checkbox
+                <TableCell style={{padding:'8px'}}><Checkbox
                   {...label}
                   checked={
                     buildingList.length > 0 &&
@@ -502,8 +502,8 @@ export function ListBuildings(props: ListBuildingsProps) {
                   }
                   onChange={handleHeaderCheckboxChange}
                 /></TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell></TableCell>
+                <TableCell style={{padding:'8px'}}>Name</TableCell>
+                <TableCell style={{padding:'8px'}}></TableCell>
               </TableRow>
             </TableHead>
 
@@ -521,7 +521,7 @@ export function ListBuildings(props: ListBuildingsProps) {
                     onClick={(e) => handleRowClick(building.id, e)}
                     key={index}
                   >
-                    <TableCell><Checkbox
+                    <TableCell style={{padding:'8px'}}><Checkbox
                       checked={selectedItems.includes(building.id)}
                       onChange={() => handleCheckboxChange(building.id)}
                       {...label}
@@ -529,8 +529,8 @@ export function ListBuildings(props: ListBuildingsProps) {
                         e.stopPropagation();
                       }}
                     /></TableCell>
-                    <TableCell sx={{ width: 800 }}>{building.name}</TableCell>
-                    <TableCell>
+                    <TableCell  style={{padding:'8px'}} sx={{ width: 800 }}>{building.name}</TableCell>
+                    <TableCell style={{padding:'8px'}}>
                       <IconButton onClick={(e) => {
                         e.stopPropagation();
                         handleEditClick(building.id);

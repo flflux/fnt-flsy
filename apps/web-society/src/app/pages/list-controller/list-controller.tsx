@@ -352,7 +352,7 @@ export function ListController(props: ListControllerProps) {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                <TableCell><Checkbox
+                <TableCell style={{padding:'8px'}}><Checkbox
                   {...label}
                   checked={
                     activeControllers.length > 0 &&
@@ -361,12 +361,12 @@ export function ListController(props: ListControllerProps) {
                     )
                   }
                   onChange={handleHeaderCheckboxChange}
-                /></TableCell>
-                  <TableCell sx={{ border: "hidden", fontFamily: "Poppins" }}>Name</TableCell>
-                  <TableCell  sx={{ border: "hidden", fontFamily: "Poppins" }}>Device ID</TableCell>
-                  <TableCell  sx={{ border: "hidden", fontFamily: "Poppins" }}>Type</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
+                /></TableCell >
+                  <TableCell sx={{ border: "hidden", fontFamily: "Poppins", padding:'8px' }}>Name</TableCell>
+                  <TableCell  sx={{ border: "hidden", fontFamily: "Poppins",padding:'8px' }}>Device ID</TableCell>
+                  <TableCell  sx={{ border: "hidden", fontFamily: "Poppins",padding:'8px' }}>Type</TableCell>
+                  <TableCell style={{padding:'8px'}}></TableCell>
+                  <TableCell style={{padding:'8px'}}></TableCell>
                 </TableRow>
               </TableHead>
 
@@ -380,7 +380,7 @@ export function ListController(props: ListControllerProps) {
               ) : (Array.isArray(activeControllers) && activeControllers.length > 0 ? (
                   activeControllers.map((device: Device, index: number) => (
                     <TableRow key={index} className={styles['table-row']}  onClick={(e) => handleRowClick(device.id,e)}>
-                      <TableCell><Checkbox
+                      <TableCell style={{padding:'8px'}}><Checkbox
                       checked={selectedItems.includes(device.id)}
                       onChange={() => handleCheckboxChange(device.id)}
                       {...label}
@@ -388,19 +388,19 @@ export function ListController(props: ListControllerProps) {
                         e.stopPropagation();
                       }}
                     /></TableCell>
-                      <TableCell>
+                      <TableCell style={{padding:'8px'}}>
                         {device.name}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{padding:'8px'}}>
                         {device.id}
                       </TableCell>
                       {/* <TableCell align='center'>
                         {device.deviceKey}
                       </TableCell> */}
-                      <TableCell>
+                      <TableCell style={{padding:'8px'}}>
                       {formatDeviceType(device?.type)}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{padding:'8px'}}>
                         <IconButton classes="btn btn-primary action-button"  className={styles['row-action-button']} onClick={(e) => {
                             e.stopPropagation();
                             handleEditClick(device.id)}}>
@@ -413,12 +413,12 @@ export function ListController(props: ListControllerProps) {
                           e.stopPropagation();
                           openDeleteModal(device.id)}} /> */}
                       </TableCell>
-                      <TableCell></TableCell>
+                      <TableCell style={{padding:'8px'}}></TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell sx={{textAlign: 'center'}} colSpan={5}>No Controller found</TableCell>
+                    <TableCell style={{padding:'8px'}} sx={{textAlign: 'center'}} colSpan={5}>No Controller found</TableCell>
                   </TableRow>
                  )
                  )}

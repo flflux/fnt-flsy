@@ -409,7 +409,9 @@
         flex-direction: row;
         /* margin-left: -8px; */
         column-gap: 4%;
-        margin: -7px;
+        // margin: -7px;
+        padding-left: 2px;
+        padding-right: 2px;
     }
 
     .import-export-button{
@@ -424,6 +426,7 @@
     .logs{
       width: 89%;;
     }
+
     
 
 }
@@ -432,6 +435,8 @@
     .grid-container{
         column-gap: 3% !important;
     }
+
+    
 
 }
 

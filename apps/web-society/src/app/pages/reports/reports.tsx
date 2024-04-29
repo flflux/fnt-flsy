@@ -289,13 +289,46 @@ export function Reports(props: ReportsProps) {
 
   };
 
-
-  const handleDataExport = () => {
-    console.log('Exporting data...');
-    // Add your export logic here
+  const handleExport = () => {
+    const dataSet = rows.map(row => ({
+      vehicle: row.vehicle,
+      device: row.device,
+      date: row.date,
+      type: row.type,
+      direction: row.direction,
+      status: row.status,
+    }));
+  
+    const excelData = [
+      {
+        sheetName: 'Vehicle Reports',
+        columns: [
+          { title: 'Vehicle', dataKey: 'vehicle' },
+          { title: 'Device', dataKey: 'device' },
+          { title: 'Date', dataKey: 'date' },
+          { title: 'Type', dataKey: 'type' },
+          { title: 'Direction', dataKey: 'direction' },
+          { title: 'Status', dataKey: 'status' },
+        ],
+        data: dataSet,
+      },
+    ];
+  
+    // Create a blob object from the excelData
+    const blob = new Blob([JSON.stringify(excelData)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+  
+    // Create a temporary anchor element to trigger the download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'vehicle_reports.xlsx';
+    document.body.appendChild(a);
+    a.click();
+  
+    // Remove the temporary anchor element
+    document.body.removeChild(a);
   };
-
-
+  
 
 
 
@@ -489,75 +522,66 @@ export function Reports(props: ReportsProps) {
                 </FormControl>
               </Box> */}
 
-          {/* <Box className={styles['date-box']}> */}
-          <Box sx={{
-            marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
-              width: '100% !important',
-            }
-          }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
-                <Controller
-                  name="startDate"
-                  control={control}
-                  defaultValue={undefined}
-                  render={({ field }) => (
-                    <DateTimePicker {...field} label="Start Date"
+              {/* <Box className={styles['date-box']}> */}
+                <Box sx={{marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
+                width:'100% !important',
+              }}}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']}>
+                    <Controller
+                      name="startDate"
+                      control={control}
+                      defaultValue={undefined}
+                      render={({ field }) => (
+                        <DateTimePicker {...field} label="Start Date" 
+                        />
+                      )}
                     />
-                  )}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </Box>
-          {/* <span className={styles['dash']}>-</span> */}
-          <Box sx={{
-            marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
-              width: '100% !important',
-            }
-          }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} >
-              <DemoContainer components={['DatePicker']} >
-                <Controller
-                  name="endDate"
-                  control={control}
-                  defaultValue={undefined}
-                  render={({ field }) => (
-                    <DateTimePicker {...field} label="End Date" />
-                  )}
+                  </DemoContainer>
+                </LocalizationProvider>
+                </Box>
+                {/* <span className={styles['dash']}>-</span> */}
+                <Box sx={{marginTop: '-7px', width: 300, '@media (max-width: 758px)': {
+                width:'100% !important',
+              }}}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} >
+                  <DemoContainer components={['DatePicker']} >
+                    <Controller
+                      name="endDate"
+                      control={control}
+                      defaultValue={undefined}
+                      render={({ field }) => (
+                        <DateTimePicker {...field} label="End Date"  />
+                      )}
+                      
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                </Box>
+              {/* </Box> */}
+              </Box>
+              <Box>
+                <Button variant="contained" color="primary" type="submit" sx={{ ml: "40px" }}>
+                  Generate
+                </Button>
+              </Box>
+            </form>
 
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </Box>
-          {/* </Box> */}
+    
+    
+ {/* <div className={styles['horizontal-line']} />  */}
 
-
-
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: "10px" }}>
-          <Button variant="contained" color="primary" type="submit">
-            Generate
-          </Button>
-          {/* <Button variant="contained" color="primary" onClick={()=>{handleDataExport()}}>
-            Export
-          </Button> */}
-        </Box>
-
-
-
-
-      </form>
-
-
-      {/*     
- <div className={styles['horizontal-line']} />  */}
-
-
-      <Box sx={{
+            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center',marginBottom:'10px',marginTop:'10px' }}>
+    
+    
+    <Button variant="contained" color="primary" type="submit"  onClick={handleExport}>Export</Button>
+  </div>  
+    <Box sx={{
         height: 400,
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+      
         [theme.breakpoints.up('sm')]: {
           flexDirection: 'row', // Change to row on small screens and above
         },

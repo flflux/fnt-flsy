@@ -378,9 +378,9 @@ export function ListFlats(props: ListFlatsProps) {
           </Box >
           <TableContainer className={styles['table_container']}>
             <Table stickyHeader>
-              <TableHead className={styles['table_head']}>
+              <TableHead className={styles['table_head']} style={{padding:'8px'}}>
                 <TableRow>
-                  <TableCell><Checkbox
+                  <TableCell align='center' style={{padding:'8px'}}><Checkbox
                     {...label}
                     checked={
                       activeBuildingFlats.length > 0 &&
@@ -390,13 +390,13 @@ export function ListFlats(props: ListFlatsProps) {
                     }
                     onChange={handleHeaderCheckboxChange}
                   /></TableCell>
-                  <TableCell sx={{ border: "hidden" }}>Building
+                  <TableCell align='center' style={{padding:'8px'}} sx={{ border: "hidden"  }}>Building
                   </TableCell>
-                  <TableCell sx={{ border: "hidden" }}>Floor
+                  <TableCell align='center' style={{padding:'8px'}} sx={{ border: "hidden" }}>Floor
                   </TableCell>
-                  <TableCell sx={{ border: "hidden", fontFamily: "Poppins" }}>Flat
+                  <TableCell  align='center' style={{padding:'8px'}} sx={{ border: "hidden", fontFamily: "Poppins" }}>Flat
                   </TableCell>
-                  <TableCell sx={{ border: "hidden" }}></TableCell>
+                  <TableCell align='center' style={{padding:'8px'}} sx={{ border: "hidden" }}></TableCell>
                 </TableRow>
 
               </TableHead>
@@ -415,8 +415,8 @@ export function ListFlats(props: ListFlatsProps) {
                   </TableCell>
                 ) : (Array.isArray(activeBuildingFlats) && activeBuildingFlats.length > 0 ? (
                   activeBuildingFlats.map((flat: ViewFlat, index: number) => (
-                    <TableRow className={styles['table-row']} onClick={(e) => handleRowClick(flat.id, flat.floor.id, flat.floor.building.id, e)}>
-                      <TableCell><Checkbox
+                    <TableRow  className={styles['table-row']}  onClick={(e) => handleRowClick(flat.id, flat.floor.id, flat.floor.building.id, e)}>
+                      <TableCell align='center' style={{padding:'5px'}}><Checkbox
                         checked={selectedItems.includes(flat.id)}
                         onChange={() => handleCheckboxChange(flat.id)}
                         {...label}
@@ -424,16 +424,16 @@ export function ListFlats(props: ListFlatsProps) {
                           e.stopPropagation();
                         }}
                       /></TableCell>
-                      <TableCell>
+                      <TableCell align='center'  style={{padding:'5px'}}>
                         {flat.floor.building.name}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='center'  style={{padding:'p5x'}}>
                         {flat.floor.number}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='center'  style={{padding:'5px'}}>
                         {flat.number}
                       </TableCell>
-                      <TableCell >
+                      <TableCell align='center'  style={{padding:'5px'}}>
                         <IconButton classes="btn btn-primary action-button" className={styles['row-action-button']} onClick={(e) => {
                             e.stopPropagation();
                             handleEditClick(flat.id);

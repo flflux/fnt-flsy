@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { SocietyContext, UserContext } from '../../contexts/user-context';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -61,6 +61,7 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
       setLoadingLogs(true);
       const response = await axios.get(
         `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
+        `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
         {
           withCredentials: true,
           params: {
@@ -77,12 +78,13 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
       setLoadingLogs(false);
     } catch (error) {
       console.log('Error in All vehicle log', error);
+      console.log('Error in All vehicle log', error);
       setLoadingLogs(false);
     }
   };
 
   return (
-    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+    <div className={styles['container']} style={{ maxHeight: '400px', overflowY: 'auto',marginLeft:'20px' }}>
       {loadingLogs ? (
         <div
           style={{
@@ -100,25 +102,25 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Gate Name</TableCell>
-                <TableCell>Flat Number</TableCell>
-                <TableCell>Vehicle Number</TableCell>
-                <TableCell>Vehicle Type</TableCell>
-                <TableCell>Direction</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Time</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Gate Name</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Flat Number</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Vehicle Number</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px'}}>Vehicle Type</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Direction</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Date</TableCell>
+                <TableCell style={{ fontSize: 'medium',padding:'10px' }}>Time</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {allvehiclelog.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell>{item.device.name}</TableCell>
-                  <TableCell>{item.vehicle ? item.vehicle?.flats[0].flats.number : 'Forced Open'}</TableCell>
-                  <TableCell>{item.vehicle?.number}</TableCell>
-                  <TableCell>{item.vehicle?.name}</TableCell>
-                  <TableCell>{item.direction}</TableCell>
-                  <TableCell>{new Date(item.dateTime).toLocaleDateString()}</TableCell>
-                  <TableCell>{new Date(item.dateTime).toLocaleTimeString()}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.device.name}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.vehicle ? item.vehicle?.flats[0].flats.number : 'Forced Open'}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.vehicle?.number}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.vehicle?.name}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{item.direction}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{new Date(item.dateTime).toLocaleDateString()}</TableCell>
+                  <TableCell style={{padding:'8px'}}>{new Date(item.dateTime).toLocaleTimeString()}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -128,6 +130,7 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
     </div>
   );
 }
+
 
 
 export default AllVehicleLogs;

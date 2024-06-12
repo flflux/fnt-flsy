@@ -256,7 +256,7 @@ export function ListFlats(props: ListFlatsProps) {
       );
       console.log(response.data);
 
-      if (response.data) {
+      if (response.data && response.status!=400) {
         console.log('Building Name Updated Successfully');
         enqueueSnackbar("Building name updated successfully!", { variant: 'success' });
         // navigate(`/buildinglist/${params.id}`);
@@ -269,6 +269,8 @@ export function ListFlats(props: ListFlatsProps) {
 
     } catch (error) {
       console.error(error);
+      console.log('Update data not received');
+      enqueueSnackbar("Duplicate Flat entry !", { variant: 'error' });
       console.log('Something went wrong');
     }
   };

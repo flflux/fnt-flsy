@@ -329,33 +329,38 @@ export class FlatsService {
           throw new HttpException('flat not found', HttpStatus.NOT_FOUND);
         } 
         
-        const updatedFlat = await this.prisma.flat.update({
-          select: {
-            id: true,
-            number: true,
-            floor:{
-                select:{
-                    id: true,
-                    number: true,
-                    building:{
-                        select: {
-                            id: true,
-                            name: true,
-                            society:{
-                                select:{
-                                    id: true,
-                                    name: true,
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-          where: { id: Number(id) },
-          data: flatDto,
-        });
-        return updatedFlat;
+        try {
+          const updatedFlat = await this.prisma.flat.update({
+            select: {
+              id: true,
+              number: true,
+              floor:{
+                  select:{
+                      id: true,
+                      number: true,
+                      building:{
+                          select: {
+                              id: true,
+                              name: true,
+                              society:{
+                                  select:{
+                                      id: true,
+                                      name: true,
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+            where: { id: Number(id) },
+            data: flatDto,
+          });
+          return updatedFlat;
+        } catch (error) {
+          console.log('inside the catch block here');
+          throw new HttpException("Duplicate Flat name",HttpStatus.BAD_REQUEST);
+        }
         
         
       }

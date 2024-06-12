@@ -76,19 +76,19 @@ export function ListFlats(props: ListFlatsProps) {
     searchQueryBuildingName,
     searchQueryFloorNumber, user, societycontext]);
 
-  const getSingleBuildingFlats = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
-        withCredentials: true,
-        params: {
-          pageSize: rowsPerPage,
-          pageOffset: page,
-          number: searchQueryName,
-          name: searchQueryName,
-          floorNumber: searchQueryName
-        },
-      });
+    const getSingleBuildingFlats = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
+          withCredentials: true,
+          params: {
+            pageSize: rowsPerPage,
+            pageOffset: page,
+            number: searchQueryName, // Assuming you're searching by flat number
+            name: searchQueryBuildingName, // Change this to building name if needed
+            floorNumber: searchQueryFloorNumber, // Change this to floor number if needed
+          },
+        });
 
       const { content, total } = response.data;
       setTotalItems(total);
@@ -272,6 +272,7 @@ export function ListFlats(props: ListFlatsProps) {
       console.log('Something went wrong');
     }
   };
+
 
   //delete a Flat
 

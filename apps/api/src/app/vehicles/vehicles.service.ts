@@ -130,49 +130,313 @@ export class VehiclesService {
     return dataObject;
   }
 
+  // async bulkVehicleUploadData(societyId: number, fileDto: FileDto, file) {
+  //   let successCount = 0;
+  //   let failureCount = 0;
+
+  //   const errorResultArray = [];
+
+  //   console.log(societyId);
+  //   try {
+  //     const society = await this.prisma.society.findFirst({
+  //       where: {
+  //         id: societyId,
+  //       },
+  //     });
+  //     if (!society)
+  //       throw new HttpException('society not found', HttpStatus.NOT_FOUND);
+
+
+  //     const workbook = xlsx.read(file.buffer);
+  //     const sheetNames = workbook.SheetNames;
+  //     const sheet = workbook.Sheets[sheetNames[0]];
+
+  //     const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
+
+  //     let buildingId: number;
+  //     let floorId: number;
+  //     let flatId: number;
+  //     let residentId: number;
+  //     let vehicleId: number;
+
+  //     console.log('before the data', buildingId, floorId, flatId, vehicleId);
+
+  //     console.log('inside the transection');
+  //     for (const flatData of jsonData) {
+  //       // const promises = jsonData.map(async (flatData) => {
+  //       // section for create building if not exist..
+  //       console.log(flatData);
+  //       Object.keys(flatData).forEach((key) => flatData[key] = flatData[key].trim());
+  //       // Check for missing or empty required fields
+  //       if (!flatData['Building Name'] || !flatData['Floor Number'] || !flatData['Flat Number']) {
+  //         this.pushReason(errorResultArray, flatData, 'Missing required fields');
+  //         failureCount++;
+  //         continue;
+  //       }
+
+  //       try {
+  //         const building = await this.prisma.building.findFirst({
+  //           where: {
+  //             societyId: societyId,
+  //             name: flatData['Building Name'],
+  //           },
+  //         });
+  //         if (!building) {
+  //           const newbuilding = await this.prisma.building.create({
+  //             data: {
+  //               name: flatData['Building Name'],
+  //               isActive: true,
+  //               societyId: societyId,
+  //             },
+  //           });
+
+  //           buildingId = newbuilding.id;
+  //         } else {
+  //           buildingId = building.id;
+  //         }
+  //       } catch (error) {
+  //         console.log('near to the building ');
+  //         console.log(error);
+  //         failureCount++;
+  //         this.pushReason(errorResultArray, flatData, error);
+  //         continue
+
+  //       }
+
+  //       //section for creating floor if not exist.
+  //       try {
+  //         const floor = await this.prisma.floor.findFirst({
+  //           where: {
+  //             number: String(flatData['Floor Number']),
+  //             buildingId: buildingId,
+  //           },
+  //         });
+
+  //         if (!floor) {
+  //           const newFloor = await this.prisma.floor.create({
+  //             data: {
+  //               number: String(flatData['Floor Number']),
+  //               buildingId: buildingId,
+  //               isActive: true,
+  //             },
+  //           });
+  //           floorId = newFloor.id;
+  //         } else {
+  //           floorId = floor.id;
+  //         }
+  //       } catch (error) {
+  //         console.log('near to the floor ');
+  //         console.log(error);
+  //         failureCount++;
+  //         this.pushReason(errorResultArray, flatData, error);
+  //         continue
+  //       }
+
+  //       //Section for creating flat if not exist.
+  //       try {
+  //         const flat = await this.prisma.flat.findFirst({
+  //           where: {
+  //             floorId: floorId,
+  //             number: String(flatData['Flat Number']),
+  //           },
+  //         });
+
+  //         // console.log(flat);
+  //         // console.log(floorId)
+  //         if (!flat) {
+  //           const flat = await this.prisma.flat.findFirst({
+  //             where: {
+  //               floorId: floorId,
+  //               number: String(flatData['Flat Number']),
+  //             },
+  //           });
+  //           console.log(flat)
+
+  //           if (!flat) {
+  //             const newFlat = await this.prisma.flat.create({
+  //               data: {
+  //                 number: String(flatData['Flat Number']),
+  //                 floorId: floorId,
+  //                 isActive: true,
+  //               },
+  //             });
+  //             flatId = newFlat.id;
+  //           }
+
+  //         } else {
+  //           flatId = flat.id;
+  //         }
+  //       } catch (error) {
+  //         console.log('near to the flat ');
+  //         console.log(error);
+  //         failureCount++;
+  //         this.pushReason(errorResultArray, flatData, error);
+  //         continue
+
+  //       }
+
+  //       try {
+  //         let isNewVehicle = false;
+  //         if (flatData['Vehicle Number'] && flatData['Vehicle Type']) {
+  //           //Section for creating resident if not exist.
+  //           const vehicle = await this.prisma.vehicle.findFirst({
+  //             where: {
+  //               name: flatData['Vehicle Make'] ? flatData['Vehicle Make'] : ' ',
+  //               number: flatData['Vehicle Number'],
+  //               type: flatData['Vehicle Type'],
+  //             },
+  //           });
+  //           console.log("VEHICLE", vehicle);
+  //           if (!vehicle) {
+  //             console.log("Create new vehicle")
+  //             const newVehicle = await this.prisma.vehicle.create({
+  //               data: {
+  //                 name: flatData['Vehicle Make']
+  //                   ? flatData['Vehicle Make']
+  //                   : ' ',
+  //                 number: flatData['Vehicle Number'],
+  //                 type: flatData['Vehicle Type'],
+  //                 isActive: true,
+  //               },
+  //             });
+  //             isNewVehicle = true;
+  //             vehicleId = newVehicle.id;
+  //           } else {
+  //             console.log("Already vehicle ", vehicle.id)
+  //             vehicleId = vehicle.id;
+  //           }
+
+  //           const vehicleFlat = await this.prisma.vehicleFlat.findFirst({
+  //             where: {
+  //               flatId: flatId,
+  //               vehicleId: vehicleId,
+  //             },
+  //           });
+
+
+
+  //           if (!vehicleFlat && isNewVehicle) {
+  //             const newVehicleFlat = await this.prisma.vehicleFlat.create({
+  //               data: {
+  //                 flatId: flatId,
+  //                 vehicleId: vehicleId,
+  //               },
+  //             });
+
+  //           }
+  //         } else {
+  //           vehicleId = null;
+  //         }
+  //       } catch (error) {
+  //         console.log('near to the vehicle ');
+  //         console.log(error);
+  //         failureCount++;
+  //         this.pushReason(errorResultArray, flatData, error);
+  //         continue
+  //       }
+
+  //       const device = await this.prisma.device.findFirst({
+  //         where: {
+  //           deviceId: flatData['Device Name'],
+  //         },
+  //       });
+
+  //       if (!device) {
+  //         failureCount++;
+  //         return this.pushReason(errorResultArray, flatData, 'device not found');
+
+  //       }
+
+  //       const card = await this.prisma.card.findFirst({
+  //         where: {
+  //           number: String(flatData['Card Number']),
+  //           type: flatData['Card Type'],
+  //           isActive: flatData['Active'] == true ? true : false,
+  //           deviceId: device.id,
+  //         },
+  //       });
+
+  //       if (!card) {
+  //         if (flatData['Card Number'] && flatData['Card Type']) {
+  //           try {
+  //             const newCard = await this.prisma.card.create({
+  //               data: {
+  //                 number: String(flatData['Card Number']),
+  //                 type: flatData['Card Type'],
+  //                 isActive: flatData['Active'] == true ? true : false,
+  //                 vehicleId: vehicleId,
+  //                 deviceId: device.id,
+  //                 flatId: flatId,
+  //               },
+  //             });
+  //             successCount++;
+  //           } catch (error) {
+  //             failureCount++;
+  //             this.pushReason(errorResultArray, flatData, 'card already exist');
+  //             continue
+
+  //           }
+  //         }
+  //       } else {
+  //         failureCount++;
+  //         this.pushReason(errorResultArray, flatData, 'card already exist');
+  //         continue
+  //       }
+
+  //       buildingId = undefined;
+  //       floorId = undefined;
+  //       // flatData = undefined;
+  //       vehicleId = undefined;
+  //       // });
+  //     }
+  //   } catch (error) {
+  //     throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+
+  //   return {
+  //     success_count: successCount,
+  //     failure_count: failureCount,
+  //     errors: errorResultArray,
+  //   };
+  // }
+
   async bulkVehicleUploadData(societyId: number, fileDto: FileDto, file) {
     let successCount = 0;
-      let failureCount = 0;
+    let failureCount = 0;
+    const errorResultArray = [];
 
-      const errorResultArray = [];
-
-    console.log(societyId);
+    console.log("Society ID ",societyId);
     try {
       const society = await this.prisma.society.findFirst({
-        where: {
-          id: societyId,
-        },
+        where: { id: societyId },
       });
-      if (!society)
-        throw new HttpException('society not found', HttpStatus.NOT_FOUND);
+      if (!society) throw new HttpException('Society not found', HttpStatus.NOT_FOUND);
 
-      
       const workbook = xlsx.read(file.buffer);
       const sheetNames = workbook.SheetNames;
       const sheet = workbook.Sheets[sheetNames[0]];
-
-      const jsonData = xlsx.utils.sheet_to_json(sheet);
+      const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
 
       let buildingId: number;
       let floorId: number;
       let flatId: number;
-      let residentId: number;
       let vehicleId: number;
 
-      console.log('before the data', buildingId, floorId, flatId, vehicleId);
-
-      console.log('inside the transection');
       for (const flatData of jsonData) {
-      // const promises = jsonData.map(async (flatData) => {
-        // section for create building if not exist..
-        console.log(flatData);
+        // Trim all incoming flatData fields to remove extra spaces
+        Object.keys(flatData).forEach((key) => flatData[key] = flatData[key].trim());
 
+  // Check for missing or empty required fields
+  if (!flatData['Building Name'] || !flatData['Floor Number'] || !flatData['Flat Number']) {
+    this.pushReason(errorResultArray, flatData, 'Missing required fields');
+    failureCount++;
+    continue;
+  }
+
+        // Section for creating building if not exist.
         try {
           const building = await this.prisma.building.findFirst({
-            where: {
-              societyId: societyId,
-              name: flatData['Building Name'],
-            },
+            where: { societyId, name: flatData['Building Name'] },
           });
           if (!building) {
             const newbuilding = await this.prisma.building.create({
@@ -182,21 +446,17 @@ export class VehiclesService {
                 societyId: societyId,
               },
             });
-
             buildingId = newbuilding.id;
           } else {
             buildingId = building.id;
           }
         } catch (error) {
-          console.log('near to the building ');
-          console.log(error);
           failureCount++;
-          this.pushReason(errorResultArray, flatData, error);
-          continue
-          
+          this.pushReason(errorResultArray, flatData, error.message);
+          continue;
         }
 
-        //section for creating floor if not exist.
+        // Section for creating floor if not exist.
         try {
           const floor = await this.prisma.floor.findFirst({
             where: {
@@ -204,7 +464,6 @@ export class VehiclesService {
               buildingId: buildingId,
             },
           });
-
           if (!floor) {
             const newFloor = await this.prisma.floor.create({
               data: {
@@ -218,60 +477,39 @@ export class VehiclesService {
             floorId = floor.id;
           }
         } catch (error) {
-          console.log('near to the floor ');
-          console.log(error);
           failureCount++;
-          this.pushReason(errorResultArray, flatData, error);
-          continue
+          this.pushReason(errorResultArray, flatData, error.message);
+          continue;
         }
 
-        //Section for creating flat if not exist.
+        // Section for creating flat if not exist.
         try {
           const flat = await this.prisma.flat.findFirst({
-            where: {
-              floorId: floorId,
-              number: String(flatData['Flat Number']),
-            },
+            where: { floorId: floorId, number: String(flatData['Flat Number']) },
           });
-
-          console.log(flat);
-          console.log(floorId)
           if (!flat) {
-            const flat = await this.prisma.flat.findFirst({
-              where: {
-                floorId: floorId,
+            const newFlat = await this.prisma.flat.create({
+              data: {
                 number: String(flatData['Flat Number']),
+                floorId: floorId,
+                isActive: true,
               },
             });
-            console.log(flat)
-
-            if(!flat){
-              const newFlat = await this.prisma.flat.create({
-                data: {
-                  number: String(flatData['Flat Number']),
-                  floorId: floorId,
-                  isActive: true,
-                },
-              });
-              flatId = newFlat.id;
-            }
-            
+            flatId = newFlat.id;
           } else {
             flatId = flat.id;
           }
         } catch (error) {
-          console.log('near to the flat ');
-          console.log(error);
           failureCount++;
-          this.pushReason(errorResultArray, flatData, error);
-          continue
-          
+          this.pushReason(errorResultArray, flatData, error.message);
+          continue;
         }
 
+        // Vehicle handling and association with flat
         try {
           let isNewVehicle = false;
+          
           if (flatData['Vehicle Number'] && flatData['Vehicle Type']) {
-            //Section for creating resident if not exist.
             const vehicle = await this.prisma.vehicle.findFirst({
               where: {
                 name: flatData['Vehicle Make'] ? flatData['Vehicle Make'] : ' ',
@@ -279,111 +517,83 @@ export class VehiclesService {
                 type: flatData['Vehicle Type'],
               },
             });
-            console.log("VEHICLE", vehicle);
             if (!vehicle) {
-              console.log("Create new vehicle")
               const newVehicle = await this.prisma.vehicle.create({
                 data: {
-                  name: flatData['Vehicle Make']
-                    ? flatData['Vehicle Make']
-                    : ' ',
+                  name: flatData['Vehicle Make'] || ' ',
                   number: flatData['Vehicle Number'],
                   type: flatData['Vehicle Type'],
                   isActive: true,
                 },
               });
-              isNewVehicle =true;
+              isNewVehicle = true;
               vehicleId = newVehicle.id;
             } else {
-              console.log("Already vehicle ", vehicle.id)
               vehicleId = vehicle.id;
             }
-           
+            console.log(flatId, vehicleId)
             const vehicleFlat = await this.prisma.vehicleFlat.findFirst({
-              where: {
-                flatId: flatId,
-                vehicleId: vehicleId,
-              },
+              where: { flatId: flatId, vehicleId: vehicleId },
             });
-
-           
-            
-            if (!vehicleFlat&& isNewVehicle) {
-              const newVehicleFlat = await this.prisma.vehicleFlat.create({
-                data: {
-                  flatId: flatId,
-                  vehicleId: vehicleId,
-                },
+            console.log(vehicleFlat, isNewVehicle,!vehicleFlat && isNewVehicle);
+            if (!vehicleFlat && isNewVehicle) {
+              await this.prisma.vehicleFlat.create({
+                data: { flatId: flatId, vehicleId: vehicleId },
               });
-              
             }
           } else {
+            console.log("data ",flatData);
             vehicleId = null;
           }
         } catch (error) {
-          console.log('near to the vehicle ');
-          console.log(error);
           failureCount++;
-          this.pushReason(errorResultArray, flatData, error);
-          continue
+          this.pushReason(errorResultArray, flatData, error.message);
+          continue;
         }
 
-        const device = await this.prisma.device.findFirst({
-          where: {
-            deviceId: flatData['Device Name'],
-          },
-        });
-
-        if (!device) {
-          failureCount++;
-          return this.pushReason(errorResultArray, flatData, 'device not found');
-          
-        }
-
-        const card = await this.prisma.card.findFirst({
-          where: {
-            number: String(flatData['Card Number']),
-            type: flatData['Card Type'],
-            isActive: flatData['Active'] == true ? true : false,
-            deviceId: device.id,
-          },
-        });
-
-        if (!card) {
-          if (flatData['Card Number'] && flatData['Card Type']) {
-            try {
-              const newCard = await this.prisma.card.create({
-                data: {
-                  number: String(flatData['Card Number']),
-                  type: flatData['Card Type'],
-                  isActive: flatData['Active'] == true ? true : false,
-                  vehicleId: vehicleId,
-                  deviceId: device.id,
-                  flatId: flatId,
-                },
-              });
-              successCount++;
-            } catch (error) {
-              failureCount++;
-              this.pushReason(errorResultArray, flatData, 'card already exist');
-              continue
-             
-            }
+        // Device and card handling (similar checks as vehicle)
+        try {
+          const device = await this.prisma.device.findFirst({
+            where: { deviceId: flatData['Device Name'] },
+          });
+          if (!device) {
+            failureCount++;
+            this.pushReason(errorResultArray, flatData, 'Device not found');
+            continue;
           }
-        } else {
-          failureCount++;
-          this.pushReason(errorResultArray, flatData, 'card already exist');
-          continue
-        }
 
-        buildingId = undefined;
-        floorId = undefined;
-        // flatData = undefined;
-        vehicleId = undefined;
-      // });
+          const card = await this.prisma.card.findFirst({
+            where: {
+              number: String(flatData['Card Number']),
+              type: flatData['Card Type'],
+              isActive: flatData['Active'] === true,
+              deviceId: device.id,
+            },
+          });
+
+          if (!card && flatData['Card Number'] && flatData['Card Type']) {
+            await this.prisma.card.create({
+              data: {
+                number: String(flatData['Card Number']),
+                type: flatData['Card Type'],
+                isActive: flatData['Active'] === true,
+                vehicleId: vehicleId,
+                deviceId: device.id,
+                flatId: flatId,
+              },
+            });
+            successCount++;
+          } else {
+            failureCount++;
+            this.pushReason(errorResultArray, flatData, 'Card already exists');
+          }
+        } catch (error) {
+          failureCount++;
+          this.pushReason(errorResultArray, flatData, error.message);
+        }
       }
     } catch (error) {
-      throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return {
@@ -392,6 +602,10 @@ export class VehiclesService {
       errors: errorResultArray,
     };
   }
+
+
+
+  //..............................
 
   async bulkUploadVehiclesData(
     societyId: number,
@@ -439,7 +653,7 @@ export class VehiclesService {
     const sheetNames = workbook.SheetNames;
     const sheet = workbook.Sheets[sheetNames[0]];
 
-    const jsonData = xlsx.utils.sheet_to_json(sheet);
+    const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
 
     jsonData.map(async (vehicle) => {
       const newVehicle = await this.prisma.vehicle.create({

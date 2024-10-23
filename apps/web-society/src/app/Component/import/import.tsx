@@ -5,6 +5,8 @@ import { environment } from '../../../environments/environment';
 import { SocietyContext } from '../../contexts/user-context';
 import { enqueueSnackbar } from 'notistack';
 import axios from 'axios';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import { ViewFlat } from '@fnt-flsy/data-transfer-types';
 
 /* eslint-disable-next-line */
@@ -13,7 +15,7 @@ export interface ImportProps {
   onClose: () => void;
 }
 
-export function Import({open, onClose}: ImportProps) {
+export function Import({ open, onClose }: ImportProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [importType, setImportType] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -26,9 +28,9 @@ export function Import({open, onClose}: ImportProps) {
 
   const apiUrl = environment.apiUrl;
 
-  useEffect(()=>{
+  useEffect(() => {
     getSingleBuildingFlats();
-  },[]);
+  }, []);
 
   const getSingleBuildingFlats = async () => {
     try {
@@ -50,12 +52,12 @@ export function Import({open, onClose}: ImportProps) {
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     // document.getElementById('excel-file-input')?.click();
-   
+
     if (!file) {
       return;
     }
-      setSelectedFile(file);
-      uploadFileToAPI(file, importType);
+    setSelectedFile(file);
+    uploadFileToAPI(file, importType);
   };
 
   const handleCloseModal = () => {
@@ -68,7 +70,7 @@ export function Import({open, onClose}: ImportProps) {
   const openFileInput = () => {
     document.getElementById('excel-file-input')?.click();
     console.log("input clicked!");
-    setModalOpen(false); 
+    setModalOpen(false);
   };
 
   const handleImportType = (type: string) => {
@@ -80,7 +82,7 @@ export function Import({open, onClose}: ImportProps) {
       console.error('No file selected');
     }
   };
-  
+
   const uploadFileToAPI = async (file: File | null, importType: string) => {
     if (!file) {
       console.error('No file selected');
@@ -113,6 +115,9 @@ export function Import({open, onClose}: ImportProps) {
         onClose();
         getSingleBuildingFlats();
         console.log('API response:', response);
+        if (response.data.errors && response.data.errors.length > 0) {
+          exportErrorsToExcel(response.data.errors);
+        }
       } else {
         console.log('Error uploading file');
         enqueueSnackbar("Error uploading file!", { variant: 'error' });
@@ -121,6 +126,23 @@ export function Import({open, onClose}: ImportProps) {
       console.error('Error uploading file to API', error);
       enqueueSnackbar("Error uploading file!", { variant: 'error' });
     }
+  };
+
+  // Function to export errors to Excel
+  const exportErrorsToExcel = (errors: any[]) => {
+    // Convert errors array to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(errors);
+
+    // Create a new workbook and append the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Errors');
+
+    // Write the Excel file
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+    // Trigger the download
+    saveAs(data, 'upload_errors.xlsx');
   };
 
   return (

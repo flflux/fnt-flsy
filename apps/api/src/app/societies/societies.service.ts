@@ -27,7 +27,7 @@ export class SocietiesService {
     const sheetNames = workbook.SheetNames;
     const sheet = workbook.Sheets[sheetNames[0]];
 
-    const jsonData = xlsx.utils.sheet_to_json(sheet);
+    const jsonData = xlsx.utils.sheet_to_json(sheet, {raw: false,  defval: ''});
 
     const finalJsonData: AddSocietyDto[]= [];
     jsonData.map(society =>{
@@ -230,6 +230,7 @@ export class SocietiesService {
  
 
   async findById(id: number): Promise<ListSocietyDto> {
+    console.log("Find Society By ID ",id)
     const socview = await this.prisma.society.findUnique({
       where: { id: Number(id) },
       select: {

@@ -5,7 +5,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { FloorDto } from './dto/floor.dto';
 import { AddFloorDto } from './dto/add-floor.dto';
 import { ListFloorPageDto } from './dto/list-floor-page.dto';
@@ -19,13 +19,57 @@ export class FloorsService {
   private prisma = new PrismaClient();
 
   
-  async bulkUploadFloorData(societyId: number,buildingId: number,fileDto:FileDto,file){
+  // async bulkUploadFloorData(societyId: number,buildingId: number,fileDto:FileDto,file){
+    // const society = await this.prisma.society.findFirst({
+    //   where:{
+    //     id: societyId
+    //   }
+    // })
+    // if(!society) throw new HttpException("society not found", HttpStatus.NOT_FOUND);
+
+    // const building = await this.prisma.building.findFirst({
+    //   where: { AND: [
+    //     {id: buildingId},
+    //     {societyId: societyId}
+    //   ]}
+    // })
+
+    // if(!building) throw new HttpException("building not found",HttpStatus.NOT_FOUND);
+
+  //   const workbook = xlsx.read(file.buffer);
+  //   const sheetNames = workbook.SheetNames;
+  //   const sheet = workbook.Sheets[sheetNames[0]];
+
+  //   const jsonData = xlsx.utils.sheet_to_json(sheet, {raw: false,  defval: ''});
+
+
+  //   const finalJsonData = [];
+  //   jsonData.map(floor =>{
+  //     floor['isActive'] = true;
+  //     floor['buildingId'] = buildingId;
+  //     finalJsonData.push(floor);
+  //   })
+    
+  //   try {
+  //       const answer = await this.prisma.floor.createMany({
+  //         data: finalJsonData
+  //       })
+  //       return answer;
+      
+  //   } catch (error) {
+  //     throw new HttpException("building already exist check code",HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+  async bulkUploadFloorData(societyId: number,buildingId: number, fileDto: FileDto, file: Express.Multer.File) {
+
     const society = await this.prisma.society.findFirst({
       where:{
         id: societyId
       }
     })
     if(!society) throw new HttpException("society not found", HttpStatus.NOT_FOUND);
+
 
     const building = await this.prisma.building.findFirst({
       where: { AND: [
@@ -36,30 +80,74 @@ export class FloorsService {
 
     if(!building) throw new HttpException("building not found",HttpStatus.NOT_FOUND);
 
+    
     const workbook = xlsx.read(file.buffer);
     const sheetNames = workbook.SheetNames;
     const sheet = workbook.Sheets[sheetNames[0]];
 
-    const jsonData = xlsx.utils.sheet_to_json(sheet);
+    const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
 
+    const finalJsonData = jsonData.map(floor => ({
+        number: floor['Number'],
+        isActive: true,
+        buildingId: buildingId,
+    }));
 
-    const finalJsonData = [];
-    jsonData.map(floor =>{
-      floor['isActive'] = true;
-      floor['buildingId'] = buildingId;
-      finalJsonData.push(floor);
-    })
-    
+    // Preventing duplicate floors
     try {
-        const answer = await this.prisma.floor.createMany({
-          data: finalJsonData
-        })
-        return answer;
-      
+        const existingFloors = await this.prisma.floor.findMany({
+            where: {
+                buildingId: buildingId,
+                number: {
+                    in: finalJsonData.map(floor => floor.number),
+                },
+            },
+        });
+
+        const existingFloorNumbers = new Set(existingFloors.map(f => f.number));
+        const newFloors = finalJsonData.filter(floor => !existingFloorNumbers.has(floor.number));
+
+        if (newFloors.length === 0) {
+            throw new HttpException('No new floors to add. All floors already exist.', HttpStatus.CONFLICT);
+        }
+
+        const duplicateNumbers = finalJsonData.filter(floor => existingFloorNumbers.has(floor.number)).map(floor => floor.number);
+
+        if (duplicateNumbers.length > 0) {
+            throw new HttpException(`The following floors already exist: ${duplicateNumbers.join(', ')}`, HttpStatus.CONFLICT);
+        }
+
+        const createdFloors = await this.prisma.floor.createMany({
+            data: newFloors,
+            skipDuplicates: true, // Prisma feature to skip duplicates
+        });
+
+        return createdFloors;
+
     } catch (error) {
-      throw new HttpException("building already exist check code",HttpStatus.BAD_REQUEST);
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            // Handle Prisma specific errors
+            switch (error.code) {
+                case 'P2002':
+                    const duplicateNumber = error.meta?.target; // Assuming target holds the field that failed
+                    throw new HttpException(`A floor with the number '${duplicateNumber}' already exists.`, HttpStatus.CONFLICT);
+                case 'P2025':
+                    // Record not found
+                    throw new HttpException('A referenced record was not found.', HttpStatus.NOT_FOUND);
+                case 'P2000':
+                    // Invalid input
+                    throw new HttpException('Invalid input data. Please check your data.', HttpStatus.BAD_REQUEST);
+                default:
+                    throw new HttpException(`An error occurred with code: ${error.code}.`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else if (error instanceof HttpException) {
+            throw error; // Re-throw HttpExceptions
+        } else {
+            // General error handling
+            throw new HttpException('An unexpected error occurred.', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-  }
+}
 
   async add(societyId:number, buildingId:number,addFloorDto: AddFloorDto): Promise<ViewFloorDto> {
     const society = await this.prisma.society.findFirst({

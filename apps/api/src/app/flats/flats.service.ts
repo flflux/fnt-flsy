@@ -21,102 +21,310 @@ export class FlatsService {
   private prisma = new PrismaClient();
   
 
-  async bulkUploadFlat(societyId: number,fileDto:FileDto,file){
-    const society = await this.prisma.society.findFirst({
-      where:{
-        id: societyId
-      }
-    })
-    if(!society) throw new HttpException("society not found", HttpStatus.NOT_FOUND);
+  // async bulkUploadFlat(societyId: number,fileDto:FileDto,file){
+  //   const society = await this.prisma.society.findFirst({
+  //     where:{
+  //       id: societyId
+  //     }
+  //   })
+  //   if(!society) throw new HttpException("society not found", HttpStatus.NOT_FOUND);
     
+  //   const workbook = xlsx.read(file.buffer);
+  //   const sheetNames = workbook.SheetNames;
+  //   const sheet = workbook.Sheets[sheetNames[0]];
+
+  //   const jsonData = xlsx.utils.sheet_to_json(sheet, {raw: false,  defval: ''});
+
+
+
+  //   this.prisma.$transaction(async (tx) => {
+
+  //       let buildingId:number;
+  //       let floorId:number;
+      
+  //       console.log("inside the transection");
+  //       for (const flatData of jsonData) {
+          
+  //         // section for create building if not exist..
+  //         console.log(flatData);
+  //         const building = await tx.building.findFirst({
+  //           where:{
+  //             societyId: societyId,
+  //             name: flatData['Building Name']
+  //           }
+  //         });
+  //         if(!building){
+  //           const newbuilding  = await tx.building.create({
+  //             data:{
+  //               'name': flatData['Building Name'],
+  //               'isActive': true,
+  //               'societyId': societyId
+  //             }
+  //           });
+
+  //           buildingId = newbuilding.id;
+  //         }else{
+  //           buildingId = building.id;
+  //         }
+
+
+  //         //section for creating floor if not exist.
+          
+  //         const floor = await tx.floor.findFirst({
+  //           where:{
+  //             number: flatData['Floor Number'],
+  //             buildingId: buildingId
+  //           }
+  //         });
+
+  //         if(!floor){
+  //           const newFloor = await tx.floor.create({
+  //             data:{
+  //               'number': flatData['Floor Number'],
+  //               "buildingId": buildingId,
+  //               "isActive": true
+  //             }
+  //           });
+  //           floorId = newFloor.id
+  //         }else{
+  //           floorId = floor.id;
+  //         }
+
+  //         //Section for creating flat if not exist.
+
+  //         const flat = await tx.flat.findFirst({
+  //           where:{
+  //             floorId: floorId,
+  //             number: flatData['Flat Number'],
+  //           }
+  //         })
+  //         if(!flat){
+  //           const newFlat = await tx.flat.create({
+  //             data:{
+  //               number: flatData['Flat Number'],
+  //               floorId: floorId,
+  //               isActive: true
+  //             }
+  //           });
+  //           if(!newFlat){
+  //             throw new HttpException("transection error while creating flat please recheck the excel sheet", HttpStatus.CONFLICT);
+  //           }
+  //         }
+  //       }
+
+  //   })
+    
+    
+  //   return 'accepted';
+  // }
+  // async bulkUploadFlat(societyId: number, fileDto: FileDto, file: Express.Multer.File) {
+  //   const society = await this.prisma.society.findFirst({
+  //     where: {
+  //       id: societyId,
+  //     },
+  //   });
+  
+  //   if (!society) throw new HttpException('Society not found', HttpStatus.NOT_FOUND);
+  
+  //   const workbook = xlsx.read(file.buffer);
+  //   const sheetNames = workbook.SheetNames;
+  //   const sheet = workbook.Sheets[sheetNames[0]];
+  
+  //   const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
+  //   // const jsonData = xlsx.utils.sheet_to_json(sheet);
+  
+  //   let errorRows = []; // To track rows where an error occurs
+  
+  //   try {
+  //     await this.prisma.$transaction(async (tx) => {
+  //       let buildingId: number;
+  //       let floorId: number;
+  
+  //       console.log('Inside the transaction');
+  //       for (const flatData of jsonData) {
+  //         try {
+  //           // Create building if not exist
+  //           console.log(flatData);
+  //           const building = await tx.building.findFirst({
+  //             where: {
+  //               societyId: societyId,
+  //               name: flatData['Building Name'],
+  //             },
+  //           });
+  
+  //           if (!building) {
+  //             const newBuilding = await tx.building.create({
+  //               data: {
+  //                 name: flatData['Building Name'],
+  //                 isActive: true,
+  //                 societyId: societyId,
+  //               },
+  //             });
+  //             buildingId = newBuilding.id;
+  //           } else {
+  //             buildingId = building.id;
+  //           }
+  
+  //           // Create floor if not exist
+  //           const floor = await tx.floor.findFirst({
+  //             where: {
+  //               number: flatData['Floor Number'],
+  //               buildingId: buildingId,
+  //             },
+  //           });
+  
+  //           if (!floor) {
+  //             const newFloor = await tx.floor.create({
+  //               data: {
+  //                 number: flatData['Floor Number'],
+  //                 buildingId: buildingId,
+  //                 isActive: true,
+  //               },
+  //             });
+  //             floorId = newFloor.id;
+  //           } else {
+  //             floorId = floor.id;
+  //           }
+  
+  //           // Create flat if not exist
+  //           const flat = await tx.flat.findFirst({
+  //             where: {
+  //               floorId: floorId,
+  //               number: flatData['Flat Number'],
+  //             },
+  //           });
+  
+  //           if (!flat) {
+  //             const newFlat = await tx.flat.create({
+  //               data: {
+  //                 number: flatData['Flat Number'],
+  //                 floorId: floorId,
+  //                 isActive: true,
+  //               },
+  //             });
+  
+  //             if (!newFlat) {
+  //               throw new Error('Transaction error while creating flat');
+  //             }
+  //           }
+  //         } catch (error) {
+  //           console.error(`Error processing flat data: ${JSON.stringify(flatData)} - Error: ${error.message}`);
+  //           errorRows.push(flatData); // Track failed entries
+  //         }
+  //       }
+  //     });
+  //   } catch (transactionError) {
+  //     console.error('Transaction error:', transactionError);
+  //     throw new HttpException('An error occurred while processing the bulk upload.', HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+  
+  //    // If there are failed entries, create and return an Excel file
+  //    if (errorRows.length > 0) {
+  //     const errorWorkbook = xlsx.utils.book_new();
+  //     const errorSheet = xlsx.utils.json_to_sheet(errorRows);
+  //     xlsx.utils.book_append_sheet(errorWorkbook, errorSheet, 'Failed Entries');
+
+  //     // Create a buffer for the Excel file
+  //     const buffer = xlsx.write(errorWorkbook, { bookType: 'xlsx', type: 'buffer' });
+
+  //     // Return the buffer as a file response
+  //     return {
+  //       file: buffer, // Returning the buffer
+  //       filename: 'failed_entries.xlsx', // Set a filename
+  //     };
+  //   }
+  
+  //   return 'Bulk upload completed successfully';
+  // }
+
+  async bulkUploadFlat(societyId: number, fileDto: FileDto, file: Express.Multer.File) {
+    const society = await this.prisma.society.findFirst({
+      where: { id: societyId },
+    });
+  
+    if (!society) throw new HttpException('Society not found', HttpStatus.NOT_FOUND);
+  
     const workbook = xlsx.read(file.buffer);
     const sheetNames = workbook.SheetNames;
     const sheet = workbook.Sheets[sheetNames[0]];
-
-    const jsonData = xlsx.utils.sheet_to_json(sheet);
-
-
-
-    this.prisma.$transaction(async (tx) => {
-
-        let buildingId:number;
-        let floorId:number;
-      
-        console.log("inside the transection");
-        for (const flatData of jsonData) {
-          
-          // section for create building if not exist..
-          console.log(flatData);
-          const building = await tx.building.findFirst({
-            where:{
-              societyId: societyId,
-              name: flatData['Building Name']
-            }
-          });
-          if(!building){
-            const newbuilding  = await tx.building.create({
-              data:{
-                'name': flatData['Building Name'],
-                'isActive': true,
-                'societyId': societyId
-              }
-            });
-
-            buildingId = newbuilding.id;
-          }else{
-            buildingId = building.id;
+    
+    const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
+    
+    const errorResultArray: Array<{ row: any; error: string }> = []; // To track rows with errors
+    let successCount = 0; // Counter for successful entries
+    let failureCount = 0; // Counter for failed entries
+  
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        console.log('Inside the transaction');
+        
+        for (const [index, flatData] of jsonData.entries()) {
+          // Trim input data
+          const buildingName = flatData['Building Name']?.trim();
+          const floorNumber = flatData['Floor Number']?.trim();
+          const flatNumber = flatData['Flat Number']?.trim();
+          console.log(typeof(flatData), flatData)
+          if (!buildingName || !floorNumber || !flatNumber) {
+            errorResultArray.push({ row: index + 1, error: 'Missing required fields.' });
+            failureCount++; // Increment failure count
+            continue; // Skip this entry
           }
-
-
-          //section for creating floor if not exist.
-          
-          const floor = await tx.floor.findFirst({
-            where:{
-              number: flatData['Floor Number'],
-              buildingId: buildingId
-            }
-          });
-
-          if(!floor){
-            const newFloor = await tx.floor.create({
-              data:{
-                'number': flatData['Floor Number'],
-                "buildingId": buildingId,
-                "isActive": true
-              }
+  
+          try {
+            // Create building if not exist
+            const building = await tx.building.findFirst({
+              where: { societyId: societyId, name: buildingName },
             });
-            floorId = newFloor.id
-          }else{
-            floorId = floor.id;
-          }
-
-          //Section for creating flat if not exist.
-
-          const flat = await tx.flat.findFirst({
-            where:{
-              floorId: floorId,
-              number: flatData['Flat Number'],
-            }
-          })
-          if(!flat){
-            const newFlat = await tx.flat.create({
-              data:{
-                number: flatData['Flat Number'],
-                floorId: floorId,
-                isActive: true
-              }
+  
+            const buildingId = building
+              ? building.id
+              : (await tx.building.create({
+                  data: { name: buildingName, isActive: true, societyId: societyId },
+                })).id;
+  
+            // Create floor if not exist
+            const floor = await tx.floor.findFirst({
+              where: { number: floorNumber, buildingId: buildingId },
             });
-            if(!newFlat){
-              throw new HttpException("transection error while creating flat please recheck the excel sheet", HttpStatus.CONFLICT);
+  
+            const floorId = floor
+              ? floor.id
+              : (await tx.floor.create({
+                  data: { number: floorNumber, buildingId: buildingId, isActive: true },
+                })).id;
+  
+            // Create flat if not exist
+            const flat = await tx.flat.findFirst({
+              where: { floorId: floorId, number: flatNumber },
+            });
+  
+            if (!flat) {
+              await tx.flat.create({
+                data: { number: flatNumber, floorId: floorId, isActive: true },
+              });
             }
+  
+            successCount++; // Increment success count for each successful entry
+          } catch (error) {
+            console.error(`Error processing flat data: ${JSON.stringify(flatData)} - Error: ${error.message}`);
+            errorResultArray.push({ row: index + 1, error: error.message }); // Track failed entries
+            failureCount++; // Increment failure count
           }
         }
-
-    })
-    
-    
-    return 'accepted';
+      });
+    } catch (transactionError) {
+      console.error('Transaction error:', transactionError);
+      throw new HttpException('An error occurred while processing the bulk upload.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  
+    // Return success and failure counts along with errors
+    return {
+      success_count: successCount,
+      failure_count: failureCount,
+      errors: errorResultArray,
+    };
   }
+  
 
 
   async bulkUploadFlatData(societyId: number,buildingId: number,floorId:number,fileDto:FileDto,file){
@@ -147,7 +355,7 @@ export class FlatsService {
       const sheetNames = workbook.SheetNames;
       const sheet = workbook.Sheets[sheetNames[0]];
 
-      const jsonData = xlsx.utils.sheet_to_json(sheet);
+      const jsonData = xlsx.utils.sheet_to_json(sheet, {raw: false,  defval: ''});
 
 
       const finalJsonData = [];
@@ -382,6 +590,8 @@ export class FlatsService {
       )
       : Promise<ListFlatPageDto>
        {
+
+        console.log("get society flats",societyId)
         const checkSociety = await this.prisma.society.findFirst({
           where:{
             id: societyId
@@ -389,6 +599,9 @@ export class FlatsService {
         });
         if(!checkSociety) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
     
+        if (floorId  == undefined) {
+          throw new HttpException("Floor ID is missing",HttpStatus.NOT_FOUND);
+        }
         const checkBuilding = await this.prisma.building.findFirst({
           where: {  
             id: buildingId,

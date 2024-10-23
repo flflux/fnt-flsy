@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { AddBuildingDto } from './dto/add-building.dto';
 import { BuildingDto } from './dto/buildings.dto';
 import { ViewBuildingDto } from './dto/view-building.dto';
@@ -17,35 +17,104 @@ import * as xlsx from 'xlsx';
 export class BuildingsService {
   private prisma = new PrismaClient();
 
-  async bulkUploadBuildingData(societyId: number,fileDto:FileDto,file){
+  // async bulkUploadBuildingData(societyId: number,fileDto:FileDto,file){
+  //   const workbook = xlsx.read(file.buffer);
+  //   const sheetNames = workbook.SheetNames;
+  //   const sheet = workbook.Sheets[sheetNames[0]];
+
+  //   const jsonData = xlsx.utils.sheet_to_json(sheet, {raw: false,  defval: ''});
+
+
+  //   const finalJsonData = [];
+  //   jsonData.map(building =>{
+  //     const tempData = {
+  //       'name': building['Name'],
+  //       'isActive' : true,
+  //       'societyId' : societyId,
+  //     }
+  //     finalJsonData.push(tempData);
+  //   })
+    
+
+  //   try {
+  //       const answer = await this.prisma.building.createMany({
+  //         data: finalJsonData
+  //       })
+  //       return answer;
+      
+  //   } catch (error) {
+  //     throw new HttpException("building already exist check code",HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+  async bulkUploadBuildingData(societyId: number, fileDto: FileDto, file: Express.Multer.File) {
     const workbook = xlsx.read(file.buffer);
     const sheetNames = workbook.SheetNames;
     const sheet = workbook.Sheets[sheetNames[0]];
 
-    const jsonData = xlsx.utils.sheet_to_json(sheet);
+    const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
 
+    const finalJsonData = jsonData.map(building => ({
+        name: building['Name'],
+        isActive: true,
+        societyId: societyId,
+    }));
 
-    const finalJsonData = [];
-    jsonData.map(building =>{
-      const tempData = {
-        'name': building['Name'],
-        'isActive' : true,
-        'societyId' : societyId,
-      }
-      finalJsonData.push(tempData);
-    })
-    
-
+    // Preventing duplicate buildings
     try {
-        const answer = await this.prisma.building.createMany({
-          data: finalJsonData
-        })
-        return answer;
-      
+        const existingBuildings = await this.prisma.building.findMany({
+            where: {
+                societyId: societyId,
+                name: {
+                    in: finalJsonData.map(building => building.name),
+                },
+            },
+        });
+
+        const existingBuildingNames = new Set(existingBuildings.map(b => b.name));
+        const newBuildings = finalJsonData.filter(building => !existingBuildingNames.has(building.name));
+
+        if (newBuildings.length === 0) {
+            throw new HttpException('No new buildings to add. All buildings already exist.', HttpStatus.CONFLICT);
+        }
+
+        const duplicateNames = finalJsonData.filter(building => existingBuildingNames.has(building.name)).map(building => building.name);
+
+        if (duplicateNames.length > 0) {
+            throw new HttpException(`The following buildings already exist: ${duplicateNames.join(', ')}`, HttpStatus.CONFLICT);
+        }
+
+        const createdBuildings = await this.prisma.building.createMany({
+            data: newBuildings,
+            skipDuplicates: true, // Prisma feature to skip duplicates
+        });
+
+        return createdBuildings;
+
     } catch (error) {
-      throw new HttpException("building already exist check code",HttpStatus.BAD_REQUEST);
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            // Handle Prisma specific errors
+            switch (error.code) {
+                case 'P2002':
+                    const duplicateName = error.meta?.target; // Assuming target holds the field that failed
+                    throw new HttpException(`A building with the name '${duplicateName}' already exists.`, HttpStatus.CONFLICT);
+                case 'P2025':
+                    // Record not found
+                    throw new HttpException('A referenced record was not found.', HttpStatus.NOT_FOUND);
+                case 'P2000':
+                    // Invalid input
+                    throw new HttpException('Invalid input data. Please check your data.', HttpStatus.BAD_REQUEST);
+                default:
+                    throw new HttpException(`An error occurred with code: ${error.code}.`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else if (error instanceof HttpException) {
+            throw error; // Re-throw HttpExceptions
+        } else {
+            // General error handling
+            throw new HttpException('An unexpected error occurred.', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-  }
+}
 
   async add(societyId: number,addBuildingDto: AddBuildingDto): Promise<ViewBuildingDto> {
     if(Number.isNaN(societyId)) throw new HttpException('society id is missing in params', HttpStatus.BAD_REQUEST);

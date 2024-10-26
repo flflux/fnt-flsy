@@ -33,7 +33,7 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(3000);
-  Logger.log('Application running on: Http://localhost:3000');
+  await app.listen(3005);
+  Logger.log('Application running on: Http://143.244.136.215:3005');
 }
 bootstrap();

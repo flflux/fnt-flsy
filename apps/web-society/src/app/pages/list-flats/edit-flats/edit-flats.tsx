@@ -79,8 +79,8 @@ const EditFlatComponent: React.FC<EditFlatProps> = ({ open, onClose, onUpdate, i
   };
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
-  console.log("society id:",societycontext?.id);
+  // console.log("society context:",societycontext);
+  // console.log("society id:",societycontext?.id);
 
   useEffect(() => {
     getAllBuildings();
@@ -113,6 +113,10 @@ const EditFlatComponent: React.FC<EditFlatProps> = ({ open, onClose, onUpdate, i
 
   const getAllFloors = async () => {
     try {
+      console.log("selected buildsing ",selectedBuildingId)
+      if(selectedBuildingId == undefined) {
+        return;
+      }
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/buildings/${selectedBuildingId}/floors`, {
         withCredentials: true,
         params: {

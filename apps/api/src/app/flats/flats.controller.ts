@@ -61,6 +61,7 @@ export class FlatsController {
     @Query('sortOrder') sortOrder?: 'asc' | 'desc'
   ): Promise<ListFlatPageDto> {
     const { user } = req;
+    console.log(req.body, req.query, req.params)
     const listsite = await this.flatsService.getFilteredFlats(
       +pageSize,
       +pageOffset,

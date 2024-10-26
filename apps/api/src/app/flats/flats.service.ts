@@ -591,7 +591,7 @@ export class FlatsService {
       : Promise<ListFlatPageDto>
        {
 
-        console.log("get society flats",societyId)
+        console.log("get society flats",pageSize, pageOffset, number, buildingName,floorNumber, sortBy, sortOrder, userId, societyId, buildingId, floorId, associateFloor);
         const checkSociety = await this.prisma.society.findFirst({
           where:{
             id: societyId
@@ -599,9 +599,9 @@ export class FlatsService {
         });
         if(!checkSociety) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
     
-        if (floorId  == undefined) {
-          throw new HttpException("Floor ID is missing",HttpStatus.NOT_FOUND);
-        }
+        // if (floorId  == undefined) {
+        //   throw new HttpException("Floor ID is missing",HttpStatus.NOT_FOUND);
+        // }
         const checkBuilding = await this.prisma.building.findFirst({
           where: {  
             id: buildingId,

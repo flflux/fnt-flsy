@@ -64,8 +64,8 @@ export function ListFlats(props: ListFlatsProps) {
   const floorIds: number[] = [];
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
-  console.log("society id:", societycontext?.id);
+  // console.log("society context:", societycontext);
+  // console.log("society id:", societycontext?.id);
 
 
   const navigate = useNavigate();
@@ -79,6 +79,13 @@ export function ListFlats(props: ListFlatsProps) {
     const getSingleBuildingFlats = async () => {
       try {
         setLoading(true);
+        console.log("GET FLAT SSSSSSSSSSSSSSSSSSS ",apiUrl, {
+          pageSize: rowsPerPage,
+          pageOffset: page,
+          number: searchQueryName, // Assuming you're searching by flat number
+          name: searchQueryBuildingName, // Change this to building name if needed
+          floorNumber: searchQueryFloorNumber, // Change this to floor number if needed
+        }, societycontext)
         const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
           withCredentials: true,
           params: {

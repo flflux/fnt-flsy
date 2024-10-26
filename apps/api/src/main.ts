@@ -8,7 +8,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin:'http://localhost:4200',
+    origin:['http://localhost:4500', 'http://localhost:4200'],
     methods:'GET,POST,HEAD,PUT,PATCH,DELETE',
     credentials:true,
   })
@@ -33,7 +33,7 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(3000);
-  Logger.log('Application running on: Http://localhost:3000');
+  await app.listen(3005);
+  Logger.log('Application running on: Http://localhost:3005');
 }
 bootstrap();

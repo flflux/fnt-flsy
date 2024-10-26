@@ -70,8 +70,8 @@ const AddFlatComponent: React.FC<AddFlatProps> = ({ open, onClose, onSubmit }) =
   };
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
-  console.log("society id:",societycontext?.id);
+  // console.log("society context:",societycontext);
+  // console.log("society id:",societycontext?.id);
 
   useEffect(() => {
     getAllFloors();
@@ -120,6 +120,10 @@ const AddFlatComponent: React.FC<AddFlatProps> = ({ open, onClose, onSubmit }) =
 
   const getAllFloors = async () => {
     try {
+      console.log("selected buildsing ",selectedBuildingId)
+      if(selectedBuildingId == undefined) {
+        return;
+      }
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/buildings/${selectedBuildingId}/floors`, {
         withCredentials: true,
         params: {
@@ -189,6 +193,7 @@ const AddFlatComponent: React.FC<AddFlatProps> = ({ open, onClose, onSubmit }) =
           withCredentials: true,
         }
       );
+      console.log("api data" , data, newData)
       if (data) {
         getAllFloors();
         setShowAddFloorForm(false);

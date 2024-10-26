@@ -29,6 +29,7 @@ export function SocietyLayout(props: SocietyLayoutProps) {
   useEffect(()=>{
     const getSociety=async()=>{
       try{
+        console.log("Params ",params)
         const response=await axios.get(`${apiUrl}/societies/${params.societyId}`,{
           withCredentials:true
         });

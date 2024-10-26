@@ -7,7 +7,7 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/web-admin',
 
   server: {
-    port: 4200,
+    port: 4500,
     host: 'localhost',
   },
 

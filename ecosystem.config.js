@@ -19,6 +19,16 @@ module.exports = {
         env: {
           NODE_ENV: 'production',
         }
+      },
+      {
+        name: 'web-admin',             // Name for your web-society service
+        script: 'npx',
+        args: 'nx serve web-admin --host=0.0.0.0',
+        cwd: '.',
+        interpreter: 'none',
+        env: {
+          NODE_ENV: 'production',
+        }
       }
     ]
   };

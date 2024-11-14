@@ -167,7 +167,7 @@ export function ViewFlats(props: ViewFlatsProps) {
   const params = useParams();
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
+  //console.log("society context:", societycontext);
   console.log("society id:", societycontext?.id);
 
 

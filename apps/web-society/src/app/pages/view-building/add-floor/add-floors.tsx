@@ -52,7 +52,7 @@ const AddFloorComponent: React.FC<AddFloorProps> = ({ open, onClose, onSubmit, b
   });
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
   useEffect(() => {

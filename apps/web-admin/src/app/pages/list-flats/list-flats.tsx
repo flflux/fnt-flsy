@@ -61,9 +61,9 @@ export function ListFlats(props: ListFlatsProps) {
   console.log("society id:",id);
 
   const societyContext=useContext(SocietyContext);
-  console.log("society context on flatlist:",societyContext);
-  console.log("Society Context:",societyContext);
-  console.log("society context society id:",societyContext?.id);
+  //console.log("society context on flatlist:",societyContext);
+  //console.log("society context:",societyContext);
+  //console.log("society context society id:",societyContext?.id);
 
   const navigate = useNavigate();
 

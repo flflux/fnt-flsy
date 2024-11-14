@@ -56,7 +56,7 @@ export function ViewDevices(props: ViewDevicesProps) {
 
   console.log("params:", params);
   const societyContext = useContext(SocietyContext);
-  console.log("society Context on Device View:", societyContext);
+  //console.log("society context on Device View:", societyContext);
   console.log("society id:", societyContext?.id);
 
   const getDeviceInfo = async () => {

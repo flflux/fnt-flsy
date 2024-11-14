@@ -59,7 +59,7 @@ export function ViewDevices(props: ViewDevicesProps) {
   };
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
+  //console.log("society context:", societycontext);
   console.log("society id:", societycontext?.id);
 
   useEffect(() => {

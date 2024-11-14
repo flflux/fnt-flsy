@@ -111,7 +111,7 @@ const columns: GridColDef[] = [
     flex: 1,
     // maxWidth:200
   },
-];  
+];
 
 
 export function Dashboard(props: DashboardProps) {
@@ -135,22 +135,22 @@ export function Dashboard(props: DashboardProps) {
   const [deleteData, setDeleteData] = useState<Manager | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedAdminId, setSelectedAdminId] = useState<number | null>(null);
-  const [adminlength, setadminlength]=useState();
-  const [isImportModalOpen, setIsImportModalOpen]=useState(false);
- 
-  const [modalExportOpen, setModalExportOpen]=useState(false);
-  const [exportType, setExportType]=useState('');
+  const [adminlength, setadminlength] = useState();
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
+  const [modalExportOpen, setModalExportOpen] = useState(false);
+  const [exportType, setExportType] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showFileInput, setShowFileInput] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
 
   const params = useParams();
-  console.log("params:", params.societyId);
+  // console.log("params:", params.societyId);
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
-  console.log("society id:", societycontext?.id);
+  //console.log("society context:", societycontext);
+  // console.log("society id:", societycontext?.id);
 
   useEffect(() => {
     getCount();
@@ -166,32 +166,38 @@ export function Dashboard(props: DashboardProps) {
 
 
   const getAllAdmin = async () => {
-    try {
-      setLoadingAllAdmin(true);
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/managers`, {
-        withCredentials: true,
-      });
-      // console.log(response.data[0].user)
-      const sortedResidents = response.data.sort((a: any, b: any) => {
-        if (a.isPrimary && !b.isPrimary) {
-          return -1;
-        }
-        else if (!a.isPrimary && b.isPrimary) {
-          return 1;
-        }
-        else {
-          return 0;
-        }
-      });
-      setAdminData(sortedResidents);
-      console.log("Admin Data", response.data);
-      setadminlength(response.data.length);
-      setLoadingAllAdmin(false);
-    } catch (error) {
-      console.error('Error fetching society data:', error);
+    if(societycontext) {
+      try {
+        setLoadingAllAdmin(true);
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
+        const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/managers`, {
+          withCredentials: true,
+        });
+        // console.log(response.data[0].user)
+        const sortedResidents = response.data.sort((a: any, b: any) => {
+          if (a.isPrimary && !b.isPrimary) {
+            return -1;
+          }
+          else if (!a.isPrimary && b.isPrimary) {
+            return 1;
+          }
+          else {
+            return 0;
+          }
+        });
+        setAdminData(sortedResidents);
+        console.log("Admin Data", response.data);
+        setadminlength(response.data.length);
+        setLoadingAllAdmin(false);
+      } catch (error) {
+        console.error('Error fetching society data:', error);
+        setLoadingAllAdmin(false);
+      }
+    } else {
+      console.error('Society id not found');
       setLoadingAllAdmin(false);
     }
+    
   };
 
 
@@ -199,7 +205,10 @@ export function Dashboard(props: DashboardProps) {
     getAllAdmin();
   }, [societycontext?.id]);
 
-  console.log("user details", user)
+
+  if (user) {
+    console.log("user details", user);
+  }
   const dashboardCards = ["Buildings", "Flats", "Residents", "Vehicles", "Devices"];
 
 
@@ -229,11 +238,16 @@ export function Dashboard(props: DashboardProps) {
 
   const getCount = async () => {
     try {
+      // console.log("Context ",societycontext)
+      if (!societycontext) {
+        return
+      }
       setLoadingCount(true);
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/asset-count`, {
         withCredentials: true,
       });
 
+      console.log(response.data)
       console.log("assestcount:", response.data.assestcount);
       console.log("societyid:", response.data.id);
       setCount(response.data.assetcount);
@@ -245,24 +259,33 @@ export function Dashboard(props: DashboardProps) {
       setLoadingCount(false);
     }
   };
-  console.log("Response Data of AssetCount:", societydata);
+
+  if (societydata.length > 0) {
+    console.log("Response Data of AssetCount:", societydata);
+  }
 
   const getSocietydetails = async () => {
-    console.log("societyId:", societyId);
-    try {
-      setLoadingDetails(true);
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}`, {
-        withCredentials: true,
-      });
-      console.log("Society Details:", response.data);
-      setSociety(response.data);
+    console.log("IDDD ",societyId, societycontext)
+    if (!societycontext?.id) {
+      console.error("societyId not found", societyId);
       setLoadingDetails(false);
-    } catch (error) {
-      console.log("Error in fetching society details:", error);
-      setLoadingDetails(false);
-    }
-  };
+    } else {
+      try {
+        setLoadingDetails(true);
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
+        const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}`, {
+          withCredentials: true,
+        });
+        console.log("Society Details:", response.data);
+        setSociety(response.data);
+        setLoadingDetails(false);
+      } catch (error) {
+        console.log("Error in fetching society details:", error);
+        setLoadingDetails(false);
+      }
+    };
+  }
+
 
 
 
@@ -407,235 +430,235 @@ export function Dashboard(props: DashboardProps) {
   };
 
 
-   const handleExport = async (exportType: string) => {
+  const handleExport = async (exportType: string) => {
 
-    try{
-    let apiUrls;
-    switch (exportType) {
-      case 'residents':
-        apiUrls = `${apiUrl}/societies/${societycontext?.id}/residents/export`;
-        break;
-      case 'vehicles':
-        apiUrls = `${apiUrl}/societies/${societycontext?.id}/vehicles/export`;
-        break;
-      default:
-        console.error('Invalid import type');
-        return;
-    }
-     const response = await axios.get(apiUrls, {
-      withCredentials: true,
-      responseType: 'blob', // Important: Set the responseType to 'blob'
-    });
-
-    console.log('API response:', response);
-
-    if (response && response.data) {
-      console.log('Response data available');
-      const blob = new Blob([response.data], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    try {
+      let apiUrls;
+      switch (exportType) {
+        case 'residents':
+          apiUrls = `${apiUrl}/societies/${societycontext?.id}/residents/export`;
+          break;
+        case 'vehicles':
+          apiUrls = `${apiUrl}/societies/${societycontext?.id}/vehicles/export`;
+          break;
+        default:
+          console.error('Invalid import type');
+          return;
+      }
+      const response = await axios.get(apiUrls, {
+        withCredentials: true,
+        responseType: 'blob', // Important: Set the responseType to 'blob'
       });
 
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `exported_${exportType}_data.xlsx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      enqueueSnackbar("Excel file Exported successfully!", { variant: 'success' });
-      // getSingleBuildingFlats();
-      setModalExportOpen(false);
       console.log('API response:', response);
-    } else {
-      console.log('Error Exporting file');
-      enqueueSnackbar("Error Exporting file!", { variant: 'error' });
-    }
-  } catch (error) {
-    console.error('Error Exporting file to API', error);
-    enqueueSnackbar("Error Exporting file!", { variant: 'error' });
-  }
 
-    
-  };
-
-  const handleExportFlatType = async (exportType: string) => {
-
-    try{
-    let apiUrls;
-    switch (exportType) {
-      case 'flats':
-        apiUrls = `${apiUrl}/societies/${societycontext?.id}/flats`;
-        break;
-      case 'residents':
-        apiUrls = `${apiUrl}/societies/${societycontext?.id}/residents/export`;
-        break;
-      case 'vehicles':
-        apiUrls = `${apiUrl}/societies/${societycontext?.id}/vehicles/export`;
-        break;
-      default:
-        console.error('Invalid import type');
-        return;
-    }
-    const response = await axios.get(apiUrls, {
-      withCredentials: true,
-    });
-    if (response) {
-
-      try {
-        // const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
-        //   withCredentials: true
-        // });
-        const societiesData = response.data.content;
-        const excludedFields = ['id', 'isActive'];
-        const exportData = convertDataToExcel(societiesData, excludedFields);
-    
-        const blob = new Blob([exportData], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      if (response && response.data) {
+        console.log('Response data available');
+        const blob = new Blob([response.data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         });
-    
+
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `exported_${exportType}_data.xlsx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-      } catch (error) {
-        console.error('Error fetching data from API:', error);
+        enqueueSnackbar("Excel file Exported successfully!", { variant: 'success' });
+        // getSingleBuildingFlats();
+        setModalExportOpen(false);
+        console.log('API response:', response);
+      } else {
+        console.log('Error Exporting file');
+        enqueueSnackbar("Error Exporting file!", { variant: 'error' });
       }
-
-      enqueueSnackbar("Excel file Exported successfully!", { variant: 'success' });
-      // getSingleBuildingFlats();
-      setModalExportOpen(false);
-      console.log('API response:', response);
-    } else {
-      console.log('Error Exporting file');
+    } catch (error) {
+      console.error('Error Exporting file to API', error);
       enqueueSnackbar("Error Exporting file!", { variant: 'error' });
     }
-  } catch (error) {
-    console.error('Error Exporting file to API', error);
-    enqueueSnackbar("Error Exporting file!", { variant: 'error' });
-  }
 
-    
+
   };
-  
 
-  
-const flattenObject = (obj: Record<string, any>, prefix = ''): Record<string, any> => {
-  console.log("obj:",obj);
-  return Object.keys(obj).reduce((acc, key) => {
-    const pre = prefix.length ? prefix + '.' : '';
-    
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      if (key !== 'id' && key !== 'society') {
-        // Recursively flatten nested objects
-        //traverse recursively till we reach society after that move to else part
-        Object.assign(acc, flattenObject(obj[key], pre + key));
+  const handleExportFlatType = async (exportType: string) => {
+
+    try {
+      let apiUrls;
+      switch (exportType) {
+        case 'flats':
+          apiUrls = `${apiUrl}/societies/${societycontext?.id}/flats`;
+          break;
+        case 'residents':
+          apiUrls = `${apiUrl}/societies/${societycontext?.id}/residents/export`;
+          break;
+        case 'vehicles':
+          apiUrls = `${apiUrl}/societies/${societycontext?.id}/vehicles/export`;
+          break;
+        default:
+          console.error('Invalid import type');
+          return;
       }
-    } else {
-      // Check for specific keys and handle them accordingly
-      //if key matches any one value then traverse
-      // if (key === 'number' || key === 'floor.number' || key === 'floor.building.name') {
+      const response = await axios.get(apiUrls, {
+        withCredentials: true,
+      });
+      if (response) {
+
+        try {
+          // const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
+          //   withCredentials: true
+          // });
+          const societiesData = response.data.content;
+          const excludedFields = ['id', 'isActive'];
+          const exportData = convertDataToExcel(societiesData, excludedFields);
+
+          const blob = new Blob([exportData], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = `exported_${exportType}_data.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } catch (error) {
+          console.error('Error fetching data from API:', error);
+        }
+
+        enqueueSnackbar("Excel file Exported successfully!", { variant: 'success' });
+        // getSingleBuildingFlats();
+        setModalExportOpen(false);
+        console.log('API response:', response);
+      } else {
+        console.log('Error Exporting file');
+        enqueueSnackbar("Error Exporting file!", { variant: 'error' });
+      }
+    } catch (error) {
+      console.error('Error Exporting file to API', error);
+      enqueueSnackbar("Error Exporting file!", { variant: 'error' });
+    }
+
+
+  };
+
+
+
+  const flattenObject = (obj: Record<string, any>, prefix = ''): Record<string, any> => {
+    console.log("obj:", obj);
+    return Object.keys(obj).reduce((acc, key) => {
+      const pre = prefix.length ? prefix + '.' : '';
+
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        if (key !== 'id' && key !== 'society') {
+          // Recursively flatten nested objects
+          //traverse recursively till we reach society after that move to else part
+          Object.assign(acc, flattenObject(obj[key], pre + key));
+        }
+      } else {
+        // Check for specific keys and handle them accordingly
+        //if key matches any one value then traverse
+        // if (key === 'number' || key === 'floor.number' || key === 'floor.building.name') {
         if (key === 'floor.building.name') {
           // Extract building name from nested structure
           acc[pre + 'Building Name'] = obj[key];
         } else {
           acc[pre + key.replace('floor.', '')] = obj[key];
         }
-      // }
-    }
-    
-    return acc;
-  }, {} as Record<string, any>);
-};
+        // }
+      }
 
-  
-  
-  
-const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[]) => {
-  if (!data.length) {
-    return new ArrayBuffer(0);
-  }
-
-  // Define a mapping of export types to data transformation functions
-  const dataTransformers: Record<string, (row: Record<string, any>) => Record<string, any>> = {
-    'flats': (row) => ({
-      'Building Name': row['floor.building.name'],
-      'Floor Number': row['floor.number'],
-      'Flat Number': row['number'],
-    }),
-    'residents': (row) => ({
-      'Building Name': row['flats.flat.floor.building.name'],
-      'Floor Number': row['flats.flat.floor.number'],
-      'Flat Number': row['flats.flat.number'],
-      'Name': row['name'],
-      'Type':row['flats.flat.type'],
-      'Email':row['email'],
-      'Phone Number':row['phoneNumber'],
-      'Is Child?':row['isChild'],
-      'Is Primary?':row['flats.isPrimary'],
-      // Add other resident-related fields as needed
-    }),
-    'vehicles': (row) => ({
-      'Building Name': row['floor.building.name'],
-      'Flat Number': row['number'],
-      'Vehicle Number': row['vehicle.number'],
-      // Add other vehicle-related fields as needed
-    }),
+      return acc;
+    }, {} as Record<string, any>);
   };
 
-  const dataTransformer = dataTransformers[exportType];
 
-  if (!dataTransformer) {
-    console.error('Invalid export type');
-    return new ArrayBuffer(0);
+
+
+  const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[]) => {
+    if (!data.length) {
+      return new ArrayBuffer(0);
+    }
+
+    // Define a mapping of export types to data transformation functions
+    const dataTransformers: Record<string, (row: Record<string, any>) => Record<string, any>> = {
+      'flats': (row) => ({
+        'Building Name': row['floor.building.name'],
+        'Floor Number': row['floor.number'],
+        'Flat Number': row['number'],
+      }),
+      'residents': (row) => ({
+        'Building Name': row['flats.flat.floor.building.name'],
+        'Floor Number': row['flats.flat.floor.number'],
+        'Flat Number': row['flats.flat.number'],
+        'Name': row['name'],
+        'Type': row['flats.flat.type'],
+        'Email': row['email'],
+        'Phone Number': row['phoneNumber'],
+        'Is Child?': row['isChild'],
+        'Is Primary?': row['flats.isPrimary'],
+        // Add other resident-related fields as needed
+      }),
+      'vehicles': (row) => ({
+        'Building Name': row['floor.building.name'],
+        'Flat Number': row['number'],
+        'Vehicle Number': row['vehicle.number'],
+        // Add other vehicle-related fields as needed
+      }),
+    };
+
+    const dataTransformer = dataTransformers[exportType];
+
+    if (!dataTransformer) {
+      console.error('Invalid export type');
+      return new ArrayBuffer(0);
+    }
+
+    const flattenedData = data.map((row) => flattenObject(row));
+    const filteredData = flattenedData.map((row) =>
+      Object.keys(row).reduce((acc, key) => {
+        if (!excludedFields.includes(key)) {
+          acc[key] = row[key];
+        }
+        return acc;
+      }, {} as Record<string, any>)
+    );
+
+    const rearrangedData = filteredData.map(dataTransformer);
+
+    const worksheet = XLSX.utils.json_to_sheet(rearrangedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+
+    const excelData: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      bookSST: false,
+      type: 'array',
+    });
+
+    return new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  };
+
+
+
+  const openImportModal = () => {
+    console.log("inside open Import modal");
+    setIsImportModalOpen(true);
+
   }
 
-  const flattenedData = data.map((row) => flattenObject(row));
-  const filteredData = flattenedData.map((row) =>
-    Object.keys(row).reduce((acc, key) => {
-      if (!excludedFields.includes(key)) {
-        acc[key] = row[key];
-      }
-      return acc;
-    }, {} as Record<string, any>)
-  );
+  const closeImportModal = () => {
+    setIsImportModalOpen(false);
+  }
 
-  const rearrangedData = filteredData.map(dataTransformer);
 
-  const worksheet = XLSX.utils.json_to_sheet(rearrangedData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
-
-  const excelData: any = XLSX.write(workbook, {
-    bookType: 'xlsx',
-    bookSST: false,
-    type: 'array',
-  });
-
-  return new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-};
-  
-
- 
- const openImportModal=()=>{
-  console.log("inside open Import modal");
-   setIsImportModalOpen(true);
-   
- }
-
- const closeImportModal=()=>{
-  setIsImportModalOpen(false);
-}
-  
-
-  const handleCloseExportModal=()=>{
+  const handleCloseExportModal = () => {
     setModalExportOpen(false);
     setExportType('');
   }
-  
-  
 
-  
+
+
+
   const handleExportType = (type: string) => {
     console.log("type selected")
     if (type !== null) {
@@ -647,7 +670,7 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
   };
 
 
-  
+
 
 
   const handleOpenModal = () => {
@@ -659,10 +682,10 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
   };
 
   //Download template files
-  const handleOptionSelect = async(option: string) => {
+  const handleOptionSelect = async (option: string) => {
     setSelectedOption(option);
     try {
-    
+
       let templateFilePath = '';
 
       switch (option) {
@@ -684,25 +707,25 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
       }
       const response = await fetch(templateFilePath);
       const blob = await response.blob();
-  
+
       const contentType = response.headers.get('content-type') || 'application/octet-stream';
-  
+
       const filename = `template_${option}.xlsx`;
       const url = window.URL.createObjectURL(new Blob([blob], { type: contentType }));
-  
+
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-  
+
       window.URL.revokeObjectURL(url);
       handleCloseTemplateModal();
     } catch (error) {
       console.error('Error downloading template:', error);
       handleCloseTemplateModal();
-   
+
     }
   };
 
@@ -715,20 +738,20 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
         <div className={styles['main_container']}>
           <div className={styles['first_container']}>
             <div className={styles['header']}>
-              <h1 style={{ marginLeft: '0px' }}>{society?.name}</h1>  
+              <h1 style={{ marginLeft: '0px' }}>{society?.name}</h1>
             </div>
 
             <div className={styles['dashboard-card-container']}>
-            <Card sx={{ minWidth: '40% '}} className={styles['society-details']}>
+              <Card sx={{ minWidth: '40% ' }} className={styles['society-details']}>
                 <CardContent>
                   <Typography variant="body2">
-                  <div className={styles['soc-detail-add']}><CodeIcon sx={{marginRight:"4px"}}/>{society?.code}</div>
-                    <br /> 
-                   <div className={styles['soc-detail-add']}><LocalPhoneIcon sx={{marginRight:"4px"}}/>{society?.phoneNumber}</div>
+                    <div className={styles['soc-detail-add']}><CodeIcon sx={{ marginRight: "4px" }} />{society?.code}</div>
                     <br />
-                    <div className={styles['soc-detail-add']}><EmailIcon sx={{marginRight:"4px"}}/>{society?.email}</div>
-                    <br/>
-                    <div className={styles['soc-detail-add']}><HomeIcon sx={{marginRight:"4px"}}/>{society?.addressLine1}, {society?.addressLisne2}, {society?.city}, {society?.stateCode}, {society?.countryCode}, {society?.postalCode}</div>
+                    <div className={styles['soc-detail-add']}><LocalPhoneIcon sx={{ marginRight: "4px" }} />{society?.phoneNumber}</div>
+                    <br />
+                    <div className={styles['soc-detail-add']}><EmailIcon sx={{ marginRight: "4px" }} />{society?.email}</div>
+                    <br />
+                    <div className={styles['soc-detail-add']}><HomeIcon sx={{ marginRight: "4px" }} />{society?.addressLine1}, {society?.addressLisne2}, {society?.city}, {society?.stateCode}, {society?.countryCode}, {society?.postalCode}</div>
                   </Typography>
                 </CardContent>
               </Card>
@@ -754,22 +777,22 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
                     </Link>
                   </Card>
                 ))}
-                 <Card className={styles['cards']}>
-                      <CardContent className={styles['cardcontent']}>
-                        <Typography variant="h6" color="text.secondary" gutterBottom className={styles['fields']}>
-                          Managers
-                        </Typography>
-                        <Typography className={styles['count']}>
-                          {adminlength}
-                          <br />
-                        </Typography>
-                      </CardContent>
-                  </Card>
+                <Card className={styles['cards']}>
+                  <CardContent className={styles['cardcontent']}>
+                    <Typography variant="h6" color="text.secondary" gutterBottom className={styles['fields']}>
+                      Managers
+                    </Typography>
+                    <Typography className={styles['count']}>
+                      {adminlength}
+                      <br />
+                    </Typography>
+                  </CardContent>
+                </Card>
               </div>
             </div>
 
             <div className={styles['horizontal-line']} />
-            
+
 
             {/* <div>
   {data.map((item) => (
@@ -835,146 +858,146 @@ const convertDataToExcel = (data: Record<string, any>[], excludedFields: string[
           <div className={styles['vertical-line']} />
 
           <div className={styles['rightColumn']}>
-          
-          <Box className={styles['import-export']}>
-            <Button startIcon={<InsertDriveFileIcon/>} color="info"
-              variant="contained"  onClick={handleOpenModal} className={styles['import-export-button']}>Template</Button>
 
-        <TemplateOptions open={isModalOpen} onClose={handleCloseTemplateModal} onSelect={handleOptionSelect} />
+            <Box className={styles['import-export']}>
+              <Button startIcon={<InsertDriveFileIcon />} color="info"
+                variant="contained" onClick={handleOpenModal} className={styles['import-export-button']}>Template</Button>
 
-            <>
-                  <Button
-                    startIcon={<FileUploadIcon />}
-                    color="info"
-                    variant="contained"
-                    onClick={openImportModal}
-                    className={styles['import-export-button']}
-                  >
-                    Import
-                  </Button>
-                  {/* Modal for choosing import type */}
-                  <Import open={isImportModalOpen} onClose={closeImportModal} />
-                  
-                </>
+              <TemplateOptions open={isModalOpen} onClose={handleCloseTemplateModal} onSelect={handleOptionSelect} />
 
-            {/* {showFileInput && ( */}
-               
-                {/* )} */}
+              <>
+                <Button
+                  startIcon={<FileUploadIcon />}
+                  color="info"
+                  variant="contained"
+                  onClick={openImportModal}
+                  className={styles['import-export-button']}
+                >
+                  Import
+                </Button>
+                {/* Modal for choosing import type */}
+                <Import open={isImportModalOpen} onClose={closeImportModal} />
+
+              </>
+
+              {/* {showFileInput && ( */}
+
+              {/* )} */}
 
 
 
-            <Button
-              startIcon={<DownloadIcon/>}
-              color="info"
-              variant="contained"
-              onClick={() => setModalExportOpen(true)}
-              className={styles['import-export-button']}
-            >
-              Export
-            </Button>
-            <Modal open={modalExportOpen} onClose={handleCloseExportModal}>
-                    <Box  className={styles['modal-container']}>
-                    <div>
-                      <h2 className={styles['h2_tag']}>Select Export Type</h2>
-                        <Button color="info" variant="contained" onClick={() => handleExportFlatType('flats')}>Export Flats</Button>
-                        <Button color="info" variant="contained" onClick={() => handleExportType('residents')}>Export Residents</Button>
-                        <Button color="info" variant="contained" onClick={() => handleExportType('vehicles')}>Export Vehicles</Button>
-                      {/* </div> */}
-                    </div>
-                    </Box>
-            </Modal>      
-
-            
-
-            </Box>
-
-          <div className={styles['column_second']}>
-           
-            <Grid container className={styles['headerStyles']}>
-              <Grid item sx={{width:'100%'}}>
-                <div className={styles['grid-header']}>
-                  <h3 id={styles['grid_detail']}>Managers</h3>
-                  <Button
-                    className={styles['add_btn']}
-                    onClick={() => {
-                      setIsAddModalOpen(true)
-                    }}
-                  >
-                    <AddIcon fontSize='small' />Add
-                  </Button>
-                </div>
-                <div className={styles['manager-horizontal-line']} />
-              </Grid>
-              <Grid xs={2} item>
-                <Box>
-                  <AddAdmin
-                    open={isAddModalOpen}
-                    onClose={() => setIsAddModalOpen(false)}
-                    onSubmit={addadmin}
-                  />
-                  <Loading open={isLoadingModalOpen}
-                    onClose={() => setIsLoadingModalOpen(false)} />
-                </Box>
-              </Grid>
-            </Grid>
-            <Box className={styles['grid-box']}>
-              {loadingAllAdmin ? (
-                <div className={styles['no-data']}><CircularProgress /></div>
-
-              ) : (Array.isArray(adminData) && adminData.length > 0 ? (
-                adminData.map((response: Manager, index: number) => (
-                  <Grid container key={index} columnGap={3} className={styles['grid-container']}>
-                    {/* <Grid item xs={12} md={1}><div className={styles['resident-primary']}>{response.isPrimary === true ? (<Chip label="primary" color="primary" variant="outlined" />) : (<></>)}</div></Grid> */}
-                    <Grid item xs={3} md={1.5} ><div className={styles['resident-name']}>{response.user.firstName}</div></Grid>
-                    <Grid item xs={2}> <div className={styles['resident-phone']}>{response.user.lastName}</div></Grid>
-                    {/* <Grid item xs={2}> <div className={styles['resident-phone']}>{response.user.email}</div></Grid>
-                  <Grid item xs={2}> <div className={styles['resident-phone']}>+91-{response.user.phoneNumber}</div></Grid> */}
-                    <Grid item xs={1} className={styles['resident-actions']}>
-                      {/* <div > */}
-                      <IconButton onClick={(e) => {
-                        e.stopPropagation()
-                        handleEditClick(response.user.id)
-                      }} sx={{ mt: "-13px", color: 'black' }}>
-                        <EditIcon>
-                          Edit
-                        </EditIcon>
-                      </IconButton>
-                      <IconButton sx={{ mt: "-13px" }} onClick={(e) => {
-                        e.stopPropagation();
-                        openDeleteModal({ id: response.user.id })
-                      }}>
-                        <DeleteIcon color="error">
-                          Delete
-                        </DeleteIcon>
-                      </IconButton>
+              <Button
+                startIcon={<DownloadIcon />}
+                color="info"
+                variant="contained"
+                onClick={() => setModalExportOpen(true)}
+                className={styles['import-export-button']}
+              >
+                Export
+              </Button>
+              <Modal open={modalExportOpen} onClose={handleCloseExportModal}>
+                <Box className={styles['modal-container']}>
+                  <div>
+                    <h2 className={styles['h2_tag']}>Select Export Type</h2>
+                    <Button color="info" variant="contained" onClick={() => handleExportFlatType('flats')}>Export Flats</Button>
+                    <Button color="info" variant="contained" onClick={() => handleExportType('residents')}>Export Residents</Button>
+                    <Button color="info" variant="contained" onClick={() => handleExportType('vehicles')}>Export Vehicles</Button>
                     {/* </div> */}
-                    </Grid>
-                  </Grid>
-                ))
-              ) : (
-                <div className={styles['no-data']}>No Admin found</div>
-              )
-              )}
+                  </div>
+                </Box>
+              </Modal>
+
+
+
             </Box>
-            <EditAdmin
-              open={isEditModalOpen}
-              onClose={closeEditModal}
-              onUpdate={(data) => {
-                handleUpdate(data);
-                closeEditModal();
-              }}
-              initialData={editData} />
 
-            <DeleteAdmin
-              open={isDeleteModalOpen}
-              onClose={closeDeleteModal}
-              onDelete={() => {
-                handleDelete(adminToDeleteId);
-                closeDeleteModal();
-              }}
-              adminData={deleteData} />
+            <div className={styles['column_second']}>
 
-          </div>
+              <Grid container className={styles['headerStyles']}>
+                <Grid item sx={{ width: '100%' }}>
+                  <div className={styles['grid-header']}>
+                    <h3 id={styles['grid_detail']}>Managers</h3>
+                    <Button
+                      className={styles['add_btn']}
+                      onClick={() => {
+                        setIsAddModalOpen(true)
+                      }}
+                    >
+                      <AddIcon fontSize='small' />Add
+                    </Button>
+                  </div>
+                  <div className={styles['manager-horizontal-line']} />
+                </Grid>
+                <Grid xs={2} item>
+                  <Box>
+                    <AddAdmin
+                      open={isAddModalOpen}
+                      onClose={() => setIsAddModalOpen(false)}
+                      onSubmit={addadmin}
+                    />
+                    <Loading open={isLoadingModalOpen}
+                      onClose={() => setIsLoadingModalOpen(false)} />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Box className={styles['grid-box']}>
+                {loadingAllAdmin ? (
+                  <div className={styles['no-data']}><CircularProgress /></div>
+
+                ) : (Array.isArray(adminData) && adminData.length > 0 ? (
+                  adminData.map((response: Manager, index: number) => (
+                    <Grid container key={index} columnGap={3} className={styles['grid-container']}>
+                      {/* <Grid item xs={12} md={1}><div className={styles['resident-primary']}>{response.isPrimary === true ? (<Chip label="primary" color="primary" variant="outlined" />) : (<></>)}</div></Grid> */}
+                      <Grid item xs={3} md={1.5} ><div className={styles['resident-name']}>{response.user.firstName}</div></Grid>
+                      <Grid item xs={2}> <div className={styles['resident-phone']}>{response.user.lastName}</div></Grid>
+                      {/* <Grid item xs={2}> <div className={styles['resident-phone']}>{response.user.email}</div></Grid>
+                  <Grid item xs={2}> <div className={styles['resident-phone']}>+91-{response.user.phoneNumber}</div></Grid> */}
+                      <Grid item xs={1} className={styles['resident-actions']}>
+                        {/* <div > */}
+                        <IconButton onClick={(e) => {
+                          e.stopPropagation()
+                          handleEditClick(response.user.id)
+                        }} sx={{ mt: "-13px", color: 'black' }}>
+                          <EditIcon>
+                            Edit
+                          </EditIcon>
+                        </IconButton>
+                        <IconButton sx={{ mt: "-13px" }} onClick={(e) => {
+                          e.stopPropagation();
+                          openDeleteModal({ id: response.user.id })
+                        }}>
+                          <DeleteIcon color="error">
+                            Delete
+                          </DeleteIcon>
+                        </IconButton>
+                        {/* </div> */}
+                      </Grid>
+                    </Grid>
+                  ))
+                ) : (
+                  <div className={styles['no-data']}>No Admin found</div>
+                )
+                )}
+              </Box>
+              <EditAdmin
+                open={isEditModalOpen}
+                onClose={closeEditModal}
+                onUpdate={(data) => {
+                  handleUpdate(data);
+                  closeEditModal();
+                }}
+                initialData={editData} />
+
+              <DeleteAdmin
+                open={isDeleteModalOpen}
+                onClose={closeDeleteModal}
+                onDelete={() => {
+                  handleDelete(adminToDeleteId);
+                  closeDeleteModal();
+                }}
+                adminData={deleteData} />
+
+            </div>
           </div>
         </div>
       )

@@ -110,8 +110,8 @@ export function VehiclesList(props: VehiclesListProps) {
 
   const params = useParams();
   const societyContext = useContext(SocietyContext);
-  console.log("Society Context:", societyContext);
-  console.log("society context society id:", societyContext?.id);
+  //console.log("society context:", societyContext);
+  //console.log("society context society id:", societyContext?.id);
   console.log("society name:", societyContext?.name);
   console.log(params);
 

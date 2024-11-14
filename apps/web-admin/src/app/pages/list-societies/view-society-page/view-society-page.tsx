@@ -81,7 +81,7 @@ export function ViewSocietyPage(props: ViewSocietyPageProps) {
   console.log("society id:",societyId);
 
   const societyContext=useContext(SocietyContext);
-  console.log("society context:",societyContext); 
+  //console.log("society context:",societyContext); 
 
   useEffect(() => {
     const fetchSocietyData = async () => {

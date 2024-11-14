@@ -54,22 +54,27 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
 
   const user = useContext(UserContext);
   const societycontext = useContext(SocietyContext);
-  console.log('society context:', societycontext);
-  console.log('society id:', societycontext?.id);
+  // console.log('society context:', societycontext);
+  // console.log('society id:', societycontext?.id);
 
   useEffect(() => {
-    getDeviceLogs();
+    // console.log("societycontext", societycontext)
+    if (societycontext && societycontext.id) {
+      getDeviceLogs();
+    }
+    // getDeviceLogs();
   }, [refreshLogs, societycontext]);
 
   const params = useParams();
-  console.log('params:', params);
+  // console.log('params:', params);
 
   const userContext = useContext(UserContext);
-  console.log('user Context:', userContext);
+  // console.log('user Context:', userContext);
 
   const getDeviceLogs = async () => {
     try {
       setLoadingLogs(true);
+      // console.log("GET DEV LOGS", societycontext?.id)
       // await new Promise((resolve) => setTimeout(resolve, 4000));
       const response = await axios.get(
         `${apiUrl}/society/${societycontext?.id}/reports/vehicle-logs`,
@@ -85,9 +90,10 @@ export function AllVehicleLogs({ refreshLogs }: AllVehicleLogsProps) {
         }
       );
 
+      console.log(response.data)
       // Update the vehiclelogs state with the API response
       setallvehiclelog(response.data.content);
-      console.log('All vehicle logs:', response.data.content);
+      // console.log('All vehicle logs:', response.data.content);
       setLoadingLogs(false);
     } catch (error) {
       console.log('Error in  All vehicle log', error);

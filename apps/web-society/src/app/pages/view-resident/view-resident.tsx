@@ -64,7 +64,7 @@ const ViewResidentComponent: React.FC<ViewResidentComponentProps> = ({ open, onC
   });
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
   const [loading, setLoading] = useState(true);
 

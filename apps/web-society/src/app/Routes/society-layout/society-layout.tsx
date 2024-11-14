@@ -18,7 +18,7 @@ export function SocietyLayout(props: SocietyLayoutProps) {
   const params=useParams();
 
   const { societyId } = useParams<{ societyId: string }>();
-  console.log("society id:",societyId);
+  // console.log("society id:",societyId);
 
   
 

@@ -123,7 +123,7 @@ export function Dashboard(props: DashboardProps) {
   console.log("params:", params.societyId);
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
+  //console.log("society context:", societycontext);
   console.log("society id:", societycontext?.id);
 
   useEffect(() => {

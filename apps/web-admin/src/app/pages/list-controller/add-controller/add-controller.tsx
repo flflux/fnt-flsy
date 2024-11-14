@@ -55,7 +55,7 @@ const AddControllerComponent: React.FC<AddControllerProps> = ({ open, onClose, o
 
   const params=useParams();
   const societyContext=useContext(SocietyContext);
-  console.log("society Context on Device View:",societyContext);
+  //console.log("society context on Device View:",societyContext);
   console.log("society id:",societyContext?.id);
 
   const handleFormSubmit = (data: Form) => {

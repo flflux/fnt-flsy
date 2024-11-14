@@ -126,7 +126,7 @@ export function ListResidents(props: ListResidentsProps) {
   const user=useContext(UserContext);
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
   const getResidents = async () => {

@@ -103,7 +103,7 @@ const EditResidentComponent: React.FC<EditResidentProps> = ({ open, onClose, onU
   const selectedFloorId = watch('floorId');
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
 

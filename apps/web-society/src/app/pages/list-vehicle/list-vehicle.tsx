@@ -103,7 +103,7 @@ export function VehiclesList(props: VehiclesListProps) {
   });
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
 

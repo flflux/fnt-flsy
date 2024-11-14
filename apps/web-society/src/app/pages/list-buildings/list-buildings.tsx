@@ -70,7 +70,7 @@ export function ListBuildings(props: ListBuildingsProps) {
   const user = useContext(UserContext);
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
+  //console.log("society context:", societycontext);
   console.log("society id:", societycontext?.id);
 
   //Get All Buildings

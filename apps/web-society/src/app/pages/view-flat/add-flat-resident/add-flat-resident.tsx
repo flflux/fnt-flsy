@@ -126,7 +126,7 @@ const AddFlatResidentComponent: React.FC<AddFlatResidentProps> = ({ open, onClos
   }, [initialData, setValue, user]);
 
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
+  //console.log("society context:", societycontext);
   console.log("society id:", societycontext?.id);
 
   useEffect(() => {

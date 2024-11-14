@@ -21,29 +21,51 @@ export function Import({ open, onClose }: ImportProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showFileInput, setShowFileInput] = useState(false);
   const [activeBuildingFlats, setActiveBuildingFlats] = useState<ViewFlat[]>([]);
-
+  const [loading, setLoading] = useState(false);
   const societycontext = useContext(SocietyContext);
-  console.log("society context:", societycontext);
+  //console.log("society context:", societycontext);
   console.log("society id:", societycontext?.id);
 
   const apiUrl = environment.apiUrl;
 
   useEffect(() => {
-    getSingleBuildingFlats();
-  }, []);
+    console.log("SCNT", societycontext)
+    // getSingleBuildingFlats();
+    if (societycontext && societycontext.id) {
+      getSingleBuildingFlats();
+    }
+  }, [societycontext]);
 
+  // const getSingleBuildingFlats = async () => {
+  //   try {
+  //     console.log("societycontext", societycontext)
+  //     const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
+  //       withCredentials: true,
+  //     });
+
+  //     const { content, total } = response.data;
+  //     setActiveBuildingFlats(content);
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.log("Something went wrong");
+  //   }
+  // };
   const getSingleBuildingFlats = async () => {
     try {
+      console.log("Calling API with society ID:", societycontext?.id);
+      setLoading(true);  // Set loading state before fetching data
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/flats`, {
         withCredentials: true,
       });
-
+      console.log("RESPONSE ",response.data)
       const { content, total } = response.data;
       setActiveBuildingFlats(content);
+      setLoading(false);  // Set loading state to false after data is fetched
 
     } catch (error) {
-      console.log(error);
-      console.log("Something went wrong");
+      console.error("Error fetching flats:", error);
+      setLoading(false);
     }
   };
 

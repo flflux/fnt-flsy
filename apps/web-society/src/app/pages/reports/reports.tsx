@@ -168,7 +168,7 @@ export function Reports(props: ReportsProps) {
   const params=useParams();
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
 

@@ -39,8 +39,8 @@ export function DrawerComponent(props: DrawerComponentProps) {
   const { id } = useParams();
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
-  console.log("society id:",societycontext?.id);
+  //console.log("society context:",societycontext);
+  // console.log("society id:",societycontext?.id);
 
 
   return (

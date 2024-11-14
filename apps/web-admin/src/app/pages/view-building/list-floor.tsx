@@ -52,7 +52,7 @@ export function ListFloor(props: ListFloorProps) {
 
 
   const societyContext=useContext(SocietyContext);
-  console.log("society Context on Floor View:",societyContext);
+  //console.log("society context on Floor View:",societyContext);
   console.log("society id:",societyContext?.id);
   console.log(params?.societyId);
 

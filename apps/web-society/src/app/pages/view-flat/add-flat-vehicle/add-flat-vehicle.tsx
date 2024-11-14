@@ -112,7 +112,7 @@ const AddFlatVehicleComponent: React.FC<AddFlatVehicleProps> = ({ open, onClose,
   const initialFlatId = initialData?.id ?? null;
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
   const handleFormSubmit = (data: Form) => {
@@ -142,6 +142,7 @@ const AddFlatVehicleComponent: React.FC<AddFlatVehicleProps> = ({ open, onClose,
 
   const getAllBuildings = async () => {
     try {
+      console.log("GET BLDG", `${apiUrl}/societies/${societycontext?.id}/buildings`)
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/buildings`, {
         withCredentials: true,
         params: {
@@ -163,6 +164,7 @@ const AddFlatVehicleComponent: React.FC<AddFlatVehicleProps> = ({ open, onClose,
 
   const getAllFloors = async () => {
     try {
+      console.log("GET FLOORS ", `${apiUrl}/societies/${societycontext?.id}/buildings/${selectedBuildingId}/floors`)
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/buildings/${selectedBuildingId}/floors`, {
         withCredentials: true,
         params: {
@@ -184,6 +186,7 @@ const AddFlatVehicleComponent: React.FC<AddFlatVehicleProps> = ({ open, onClose,
 
   const getAllFlats = async () => {
     try {
+      console.log("GET FLAT", `${apiUrl}/societies/${societycontext?.id}/buildings/${selectedBuildingId}/flats`)
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/buildings/${selectedBuildingId}/flats`, {
         withCredentials: true,
         params: {
@@ -204,9 +207,13 @@ const AddFlatVehicleComponent: React.FC<AddFlatVehicleProps> = ({ open, onClose,
 
 
   useEffect(() => {
-    getAllBuildings();
-    getAllFloors();
-    getAllFlats();
+    console.log("societycontext ",societycontext);
+    if(societycontext) {
+      getAllBuildings();
+      getAllFloors();
+      getAllFlats();
+    }
+   
   }, [page, rowsPerPage, totalbuildingValue, totalFlatValue, totalValue, selectedBuildingId, selectedFloorId, user, societycontext]);
 
   // useEffect(() => { 

@@ -125,7 +125,7 @@ export function ViewVehicles(props: ViewVehiclesProps) {
 
   const societycontext=useContext(SocietyContext);
   console.log("society context:",societycontext);
-  console.log("society id:",societycontext?.id);
+  // console.log("society id:",societycontext?.id);
 
 
  
@@ -134,8 +134,9 @@ export function ViewVehicles(props: ViewVehiclesProps) {
   const getVehicleinfo = async () => {
     try {
       setLoadingVehicleInfo(true)
+      console.log("PARAMS", params)
       //  await new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/buildings/${params.buildingId}/floors/${params.floorId}/flat/${params.flatId}/vehicles/${params.id}`, {
+      const response = await axios.get(`${apiUrl}/societies/${params?.societyId}/buildings/${params.buildingId}/floors/${params.floorId}/flat/${params.flatId}/vehicles/${params.id}`, {
         withCredentials: true,
       }).then((response) => {
         console.log("Vehcile Detail:", response.data);
@@ -156,7 +157,7 @@ export function ViewVehicles(props: ViewVehiclesProps) {
     try {
       setLoadingVehicleCard(true);
       // await new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/cards`, {
+      const response = await axios.get(`${apiUrl}/societies/${params?.societyId}/cards`, {
         withCredentials: true
       });
       setCards(response.data);
@@ -169,7 +170,9 @@ export function ViewVehicles(props: ViewVehiclesProps) {
   };
 
   useEffect(() => {
-    getVehicleinfo();
+    if (params && params?.societyId) {
+      getVehicleinfo();
+    }
   }, [user, societycontext]);
 
   useEffect(() => {
@@ -198,7 +201,8 @@ export function ViewVehicles(props: ViewVehiclesProps) {
   // Add Card
   const handleAddCard = async (formData: AddCard) => {
     try {
-      const { data } = await axios.post(`${apiUrl}/societies/${societycontext?.id}/cards`, { ...formData, vehicleId: vehicleId, isActive: true },
+      // console.log(" handleAddCard ",params, { ...formData, vehicleId: vehicleId, isActive: true })
+      const { data } = await axios.post(`${apiUrl}/societies/${params?.societyId}/cards`, { ...formData, vehicleId: vehicleId, isActive: true },
         {
           withCredentials: true,
         },)
@@ -220,8 +224,9 @@ export function ViewVehicles(props: ViewVehiclesProps) {
   // Edit Vehicle Card
   const handleVehicleCardUpdate = async (data: AddCard) => {
     try {
+      console.log(" handleVehicleCardUpdate ", { ...data, vehicleId: vehicleId, isActive: true })
       const response = await axios.put(
-        `${apiUrl}/societies/${societycontext?.id}/cards/${selectedCardId}`,
+        `${apiUrl}/societies/${params?.societyId}/cards/${selectedCardId}`,
         { ...data, vehicleId: vehicleId, isActive: true },
         {
           withCredentials: true,
@@ -256,11 +261,11 @@ export function ViewVehicles(props: ViewVehiclesProps) {
 
   const breadcrumbs = [
     {
-      to: `/dashboard/${societycontext?.id}`,
+      to: `/dashboard/${params?.societyId}`,
       label: 'Home',
     },
     {
-      to: `/society/${societycontext?.id}/flats`,
+      to: `/society/${params?.societyId}/flats`,
       label: 'Flats',
     },
     {

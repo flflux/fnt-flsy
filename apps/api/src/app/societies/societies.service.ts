@@ -22,51 +22,51 @@ import { FileDto } from '../core/dto/page-base.dto';
 export class SocietiesService {
   private prisma = new PrismaClient();
 
-  async bulkUploadSocietyData(fileDto:FileDto,file){
+  async bulkUploadSocietyData(fileDto: FileDto, file) {
     const workbook = xlsx.read(file.buffer);
     const sheetNames = workbook.SheetNames;
     const sheet = workbook.Sheets[sheetNames[0]];
 
-    const jsonData = xlsx.utils.sheet_to_json(sheet, {raw: false,  defval: ''});
+    const jsonData = xlsx.utils.sheet_to_json(sheet, { raw: false, defval: '' });
 
-    const finalJsonData: AddSocietyDto[]= [];
-    jsonData.map(society =>{
-      const tempData : AddSocietyDto = {
-        'name' : society['Name'],
-        'addressLine1' : society['Address Line 1'],
-        'addressLine2' : society['Address Line 2'],
-        'city' : society['City'],
-        'postalCode' : society['Postal Code'],
-        'countryCode' : society['Country Code'],
-        'stateCode' : society['State Code'],
-        'email' : society['Email'],
-        'phoneNumber' : String(society['Phone Number']),
-        'code' : society['Code'],
-        'isActive' : true,
+    const finalJsonData: AddSocietyDto[] = [];
+    jsonData.map(society => {
+      const tempData: AddSocietyDto = {
+        'name': society['Name'],
+        'addressLine1': society['Address Line 1'],
+        'addressLine2': society['Address Line 2'],
+        'city': society['City'],
+        'postalCode': society['Postal Code'],
+        'countryCode': society['Country Code'],
+        'stateCode': society['State Code'],
+        'email': society['Email'],
+        'phoneNumber': String(society['Phone Number']),
+        'code': society['Code'],
+        'isActive': true,
       };
-     
-      
+
+
       console.log(tempData);
 
       finalJsonData.push(tempData);
     })
 
-     return this.prisma.$transaction(async (tx) => {
-        const result =  await tx.society.createMany({data:finalJsonData});
-        return result;
-      })
+    return this.prisma.$transaction(async (tx) => {
+      const result = await tx.society.createMany({ data: finalJsonData });
+      return result;
+    })
 
   }
-  
+
   isValidMobileNumber(mobileNumber: string): boolean {
     // Define a regex pattern for a 10-digit mobile number
     const pattern = /^[0-9]{10}$/;
-  
+
     // Test the provided mobile number against the pattern
     return pattern.test(mobileNumber);
   }
 
-  
+
 
 
   async add(addSocietyDto: AddSocietyDto): Promise<AddSocietyResponseDto> {
@@ -74,8 +74,8 @@ export class SocietiesService {
     const isPhoneNumberValid = this.isValidMobileNumber(addSocietyDto.phoneNumber);
 
     if (!isPhoneNumberValid) {
-      throw new HttpException(`${addSocietyDto.phoneNumber} is a valid 10-digit mobile number.`,HttpStatus.BAD_REQUEST);
-    } ;
+      throw new HttpException(`${addSocietyDto.phoneNumber} is a valid 10-digit mobile number.`, HttpStatus.BAD_REQUEST);
+    };
 
     const checkSociety = await this.prisma.society.findFirst({
       where: {
@@ -95,7 +95,7 @@ export class SocietiesService {
       data: {
         name: addSocietyDto.name,
         email: addSocietyDto.email,
-        phoneNumber:addSocietyDto.phoneNumber,
+        phoneNumber: addSocietyDto.phoneNumber,
         addressLine1: addSocietyDto.addressLine1,
         addressLine2: addSocietyDto.addressLine2,
         city: addSocietyDto.city,
@@ -105,7 +105,7 @@ export class SocietiesService {
         isActive: true,
         code: addSocietyDto.code
       },
-      select:{
+      select: {
         id: true,
         name: true,
         addressLine1: true,
@@ -123,8 +123,8 @@ export class SocietiesService {
     return addsoc;
   }
 
-  async giveAssetCount(societyId: number){
-    if(Number.isNaN(societyId)) throw new HttpException('society id is missing in params', HttpStatus.BAD_REQUEST);
+  async giveAssetCount(societyId: number) {
+    if (Number.isNaN(societyId)) throw new HttpException('society id is missing in params', HttpStatus.BAD_REQUEST);
 
     const society = this.prisma.society.findUnique({
       where: {
@@ -136,9 +136,9 @@ export class SocietiesService {
       throw new HttpException('society not found ', HttpStatus.NOT_FOUND);
 
     const societyIdList = await this.prisma.society.findFirst({
-      select:{
+      select: {
         id: true,
-        buildings:{
+        buildings: {
           select: {
             id: true,
             floors: {
@@ -163,7 +163,6 @@ export class SocietiesService {
         id: societyId
       }
     });
-   
 
     const listsociety = await this.prisma.society.findFirst({
       select: {
@@ -177,60 +176,63 @@ export class SocietiesService {
       }
     });
 
-    
 
 
-    async function getNestedLengths(PrismaClient,data, depth, Buildings, Floors, Flats, Residents,Vehicles) { 
+
+    async function getNestedLengths(PrismaClient, data, depth, Buildings, Floors, Flats, Residents, Vehicles) {
       
       if (depth === 3) Buildings += data.length;
       else if (depth === 2) Floors += data.length;
       else if (depth === 1) Flats += data.length;
       else if (depth === 0) Residents += data.length;
-  
+
       if (depth <= 0) {
-          return { Buildings, Floors, Flats, Residents,Vehicles };
+        return { Buildings, Floors, Flats, Residents, Vehicles };
       }
-  
+      
       // Recursively print lengths of nested arrays
       for (const item of data) {
-          if (typeof item === 'object') {
-              let innerData;
-              if (depth === 3) innerData = item.floors;
-              else if (depth === 2) innerData = item.flats;
-              else if (depth === 1) {
-                const vehicleResponse = await PrismaClient.vehicleFlat.count({
-                  where: {
-                    flatId: item.id
-                  }
-
-                })
-                if(vehicleResponse) Vehicles =vehicleResponse;
-                innerData = item.residents;
+        if (typeof item === 'object') {
+          let innerData;
+          if (depth === 3) innerData = item.floors;
+          else if (depth === 2) innerData = item.flats;
+          else if (depth === 1) {
+            // console.log("Vehicle ",Vehicles);
+            const vehicleResponse = await PrismaClient.vehicleFlat.count({
+              where: {
+                flatId: item.id
               }
-  
-              const lengths = await getNestedLengths(PrismaClient,innerData, depth - 1, Buildings, Floors, Flats, Residents,Vehicles);
-              Buildings = lengths.Buildings;
-              Floors = lengths.Floors;
-              Flats = lengths.Flats;
-              Residents = lengths.Residents;
-              Vehicles = lengths.Vehicles;
+
+            })
+            // if (vehicleResponse) Vehicles =  vehicleResponse;
+            // NOTE: Here Update Count Logic
+            if (vehicleResponse) Vehicles = Vehicles + vehicleResponse;
+            innerData = item.residents;
           }
+
+          const lengths = await getNestedLengths(PrismaClient, innerData, depth - 1, Buildings, Floors, Flats, Residents, Vehicles);
+          Buildings = lengths.Buildings;
+          Floors = lengths.Floors;
+          Flats = lengths.Flats;
+          Residents = lengths.Residents;
+          Vehicles = lengths.Vehicles;
+        }
       }
-  
-      return { Buildings, Floors, Flats, Residents ,Vehicles};
-  }
-  
- 
-    const tempresult = await getNestedLengths(this.prisma,societyIdList.buildings,3, 0, 0, 0, 0,0)
+
+      return { Buildings, Floors, Flats, Residents, Vehicles };
+    }
+
+
+    const tempresult = await getNestedLengths(this.prisma, societyIdList.buildings, 3, 0, 0, 0, 0, 0)
     listsociety['assetcount'] = tempresult;
-    
+
     return listsociety
   }
 
- 
+
 
   async findById(id: number): Promise<ListSocietyDto> {
-    console.log("Find Society By ID ",id)
+    console.log("Find Society By ID ", id)
     const socview = await this.prisma.society.findUnique({
       where: { id: Number(id) },
       select: {
@@ -262,8 +264,8 @@ export class SocietiesService {
     const isPhoneNumberValid = this.isValidMobileNumber(societyDto.phoneNumber);
 
     if (!isPhoneNumberValid) {
-      throw new HttpException(`${societyDto.phoneNumber} is a valid 10-digit mobile number.`,HttpStatus.BAD_REQUEST);
-    } ;
+      throw new HttpException(`${societyDto.phoneNumber} is a valid 10-digit mobile number.`, HttpStatus.BAD_REQUEST);
+    };
 
     const checkSociety = await this.prisma.society.findUnique({
       where: { id: Number(id) },
@@ -286,7 +288,7 @@ export class SocietiesService {
         const updatesoc = this.prisma.society.update({
           where: { id: id },
           data: societyDto,
-          select:{
+          select: {
             id: true,
             name: true,
             email: true,
@@ -358,23 +360,23 @@ export class SocietiesService {
       whereArray.push({ city: { contains: city, mode: 'insensitive' } });
     }
     if (status !== undefined) {
-      if(status=='active'){
+      if (status == 'active') {
         whereArray.push({ isActive: true });
 
-      }else if(status=='inactive'){
+      } else if (status == 'inactive') {
         whereArray.push({ isActive: false });
 
-      }else if(status=='all'){
+      } else if (status == 'all') {
         whereArray.push({ isActive: true });
         whereArray.push({ isActive: false });
 
-      }else{
-        throw new HttpException("status should be one of 'active', 'inactive', 'all'. ",HttpStatus.BAD_REQUEST);
+      } else {
+        throw new HttpException("status should be one of 'active', 'inactive', 'all'. ", HttpStatus.BAD_REQUEST);
       }
-      
+
     }
-   
-    
+
+
 
     if (whereArray.length > 0) {
       if (whereArray.length > 1) {

@@ -68,7 +68,7 @@ const ViewResidentComponent: React.FC<ViewResidentComponentProps> = ({ open, onC
 
   const params=useParams();
   const societyContext=useContext(SocietyContext);
-  console.log("society Context on Device View:",societyContext);
+  //console.log("society context on Device View:",societyContext);
   console.log("society id:",societyContext?.id);
 
 

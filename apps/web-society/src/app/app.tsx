@@ -39,7 +39,7 @@ export function App() {
   const navigate = useNavigate();
 
   const usercontext=useContext(UserContext);
-  console.log('User context:',usercontext);
+  // console.log('User context:',usercontext);
 
   const onLogout = async () => {
     localStorage.removeItem('user');

@@ -79,7 +79,7 @@ export class MainFluxService {
       } catch (error) {
         // Retry the connection after a delay
         retryCount++;
-        console.log(`Retry attempt ${retryCount} failed: ${error.message}`);
+        console.log(`Retry attempt ${retryCount} failed: ${error}`);
         await new Promise((resolve) => setTimeout(resolve, 1000)); // Adjust the delay as needed // return { //status: false, //resp: error.message // }
       }
     }

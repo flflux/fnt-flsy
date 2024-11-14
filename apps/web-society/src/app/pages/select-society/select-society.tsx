@@ -52,9 +52,9 @@ export function SelectSociety(props: SelectSocietyProps) {
     navigate(`/dashboard/${value}`);
   };
 
-  console.log("user context:",user);
-  console.log("user context scoietty:",user?.societyRoles);
-  console.log("user context scoietty length:",user?.societyRoles.length);
+  // console.log("user context:",user);
+  // console.log("user context scoietty:",user?.societyRoles);
+  // console.log("user context scoietty length:",user?.societyRoles.length);
 
 
   return (

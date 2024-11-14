@@ -165,7 +165,7 @@ export function ViewFlats(props: ViewFlatsProps) {
   console.log("params:", params);
 
   const societyContext=useContext(SocietyContext);
-  console.log("society Context on FLat View:",societyContext);
+  //console.log("society context on FLat View:",societyContext);
   console.log("society id:",societyContext?.id);
 
   const closeEditModal = () => {

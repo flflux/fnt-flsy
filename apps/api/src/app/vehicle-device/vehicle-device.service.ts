@@ -52,6 +52,7 @@ export class VehicleDeviceService {
     }
 
     async addVehicleDevice(societyId: number, vehicleId: number,addDeviceVehicleDto: AddDeviceVehicleDto){
+        console.log("addVehicleDevice", societyId,vehicleId, addDeviceVehicleDto)
         const society = await this.prisma.society.findFirst({
             where: {
                 id: societyId

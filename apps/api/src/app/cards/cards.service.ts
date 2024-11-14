@@ -11,6 +11,7 @@ export class CardsService {
   private prisma = new PrismaClient();
 
   async add(societyId: number, addCardDto: AddCardDto): Promise<CardDto> {
+    // console.log(societyId, addCardDto, addCardDto.deviceId);
     if (Number.isNaN(societyId))
       throw new HttpException(
         'society id is missing in params',
@@ -25,6 +26,27 @@ export class CardsService {
     if (!society)
       throw new HttpException('society not found', HttpStatus.NOT_FOUND);
 
+
+    const vehicle_flat = await this.prisma.vehicleFlat.findFirst({
+      where: {
+        vehicleId: addCardDto.vehicleId ?? null,
+      },
+    });
+    // console.log("vehicle_flat", vehicle_flat);
+
+
+    if (!vehicle_flat) {
+      throw new HttpException('vehicle not found', HttpStatus.NOT_FOUND);
+    }
+    // const device = await this.prisma.device.findFirst({
+    //   where: {
+    //     deviceId: addCardDto.deviceId
+    //   },
+    // });
+    // console.log(device)
+    // if (!device)
+    //   throw new HttpException('device not found', HttpStatus.NOT_FOUND);
+
     const card = await this.prisma.card.findFirst({
       where: {
         number: addCardDto.number,
@@ -35,12 +57,13 @@ export class CardsService {
 
     const device = await this.prisma.device.findFirst({
       where: {
-        deviceId: addCardDto.deviceId,
+        societyId: societyId
       },
     });
-
     if (!device)
-      throw new HttpException('device not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(`device does not exist for society!`, HttpStatus.BAD_REQUEST);
+
+
 
     const newCard = await this.prisma.card.create({
       data: {
@@ -48,6 +71,8 @@ export class CardsService {
         isActive: addCardDto.isActive,
         type: addCardDto.type,
         deviceId: device.id,
+        flatId: vehicle_flat.flatId,
+        vehicleId: addCardDto.vehicleId
       },
     });
 
@@ -57,7 +82,7 @@ export class CardsService {
       vehicleId: newCard.vehicleId,
       isActive: newCard.isActive,
       type: newCard.type,
-      deviceId: device.deviceId,
+      deviceId: (device.id).toString()
     };
   }
 
@@ -404,18 +429,18 @@ export class CardsService {
   ) {
 
     const society = await this.prisma.society.findFirst({
-      where:{
+      where: {
         code: societyCode
       }
     });
-    if(!society) throw new HttpException("society not found",HttpStatus.NOT_FOUND);
+    if (!society) throw new HttpException("society not found", HttpStatus.NOT_FOUND);
 
     const flat = await this.prisma.flat.findFirst({
       where: {
         number: flatNumber,
-        floor:{
-          building:{
-            society:{
+        floor: {
+          building: {
+            society: {
               id: society.id
             }
           }
@@ -423,24 +448,24 @@ export class CardsService {
       }
     })
 
-    if(!flat) throw new HttpException("flat not found",HttpStatus.NOT_FOUND);
+    if (!flat) throw new HttpException("flat not found", HttpStatus.NOT_FOUND);
 
     const card = await this.prisma.card.findFirst({
-      where:{
+      where: {
         flatId: flat.id,
         number: sbCardDto.number
       }
     });
-    if(!card) throw new HttpException("card not found",HttpStatus.NOT_FOUND);
+    if (!card) throw new HttpException("card not found", HttpStatus.NOT_FOUND);
 
     const updatedCard = await this.prisma.card.update({
-      where:{
-       id: card.id
+      where: {
+        id: card.id
       },
-      data:{
+      data: {
         isActive: Boolean(sbCardDto.isActive)
       },
-      select:{
+      select: {
         number: true,
         isActive: true,
         type: true

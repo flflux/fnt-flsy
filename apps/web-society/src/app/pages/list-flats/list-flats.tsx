@@ -64,7 +64,7 @@ export function ListFlats(props: ListFlatsProps) {
   const floorIds: number[] = [];
 
   const societycontext = useContext(SocietyContext);
-  // console.log("society context:", societycontext);
+  // //console.log("society context:", societycontext);
   // console.log("society id:", societycontext?.id);
 
 

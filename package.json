@@ -62,6 +62,7 @@
     "tslib": "^2.6.2",
     "uuid": "^9.0.0",
     "xlsx": "^0.18.5",
+    "xlsx-style": "^0.8.13",
     "xng-breadcrumb": "^10.0.0",
     "yup": "^1.2.0",
     "zone.js": "~0.13.0"
@@ -98,6 +99,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/cron": "^2.0.1",
     "@types/express-session": "^1.17.7",
+    "@types/file-saver": "^2.0.7",
     "@types/jest": "^29.4.0",
     "@types/multer": "^1.4.11",
     "@types/node": "18.14.2",

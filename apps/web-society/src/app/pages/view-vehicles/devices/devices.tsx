@@ -59,9 +59,9 @@ export function Devices() {
   const [selectedDevices, setSelectedDevices] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
-  console.log("society id:",societycontext?.id);
+  const societycontext = useContext(SocietyContext);
+  //console.log("society context:",societycontext);
+  console.log("society id:", societycontext?.id);
 
 
   useEffect(() => {
@@ -108,13 +108,14 @@ export function Devices() {
       // setDeviceList(response.data.content);
       setDeviceList(activeDevices);
       setLoading(false);
-     
+
     } catch (error) {
       console.log("Error in fetching Vehicle Device", error);
       setLoading(false);
     }
-
   }
+
+
   const getSelectedDevices = async () => {
     try {
       const response = await axios.get(`${apiUrl}/societies/${societycontext?.id}/vehicles/${params.id}/devices`,
@@ -126,7 +127,6 @@ export function Devices() {
     } catch (error) {
       console.log("Error in fetching Vehicle Device", error);
     }
-
   }
 
 
@@ -140,9 +140,9 @@ export function Devices() {
     // }
   ) => {
     try {
-      const selectedDeviceIds = selectedDevices; 
+      const selectedDeviceIds = selectedDevices;
 
-      console.log(selectedDeviceIds)
+      // console.log("handleAddController",{ deviceId: stringDeviceId }, `${apiUrl}/societies/${societycontext?.id}/vehicle/${params.id}/device`)
 
       const { data } = await axios.post(
         `${apiUrl}/societies/${societycontext?.id}/vehicle/${params.id}/device`,
@@ -160,6 +160,7 @@ export function Devices() {
         console.log("Something went wrong");
       }
     } catch (error) {
+      console.log("handleAddController err", error)
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         if (axiosError.response) {
@@ -255,7 +256,7 @@ export function Devices() {
           onSubmit={handleAddController}
         /> */}
       </Box>
-      <TableContainer sx={{ maxHeight: 440, overflow: 'auto'}} >
+      <TableContainer sx={{ maxHeight: 440, overflow: 'auto' }} >
         <Table stickyHeader>
           <TableHead>
             <TableRow >
@@ -280,11 +281,11 @@ export function Devices() {
             </TableRow>
           </TableHead>
           <TableBody >
-          {loading ? (
-                <TableCell align='center' colSpan={5}>
-                  <CircularProgress />
-                </TableCell>
-              ) : (Array.isArray(deviceList) && deviceList.length > 0 ? (
+            {loading ? (
+              <TableCell align='center' colSpan={5}>
+                <CircularProgress />
+              </TableCell>
+            ) : (Array.isArray(deviceList) && deviceList.length > 0 ? (
               deviceList.map((Device: Device, index: number) => (
                 <TableRow key={index}>
                   {/* <TableCell>{index + 1}</TableCell> */}
@@ -298,7 +299,7 @@ export function Devices() {
                     {formatDeviceType(Device?.type)}
                   </TableCell>
 
-                  <TableCell align='center' sx={{pr:15}}>
+                  <TableCell align='center' sx={{ pr: 15 }}>
                     {/* <EditIcon sx={{ mr: 1 }} className="btn btn-primary"
                     >
                       Edit
@@ -322,8 +323,8 @@ export function Devices() {
               <TableRow>
                 <TableCell sx={{ textAlign: 'center' }} colSpan={5}>No Devices found</TableCell>
               </TableRow>
-           )
-           )}
+            )
+            )}
           </TableBody>
         </Table>
       </TableContainer>

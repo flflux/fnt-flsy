@@ -64,7 +64,7 @@ const AddControllerComponent: React.FC<AddControllerProps> = ({ open, onClose, o
   }, [open, reset]);
 
   const societycontext=useContext(SocietyContext);
-  console.log("society context:",societycontext);
+  //console.log("society context:",societycontext);
   console.log("society id:",societycontext?.id);
 
   useEffect(() => {
